@@ -1,0 +1,10 @@
+import { mkdir, readFile } from 'node:fs/promises';
+import { spawnSync } from 'node:child_process';
+const files = ['README.md', 'AUTOMATED-DEPLOY.md', '.github', 'DEPLOY-CLOUDFLARE.md', 'SECURITY.md', 'package.json', 'package-lock.json', 'wrangler.jsonc', 'tsconfig.json', 'vitest.config.js', 'worker-configuration.d.ts', '.gitignore', '.dev.vars.example', 'dist', 'src', 'web', 'scripts', 'tests'];
+const config = JSON.parse(await readFile('wrangler.jsonc', 'utf8'));
+if (config.assets.run_worker_first !== true) throw new Error('Private assets must pass through the Worker.');
+await mkdir('artifacts', { recursive: true });
+const destination = 'artifacts/kansai-cloudflare-source.tar.gz';
+const result = spawnSync('tar', ['-czf', destination, '--exclude=.DS_Store', '--exclude=.openai', ...files], { stdio: 'inherit' });
+if (result.status !== 0) process.exit(result.status ?? 1);
+console.log(`Ready: ${destination}. No account credentials or local secrets included.`);

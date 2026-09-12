@@ -1,0 +1,5 @@
+# For local development only. Generate fresh values with:
+# npm run secrets:generate -- --local
+APP_ORIGIN="http://localhost:8787"
+AUTH_SECRET="GENERATE_A_FRESH_32_BYTE_BASE64URL_SECRET"
+SETUP_SECRET="GENERATE_ANOTHER_FRESH_32_BYTE_BASE64URL_SECRET"

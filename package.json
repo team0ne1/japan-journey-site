@@ -1,0 +1,35 @@
+{
+  "name": "kansai-private-journey",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "dev": "npm run build && wrangler dev --local",
+    "types": "wrangler types",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "check": "npm run build && npm run types && npm run typecheck && npm test && npm run dry-run",
+    "dry-run": "wrangler deploy --dry-run --outdir .build/worker",
+    "deploy": "npm run build && wrangler deploy",
+    "package": "node scripts/package.mjs",
+    "secrets:generate": "node scripts/secrets.mjs",
+    "smoke": "node scripts/smoke.mjs"
+  },
+  "dependencies": {
+    "@simplewebauthn/browser": "14.0.0",
+    "@simplewebauthn/server": "14.0.1"
+  },
+  "devDependencies": {
+    "@cloudflare/vitest-plugin": "1.1.8",
+    "@types/node": "^22.0.0",
+    "cbor-x": "1.6.0",
+    "esbuild": "0.28.2",
+    "typescript": "~5.9.3",
+    "vitest": "4.1.11",
+    "wrangler": "4.131.1"
+  }
+}
