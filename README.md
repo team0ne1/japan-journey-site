@@ -1,5 +1,7 @@
 # 关西七日
 
+正式开发目录为本仓库，线上地址为 https://trip.team0ne.work/ 。私有仓库：https://github.com/team0ne1/japan-journey-site 。推送 `main` 会触发检查与自动发布；一次性发布令牌配置和日常操作见 [AUTOMATED-DEPLOY.md](AUTOMATED-DEPLOY.md)。
+
 已准备 **Cloudflare Workers 迁移版本**，新增成员一次性邀请、问答尝试限制、30 天登录态、领队 Passkey 与页面内邀请管理。完整手动部署流程见 [DEPLOY-CLOUDFLARE.md](DEPLOY-CLOUDFLARE.md)，权限设计见 [SECURITY.md](SECURITY.md)。本地检查：`npm ci && npm run check`；发布由你手动运行 `npm run deploy`。
 
 现已加入每个行程节点的共享评论和顶部“全部建议”汇总：全体成员互相可见、领队可标记已处理。评论沿用登录服务的 SQLite，无需新增数据库配置；已部署网站的升级步骤也在部署说明中。调整节点时保留 `dist/data.js` 中的固定评论编号，避免讨论错位。

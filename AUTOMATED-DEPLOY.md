@@ -3,6 +3,7 @@
 正式网站：https://trip.team0ne.work/
 Worker：kansai-private-journey
 Cloudflare account：0a24af260b9e3362f9bbe75965b2fe44
+私有仓库：https://github.com/team0ne1/japan-journey-site
 
 ## 日常更新
 
@@ -24,7 +25,7 @@ npm run smoke
 ## GitHub 一次性配置
 
 1. 在 Cloudflare → My Profile → API Tokens 创建用于此仓库的令牌。可使用 Edit Cloudflare Workers 模板，仅选择上述账户和 `team0ne.work` 区域；需要 Worker 脚本编辑及该域名的 Workers Routes 编辑权限，按模板保留所需读取权限。
-2. 在 GitHub 私有仓库 → Settings → Secrets and variables → Actions → New repository secret，名称填 `CLOUDFLARE_API_TOKEN`，值填刚创建的令牌。也可以在自己的终端运行 `gh secret set CLOUDFLARE_API_TOKEN`，在隐藏输入提示中粘贴。不要把令牌发到聊天或提交到仓库。
+2. 在 GitHub 私有仓库 → Settings → Secrets and variables → Actions → New repository secret，名称填 `CLOUDFLARE_API_TOKEN`，值填刚创建的令牌。也可以在自己的终端运行 `gh secret set CLOUDFLARE_API_TOKEN --repo team0ne1/japan-journey-site`，在隐藏输入提示中粘贴。不要把令牌发到聊天或提交到仓库。
 3. 在 Actions 手动运行 Publish trip website，选择 main；第一次发布检查通过后，此后推送 main 自动发布。
 
 账户 ID 和正式域名不是密钥，已固定在配置里。网站的 AUTH_SECRET、SETUP_SECRET 只保留在原 Worker；CI 不需要知道它们。不要轮换身份密钥、修改 TRIP_ID 或重建 Durable Object 来完成普通代码升级。
