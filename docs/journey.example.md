@@ -2210,6 +2210,8 @@ notes:
   - 会场地图点为公园位置；实际检票入口待官方会场图。散场排队另留时间。
   - 茶体验候选未预约，店家与预约时段确定后再细调。
 links:
+  - - 宇治商工会议所观光地图｜景点・茶店・美食
+    - https://travel.ujicci.or.jp/app/public/index
   - - 城阳市花火官方信息
     - https://www.city.joyo.kyoto.jp/joint/0000012600.html
   - - 对凤庵体验／预约

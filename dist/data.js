@@ -111,7 +111,7 @@ const DAYS=[
  step('d3-kibuneguchi-2','kibuneguchi','按末班倒排','乘巴士下山，避免因错过末班被迫夜间徒步。','bus','33路返程'),
  step('d3-demachi-2','demachi','晚间','乘叡电返回市区。','rail','叡山电铁'),
  step('d3-kyoto-2','kyoto','晚饭／返房','回京都市区正常吃晚饭，回房休息。','bus','市内交通，餐厅未定') ]},
- {id:4,date:'10.04',weekday:'周日',city:'宇治 · 城阳',title:'茶香、鸟居与秋夜花火',subtitle:'稻荷只走短线。宇治茶文化之后先回房休息，再出发看花火。',distance:'6–9',calories:'250–500',intensity:'较充实',hotel:'uji',focus:['uji','omotesando','taihoan','ujibridge','nagaike','fireworks'],luggage:'京都酒店退房寄存 → 稻荷短游 → 回酒店取件 → 宇治酒店寄存、入住。',next:'花火散场回JR宇治，步行回酒店。明天带行李去JR奈良。',rest:'15:00后回房至少休息60分钟。先吃晚饭，再轻装去会场。',notes:['花火19:00起约40分钟，仅售前卖票，尚未购票。','会场地图点为公园位置；实际检票入口待官方会场图。散场排队另留时间。','茶体验候选未预约，店家与预约时段确定后再细调。'],links:[['城阳市花火官方信息','https://www.city.joyo.kyoto.jp/joint/0000012600.html'],['对凤庵体验／预约','https://www.kyoto-uji-kankou.or.jp/taihoan.html']],stops:[
+ {id:4,date:'10.04',weekday:'周日',city:'宇治 · 城阳',title:'茶香、鸟居与秋夜花火',subtitle:'稻荷只走短线。宇治茶文化之后先回房休息，再出发看花火。',distance:'6–9',calories:'250–500',intensity:'较充实',hotel:'uji',focus:['uji','omotesando','taihoan','ujibridge','nagaike','fireworks'],luggage:'京都酒店退房寄存 → 稻荷短游 → 回酒店取件 → 宇治酒店寄存、入住。',next:'花火散场回JR宇治，步行回酒店。明天带行李去JR奈良。',rest:'15:00后回房至少休息60分钟。先吃晚饭，再轻装去会场。',notes:['花火19:00起约40分钟，仅售前卖票，尚未购票。','会场地图点为公园位置；实际检票入口待官方会场图。散场排队另留时间。','茶体验候选未预约，店家与预约时段确定后再细调。'],links:[['宇治商工会议所观光地图｜景点・茶店・美食','https://travel.ujicci.or.jp/app/public/index'],['城阳市花火官方信息','https://www.city.joyo.kyoto.jp/joint/0000012600.html'],['对凤庵体验／预约','https://www.kyoto-uji-kankou.or.jp/taihoan.html']],stops:[
  step('d4-kyoto','kyoto','早上','退房先寄存，不带五人的箱子去稻荷。'),
  step('d4-inari','inari','早上短线','本殿、千本鸟居与奥社附近折返，不登顶。','rail','JR京都至稻荷'),
  step('d4-kyoto-2','kyoto','上午','回酒店取行李。为可靠寄存保留这次折返。','rail','JR回京都站'),
