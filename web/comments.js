@@ -20,6 +20,7 @@ async function api(path, body) {
 const time = stamp => new Intl.DateTimeFormat('zh-CN', { timeZone: 'Asia/Tokyo', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: false }).format(stamp) + ' 日本时间';
 function contextLabel(c) { return `Day ${c.day}${c.plan === 'shared' ? '' : ' · Plan ' + c.plan} · ${c.place} · ${c.time}`; }
 function scrollToTarget(target) {
+  window.dispatchEvent(new Event('itinerary:reveal'));
   const host = [...document.querySelectorAll('[data-comment-target]')].find(el => el.dataset.commentTarget === target);
   if (!host) return;
   const detail = host.querySelector('details'); if (detail) detail.open = true;

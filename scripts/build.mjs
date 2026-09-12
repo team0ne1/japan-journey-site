@@ -3,6 +3,18 @@ import { build } from 'esbuild';
 import { runInNewContext } from 'node:vm';
 // The same explicit step IDs drive browser anchors and server validation.
 const itinerary = runInNewContext(`${await readFile('dist/data.js', 'utf8')}; ({DAYS, PLAN_B, PLACES})`);
+// Every itinerary location and the optional Kamo area must ship with its photo.
+const photos = runInNewContext(`${await readFile('dist/place-images.js', 'utf8')}; PLACE_IMAGES`);
+for (const id of new Set([...Object.keys(itinerary.PLACES), 'kamo'])) {
+  const photo = photos[id];
+  if (!photo || !photo.alt || !photo.author || !photo.license || !photo.source?.startsWith('https://')) throw new Error('Incomplete photo metadata: ' + id);
+  if (photo.kind === 'commons' && photo.license !== 'Public domain' && !photo.licenseUrl?.startsWith('https://')) throw new Error('Missing photo license: ' + id);
+  for (const path of [photo.src, photo.thumbnail]) {
+    if (typeof path !== 'string' || !/^photos\/(?:thumbs\/)?[a-z0-9-]+\.jpg$/.test(path)) throw new Error('Invalid local photo path: ' + id);
+    const bytes = await readFile('dist/' + path);
+    if (bytes.length < 100 || bytes[0] !== 0xff || bytes[1] !== 0xd8) throw new Error('Invalid JPEG photo: ' + id);
+  }
+}
 const targets = {};
 for (const [days, plan] of [[itinerary.DAYS, 'A'], [Object.values(itinerary.PLAN_B), 'B']]) {
   for (const day of days) for (const stop of day.stops) {
