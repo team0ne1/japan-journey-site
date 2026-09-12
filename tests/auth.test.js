@@ -228,3 +228,82 @@ describe('private itinerary and invitations',()=>{
     expect((await records('passkey:'))).toHaveLength(1);
   });
 });
+
+describe('permanent member removal',()=>{
+  it('removes every session/invitation/profile, anonymizes existing comments, and frees a member slot',async()=>{
+    const {cookie}=await setup();const m=await member(cookie);
+    const first=await post('/api/invite/verify',{token:m.token,answer:'03-08'});
+    await post('/api/admin/invite/rotate',{memberId:m.id},cookie);
+    const secondLink=await post('/api/admin/invite/claim',{memberId:m.id},cookie);
+    const secondToken=new URLSearchParams(new URL(secondLink.data.url).hash.slice(1)).get('token');
+    const second=await post('/api/invite/verify',{token:secondToken,answer:'03-08'});
+    const requestId=crypto.randomUUID();
+    expect((await post('/api/comments/create',{target:'d1-dotonbori',body:'建议保留休息时间',requestId},first.cookie)).status).toBe(200);
+    expect((await post('/api/comments/create',{target:'d1-dotonbori',body:'领队的反馈',requestId},cookie)).status).toBe(200);
+    await post('/api/admin/invite/rotate',{memberId:m.id},cookie); // encrypted, unclaimed replacement
+    for(let i=0;i<4;i++)await member(cookie);
+    expect((await post('/api/admin/member/create',{name:'第六位',question:'q',answer:'a'},cookie)).status).toBe(409);
+    expect((await post('/api/admin/member/remove',{memberId:m.id},cookie)).status).toBe(200);
+    await evictDurableObject(stub());
+    expect((await post('/api/admin/member/remove',{memberId:m.id},cookie)).status).toBe(200); // retry is safe
+    for(const session of [first.cookie,second.cookie]) {
+      expect((await (await get('/api/session',session)).json()).user).toBeNull();
+      expect((await get('/data.js',session)).status).toBe(401);
+      expect((await get('/api/comments',session)).status).toBe(401);
+    }
+    for(const token of [m.token,secondToken])expect((await post('/api/invite/verify',{token,answer:'03-08'})).status).toBe(410);
+    const remaining=await records('');
+    expect(remaining.some(row=>row.value.includes(m.id))).toBe(false);
+    const comments=await (await get('/api/comments',cookie)).json();
+    expect(comments.comments.find(c=>c.body==='建议保留休息时间')).toMatchObject({name:'已移除成员',canDelete:true});
+    expect(comments.comments.find(c=>c.body==='领队的反馈').name).toBe('领队');
+    const stored=await runInDurableObject(stub(),(_,state)=>({rows:state.storage.sql.exec('SELECT author,name FROM comments').toArray(),rates:state.storage.sql.exec('SELECT author FROM comment_rates').toArray()}));
+    expect(stored.rows.some(c=>c.author===m.id||c.name==='旅伴一')).toBe(false);
+    expect(stored.rates.some(c=>c.author===m.id)).toBe(false);
+    const listing=await (await get('/api/admin/members',cookie)).json();expect(listing.members).toHaveLength(4);expect(listing.members.some(x=>x.id===m.id)).toBe(false);
+    const replacement=await post('/api/admin/member/create',{name:'新旅伴',question:'q',answer:'a'},cookie);
+    expect(replacement.status).toBe(200);expect(replacement.data.id).not.toBe(m.id);
+    expect((await get('/',cookie)).status).toBe(200);
+  });
+  it('requires a fresh leader session, validates the member ID and enforces request origin',async()=>{
+    const {cookie}=await setup();const m=await member(cookie);
+    const signed=await post('/api/invite/verify',{token:m.token,answer:'03-08'});
+    expect((await post('/api/admin/member/remove',{memberId:m.id})).status).toBe(403);
+    expect((await post('/api/admin/member/remove',{memberId:m.id},signed.cookie)).status).toBe(403);
+    expect((await post('/api/admin/member/remove',{memberId:m.id},cookie,{Origin:'https://other.example'})).status).toBe(403);
+    expect((await post('/api/admin/member/remove',{memberId:'leader'},cookie)).status).toBe(400);
+    await runInDurableObject(stub(),(_,state)=>state.storage.sql.exec("UPDATE records SET value=json_set(value,'$.verifiedAt',0) WHERE key LIKE 'session:%'"));
+    expect((await post('/api/admin/member/remove',{memberId:m.id},cookie)).data.code).toBe('STEP_UP');
+    expect((await get('/',signed.cookie)).status).toBe(200);
+    expect((await (await get('/api/admin/members',cookie)).json()).members).toHaveLength(1);
+  });
+  it('cannot be undone by concurrent invitation verification or rotation',async()=>{
+    const {cookie}=await setup();const m=await member(cookie);
+    const results=await Promise.all([
+      post('/api/invite/verify',{token:m.token,answer:'03-08'}),
+      post('/api/admin/invite/rotate',{memberId:m.id},cookie),
+      post('/api/invite/verify',{token:m.token,answer:'incorrect'}),
+      post('/api/admin/member/remove',{memberId:m.id},cookie),
+    ]);
+    expect(results[3].status).toBe(200);
+    await evictDurableObject(stub());
+    expect((await records('')).some(row=>row.value.includes(m.id))).toBe(false);
+    for(const result of results)if(result.cookie)expect((await get('/data.js',result.cookie)).status).toBe(401);
+    expect((await post('/api/admin/invite/claim',{memberId:m.id},cookie)).status).toBe(404);
+    expect((await post('/api/admin/invite/rotate',{memberId:m.id},cookie)).status).toBe(404);
+  });
+  it('rolls back the entire removal if one database operation fails',async()=>{
+    const {cookie}=await setup();const m=await member(cookie);
+    const signed=await post('/api/invite/verify',{token:m.token,answer:'03-08'});
+    await post('/api/comments/create',{target:'d1-dotonbori',body:'保留原署名',requestId:crypto.randomUUID()},signed.cookie);
+    await post('/api/admin/invite/rotate',{memberId:m.id},cookie);
+    const before=await records('invite:');
+    await runInDurableObject(stub(),(_,state)=>state.storage.sql.exec("CREATE TRIGGER test_stop_removal BEFORE DELETE ON records WHEN OLD.key LIKE 'member:%' BEGIN SELECT RAISE(ABORT,'simulated storage failure'); END"));
+    expect((await post('/api/admin/member/remove',{memberId:m.id},cookie)).status).toBe(500);
+    expect((await get('/',signed.cookie)).status).toBe(200);
+    expect((await records('invite:'))).toEqual(before);
+    const comments=await (await get('/api/comments',cookie)).json();expect(comments.comments[0].name).toBe('旅伴一');
+    await runInDurableObject(stub(),(_,state)=>state.storage.sql.exec('DROP TRIGGER test_stop_removal'));
+    expect((await post('/api/admin/member/remove',{memberId:m.id},cookie)).status).toBe(200);
+  });
+});

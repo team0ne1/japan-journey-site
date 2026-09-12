@@ -79,7 +79,11 @@ async function authPage() {
   $('recovery-form').addEventListener('submit', event => { event.preventDefault(); const form = event.currentTarget; busy(form.querySelector('button'), async () => { if (!confirm('这会使领队的全部 Passkey 和登录失效。继续恢复？')) return; await api('/api/setup/recover', { setupSecret: new FormData(form).get('secret') }); form.reset(); location.replace('/setup'); }); });
   if (status.setupRequired) $('auth-intro').textContent = '领队尚未完成首次绑定。成员请等待领队发送邀请。';
 }
-function showInvite(url, expires) {
+function clearInviteOutput() {
+  $('invite-url').value = ''; $('invite-output').hidden = true; delete $('invite-output').dataset.member;
+}
+function showInvite(url, expires, memberId) {
+  $('invite-output').dataset.member = memberId;
   $('invite-output').hidden = false;
   $('invite-url').value = url;
   $('invite-expiry').textContent = `有效期至 ${date(expires)}。请单独发送给对应成员；关闭面板后这里不再保留链接。`;
@@ -87,16 +91,18 @@ function showInvite(url, expires) {
 }
 async function refreshMembers() {
   const { members, passkeys } = await api('/api/admin/members');
-  $('member-list').innerHTML = members.length ? members.map(m => `<article class="member-card"><h3>${esc(m.name)}</h3><span class="member-status">${m.pending ? '有新邀请待领取' : ({active:'邀请已领取，待验证',used:'邀请已使用',revoked:'邀请已撤销',expired:'邀请已过期'})[m.inviteStatus]}</span><p>${m.sessions} 个浏览器已登录 · 此邀请失败 ${m.failures}/5 次 · 第 ${m.generation} 次邀请</p><p>${esc(m.question)}</p><div class="member-actions">${m.pending ? `<button class="auth-button primary" data-action="claim" data-member="${esc(m.id)}">领取邀请链接</button>` : ''}<button class="auth-button" data-action="rotate" data-member="${esc(m.id)}">重新邀请</button><button class="auth-button danger" data-action="revoke" data-member="${esc(m.id)}">撤销登录和邀请</button></div><details><summary>修改问答并重发</summary><form class="auth-form edit-question" data-member="${esc(m.id)}"><label>问题<input name="question" value="${esc(m.question)}" maxlength="160" required></label><label>新答案<input name="answer" type="password" autocomplete="new-password" maxlength="200" required></label><button class="auth-button">保存并生成新邀请</button></form></details></article>`).join('') : '<p class="panel-note">还没有成员。先填写下面的信息，再领取邀请链接。</p>';
+  const shownMember = $('invite-output').dataset.member;
+  if (shownMember && !members.some(m => m.id === shownMember)) clearInviteOutput();
+  $('member-list').innerHTML = members.length ? members.map(m => `<article class="member-card"><h3>${esc(m.name)}</h3><span class="member-status">${m.pending ? '有新邀请待领取' : ({active:'邀请已领取，待验证',used:'邀请已使用',revoked:'邀请已撤销',expired:'邀请已过期'})[m.inviteStatus]}</span><p>${m.sessions} 个浏览器已登录 · 此邀请失败 ${m.failures}/5 次 · 第 ${m.generation} 次邀请</p><p>${esc(m.question)}</p><div class="member-actions">${m.pending ? `<button class="auth-button primary" data-action="claim" data-member="${esc(m.id)}">领取邀请链接</button>` : ''}<button class="auth-button" data-action="rotate" data-member="${esc(m.id)}">重新邀请</button><button class="auth-button danger" data-action="revoke" data-member="${esc(m.id)}">撤销登录和邀请</button><button class="auth-button danger" data-action="remove" data-member="${esc(m.id)}" data-name="${esc(m.name)}">移除成员</button></div><details><summary>修改问答并重发</summary><form class="auth-form edit-question" data-member="${esc(m.id)}"><label>问题<input name="question" value="${esc(m.question)}" maxlength="160" required></label><label>新答案<input name="answer" type="password" autocomplete="new-password" maxlength="200" required></label><button class="auth-button">保存并生成新邀请</button></form></details></article>`).join('') : '<p class="panel-note">还没有成员。先填写下面的信息，再领取邀请链接。</p>';
   $('passkey-list').innerHTML = passkeys.map(p => `<div class="passkey-item"><span>${esc(p.name)}<br><small>${date(p.created)}</small></span><button class="auth-button danger" data-action="delete-key" data-key="${esc(p.id)}" ${passkeys.length === 1 ? 'disabled title="不能删除最后一个 Passkey"' : ''}>删除</button></div>`).join('');
   $('member-limit').textContent = `${members.length}/5 位成员，领队单独计入身份管理。`;
 }
 function createPanel() {
   const dialog = document.createElement('dialog'); dialog.className = 'member-panel'; dialog.id = 'member-panel'; dialog.setAttribute('aria-labelledby', 'panel-title');
-  dialog.innerHTML = `<div class="panel-heading"><h2 id="panel-title">成员邀请</h2><button id="panel-close" class="auth-button" aria-label="关闭成员邀请">关闭</button></div><p class="panel-note">只有领队可管理。领取邀请、重发或撤销时，可能需要 Passkey 验证。</p><div class="panel-toolbar"><button id="panel-refresh" class="auth-button">刷新状态</button><button id="panel-unlock" class="auth-button">用 Passkey 解锁管理</button></div><p id="panel-message" class="auth-message" role="status" aria-live="polite"></p><section id="invite-output" class="invite-output" hidden><strong>请保存并转发这条邀请</strong><p id="invite-expiry"></p><textarea id="invite-url" readonly aria-label="专属邀请链接"></textarea><button id="copy-invite" class="auth-button">复制链接</button></section><div id="member-list"></div><details><summary>添加成员</summary><p id="member-limit" class="panel-note"></p><form id="create-member" class="auth-form"><label>成员名字或昵称<input name="name" autocomplete="off" maxlength="40" required></label><label>验证问题<input name="question" value="你的生日是几月几日？请按 MM-DD 填写，例如 03-08。" maxlength="160" required></label><label>正确答案<input name="answer" type="password" autocomplete="new-password" maxlength="200" required></label><p class="panel-note">问题中写清格式。答案会忽略首尾空格、全角字符和英文字母大小写；日期分隔符需一致。</p><button class="auth-button primary">添加并生成邀请</button></form></details><details><summary>领队 Passkey 与备用凭证</summary><div id="passkey-list"></div><form id="add-key" class="auth-form"><label>新凭证名称<input name="name" maxlength="60" value="备用 Passkey" required></label><button class="auth-button">验证身份并添加 Passkey</button></form></details>`;
+  dialog.innerHTML = `<div class="panel-heading"><h2 id="panel-title">成员邀请</h2><button id="panel-close" class="auth-button" aria-label="关闭成员邀请">关闭</button></div><p class="panel-note">只有领队可管理。领取邀请、重发、撤销或移除成员时，可能需要 Passkey 验证。</p><div class="panel-toolbar"><button id="panel-refresh" class="auth-button">刷新状态</button><button id="panel-unlock" class="auth-button">用 Passkey 解锁管理</button></div><p id="panel-message" class="auth-message" role="status" aria-live="polite"></p><section id="invite-output" class="invite-output" hidden><strong>请保存并转发这条邀请</strong><p id="invite-expiry"></p><textarea id="invite-url" readonly aria-label="专属邀请链接"></textarea><button id="copy-invite" class="auth-button">复制链接</button></section><div id="member-list"></div><details><summary>添加成员</summary><p id="member-limit" class="panel-note"></p><form id="create-member" class="auth-form"><label>成员名字或昵称<input name="name" autocomplete="off" maxlength="40" required></label><label>验证问题<input name="question" value="你的生日是几月几日？请按 MM-DD 填写，例如 03-08。" maxlength="160" required></label><label>正确答案<input name="answer" type="password" autocomplete="new-password" maxlength="200" required></label><p class="panel-note">问题中写清格式。答案会忽略首尾空格、全角字符和英文字母大小写；日期分隔符需一致。</p><button class="auth-button primary">添加并生成邀请</button></form></details><details><summary>领队 Passkey 与备用凭证</summary><div id="passkey-list"></div><form id="add-key" class="auth-form"><label>新凭证名称<input name="name" maxlength="60" value="备用 Passkey" required></label><button class="auth-button">验证身份并添加 Passkey</button></form></details>`;
   document.body.append(dialog);
   $('panel-close').onclick = () => dialog.close();
-  dialog.addEventListener('close', () => { $('invite-url').value = ''; $('invite-output').hidden = true; dialog.querySelectorAll('input[type=password]').forEach(input => input.value = ''); });
+  dialog.addEventListener('close', () => { clearInviteOutput(); dialog.querySelectorAll('input[type=password]').forEach(input => input.value = ''); });
   $('panel-refresh').onclick = event => busy(event.currentTarget, refreshMembers, 'panel-message');
   $('panel-unlock').onclick = event => busy(event.currentTarget, async () => { await loginPasskey(); message('已解锁，管理操作可用 5 分钟。', false, 'panel-message'); }, 'panel-message');
   $('copy-invite').onclick = event => busy(event.currentTarget, async () => { try { await navigator.clipboard.writeText($('invite-url').value); message('已复制，请发送给对应成员。', false, 'panel-message'); } catch { $('invite-url').focus(); $('invite-url').select(); message('请长按或手动复制上面的完整链接。', false, 'panel-message'); } }, 'panel-message');
@@ -104,9 +110,15 @@ function createPanel() {
     const button = event.target.closest('button[data-action]'); if (!button) return;
     busy(button, async () => {
       const { action, member: memberId, key: id } = button.dataset;
-      if (action === 'claim') { const data = await management('/api/admin/invite/claim', { memberId }); showInvite(data.url, data.expires); }
+      if (action === 'claim') { const data = await management('/api/admin/invite/claim', { memberId }); showInvite(data.url, data.expires, memberId); }
       if (action === 'rotate') { if (!confirm('生成新邀请后，此成员的旧邀请会立即失效。继续？')) return; await management('/api/admin/invite/rotate', { memberId }); message('新邀请已生成，请领取。', false, 'panel-message'); }
       if (action === 'revoke') { if (!confirm('此成员的全部浏览器登录和现有邀请都会失效。继续？')) return; await management('/api/admin/member/revoke', { memberId }); }
+      if (action === 'remove') {
+        if (!confirm(`确定移除“${button.dataset.name}”？所有浏览器登录和邀请链接将失效，成员资料将删除。已有评论会保留，署名改为“已移除成员”。此操作无法撤销。`)) return;
+        await management('/api/admin/member/remove', { memberId });
+        if ($('invite-output').dataset.member === memberId) clearInviteOutput();
+        message('成员已移除，登录和邀请均已失效；现在可以添加新成员。', false, 'panel-message');
+      }
       if (action === 'delete-key') { if (!confirm('删除此 Passkey 会同时退出领队的全部浏览器，请确认有可用的备用凭证。')) return; await loginPasskey(); await api('/api/admin/passkey/delete', { id }); return location.replace('/login'); }
       await refreshMembers();
     }, 'panel-message');

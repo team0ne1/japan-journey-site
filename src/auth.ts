@@ -296,6 +296,25 @@ export class TripAuth extends DurableObject<AppEnv> {
     });
     return ok();
   }
+  private removeMember(body: Record<string, unknown>, context: Context): Result {
+    this.requireLeader(context, true);
+    const id = field(body, 'memberId');
+    if (!validToken(id)) return fail(400, 'INVALID_MEMBER', '成员编号不正确。');
+    return this.ctx.storage.transactionSync(() => {
+      // No await inside this transaction: concurrent invitation verification,
+      // rotation and comment writes cannot recreate a removed member.
+      this.requireLeader(context, true);
+      if (!this.get<Member>('member:' + id)) return ok({ removed: true });
+      this.removeSessions(id);
+      this.ctx.storage.sql.exec("DELETE FROM records WHERE key LIKE 'invite:%' AND json_extract(value, '$.memberId')=?", id);
+      // Preserve shared discussion without retaining the profile name/ID.
+      // A fresh anonymous ID avoids collisions in UNIQUE(author, request).
+      this.ctx.storage.sql.exec("UPDATE comments SET author=?,name='已移除成员' WHERE author=?", 'removed:' + token(), id);
+      this.ctx.storage.sql.exec('DELETE FROM comment_rates WHERE author=?', id);
+      this.del('member:' + id);
+      return ok({ removed: true });
+    });
+  }
   private deletePasskey(body: Record<string, unknown>, context: Context): Result {
     this.requireLeader(context, true);
     const id = field(body, 'id', 1500);
@@ -352,6 +371,7 @@ export class TripAuth extends DurableObject<AppEnv> {
         case '/api/admin/invite/rotate': return await this.rotate(body, context);
         case '/api/admin/invite/claim': return await this.claim(body, context);
         case '/api/admin/member/revoke': return this.revoke(body, context);
+        case '/api/admin/member/remove': return this.removeMember(body, context);
         case '/api/setup/recover': return await this.recover(body);
         case '/api/logout': this.del('session:' + context.sessionHash); return { ...ok(), clearSession: true };
         default: return { status: 404, data: { error: '找不到此操作。' } };
