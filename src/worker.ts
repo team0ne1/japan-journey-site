@@ -5,7 +5,7 @@ export { TripAuth } from './auth';
 const COOKIE = '__Host-trip_session';
 const PUBLIC_FILES = new Set(['/auth.js', '/auth.css', '/favicon.svg']);
 const AUTH_PAGES = new Set(['/login', '/invite', '/setup']);
-const READ_API = new Set(['/api/session', '/api/admin/members', '/api/comments', '/api/comments/summary']);
+const READ_API = new Set(['/api/session', '/api/admin/members', '/api/comments', '/api/comments/summary', '/api/favorites', '/api/favorites/export']);
 function secured(response: Response): Response {
   const result = new Response(response.body, response);
   result.headers.set('Cache-Control', 'private, no-store');
@@ -73,6 +73,12 @@ export default {
         }
         const ipHash = read ? '' : await mac(env.AUTH_SECRET!, 'ip:' + (request.headers.get('CF-Connecting-IP') ?? 'local'));
         const result = JSON.parse(await stub.execute(url.pathname, JSON.stringify(body), { sessionHash, ipHash })) as Result;
+        if (url.pathname === '/api/favorites/export' && result.status === 200) {
+          return secured(new Response(String(result.data.csv), { headers: {
+            'Content-Type': 'text/csv; charset=utf-8',
+            'Content-Disposition': 'attachment; filename="trip-favorites.csv"',
+          } }));
+        }
         const response = json(result.data, result.status);
         if (result.sessionToken) response.headers.set('Set-Cookie', cookie(result.sessionToken, SESSION_AGE / 1000));
         else if (result.clearSession) response.headers.set('Set-Cookie', cookie('', 0));
