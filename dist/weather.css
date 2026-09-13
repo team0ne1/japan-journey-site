@@ -1,0 +1,29 @@
+/* Scoped to the weather card; the existing itinerary styles are kept intact. */
+.day-weather{min-width:0;margin:0 0 20px;padding:18px;border:1px solid #d8e3e9;border-radius:12px;background:#f4f8fb;color:#203849}
+.day-weather[hidden]{display:none}
+.weather-heading{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.weather-heading h3{font-size:16px;margin:0}
+.weather-heading p{margin:5px 0 0;font-size:14px;color:#506375}
+.weather-carousel-actions{display:flex;gap:7px}.weather-carousel-actions button{display:grid;place-items:center;box-sizing:border-box;flex:0 0 38px;width:38px;height:38px;padding:0;border:1px solid #c8d6df;border-radius:50%;background:#fff;color:#274b63;font:24px/1 system-ui;transition:background .18s,border-color .18s,opacity .18s}.weather-carousel-actions button:hover:not(:disabled){background:#e7f0f5;border-color:#8ca9bb}.weather-carousel-actions button:disabled{opacity:.32;cursor:default}
+.weather-carousel{overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;scrollbar-width:none;margin:14px -6px 0;padding:0 6px}.weather-carousel::-webkit-scrollbar{display:none}
+.weather-track{display:flex;align-items:stretch;gap:12px}.weather-place{flex:0 0 100%;min-width:0;box-sizing:border-box;scroll-snap-align:start;scroll-snap-stop:always;padding:16px;border:1px solid #d7e2e8;border-radius:11px;background:#fff;box-shadow:0 5px 18px #294c6110}.weather-place>header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.weather-place>header span{display:block;font-size:11px;letter-spacing:.08em;color:#71818d}.weather-place>header h4{margin:3px 0 0;font-size:19px;font-weight:650}.weather-place>header>small{font-size:11px;color:#7b8b96;font-variant-numeric:tabular-nums}
+.weather-pagination{display:flex;justify-content:center;gap:7px;margin-top:11px}.weather-pagination button{width:7px;height:7px;padding:0;border:0;border-radius:50%;background:#bdcad2;transition:width .18s,background .18s}.weather-pagination button[aria-current=true]{width:20px;border-radius:5px;background:#315f86}.weather-swipe-hint{text-align:center;margin:7px 0 0;font-size:11px;color:#71818d}
+.weather-sun{display:flex;gap:10px 20px;align-items:center;flex-wrap:wrap;margin:18px 0 12px;font-size:16px}
+.weather-now{display:flex;align-items:center;gap:12px;margin:18px 0 4px;padding:12px 14px;border-radius:9px;background:#e8f1f7}
+.weather-now>span:last-child{display:flex;align-items:baseline;flex-wrap:wrap;gap:5px 10px}.weather-now small{width:100%;font-size:12px;color:#506375}.weather-now strong{font-size:22px}.weather-now>span span{font-size:14px;color:#506375}
+.weather-sun strong{margin-left:6px;font-variant-numeric:tabular-nums}
+.weather-updated{width:100%;font-size:13px;color:#506375}
+.weather-scroll{overflow-x:auto;overscroll-behavior-x:contain;border:1px solid #d8e3e9;border-radius:10px;background:white;position:relative;scrollbar-width:thin}
+.weather-hours{list-style:none;display:flex;width:max-content;padding:0;margin:0}
+.weather-hour{display:flex;flex-direction:column;align-items:center;gap:7px;min-width:85px;padding:13px 9px;border-right:1px solid #e5edf2;font-size:14px}
+.weather-hour:last-child{border:0}.weather-hour strong{font-size:18px}.weather-icon{font-size:24px;line-height:1.5}.weather-rain{color:#285a79;font-size:13px}
+.weather-message{font-size:14px;line-height:1.8;margin:16px 0;color:#506375}
+.weather-hint{font-size:13px;color:#506375;margin:9px 0 0;line-height:1.7}
+.weather-attribution{flex-basis:100%;display:block;color:#71808b;font-size:10px;line-height:1.7}
+.weather-attribution a{color:inherit}
+.weather-retry{font:inherit;min-height:40px;border:1px solid #9bb2c2;background:white;color:#203849;padding:8px 14px;border-radius:7px;cursor:pointer}
+.day-weather :focus-visible{outline:3px solid #1879a4;outline-offset:3px}
+@media(max-width:700px){.day-weather{padding:14px}.weather-carousel-actions{display:none}.weather-place{padding:14px}.weather-track{gap:9px}}
+@media print{.weather-carousel{overflow:visible}.weather-track{display:block}.weather-place{margin-bottom:12px}.weather-scroll{overflow:visible}.weather-hours{width:auto;flex-wrap:wrap}.weather-carousel-actions,.weather-pagination,.weather-swipe-hint{display:none}}
+
+.weather-carousel-actions button svg{display:block;width:20px;height:20px;pointer-events:none}

@@ -13,12 +13,12 @@
 | 正式域名 | `https://trip.team0ne.work/` |
 | Worker 名称 | `kansai-private-journey` |
 | 旅行标识 | `kansai-october-2026` |
-| 当前分支及提交基线 | `main`，`c8169cc`（增加宇治旅游参考链接） |
-| 当前本地增量 | 小红书搜索入口；共享探店收藏夹、地区分组、营业时间待确认、可选消息来源、CSV 导出、感兴趣表态；均为未提交工作区内容 |
-| 验证记录 | 上一轮构建、类型检查、48 项运行时测试通过；Chrome 本地验证表态、取消和名单，CSV 本地接口验证通过。本轮仅整理文档，未重新执行测试 |
+| 当前分支及提交基线 | `main`，`89f74a3`（共享收藏、兴趣表态和CSV导出） |
+| 当前本地增量 | 既有 `dist/itinerary-ui.css` 样式修改；本轮新增每日天气展示及说明，均保留本地；收藏夹等功能已包含于本地HEAD |
+| 验证记录 | 本轮 build、types、typecheck、56项运行时测试和dry-run通过；Chrome验证天气桌面／手机、状态、日期及方案切换；真实Open-Meteo数据解析通过，详见 WEATHER.md |
 | 发布约束 | **用户要求讨论期间只保留本地修改；收到明确发布指令后才提交／推送／部署。推送 main 会自动部署，不能把 push 当成单纯备份** |
 
-本轮没有查询 Cloudflare 当前部署版本；不能把本地 HEAD 或工作区等同于线上版本。用户之前已完成正式部署，但最新本地收藏夹等功能尚未由本会话发布。正式版本需在获准发布时结合 GitHub Actions 和 Cloudflare 部署记录确认。
+本轮没有查询 Cloudflare 当前部署版本；不能把本地 HEAD 或工作区等同于线上版本。用户之前已完成正式部署，但当前本地天气等改动尚未由本会话发布。正式版本需在获准发布时结合 GitHub Actions 和 Cloudflare 部署记录确认。
 
 正式行程对所有用户（包括领队）只读。用户只能在领队正式行程节点评论；收藏夹允许共同新增和表态，但不会自动改变正式行程。Markdown 行程描述语言、个人行程副本、提案与合并机制仍属于未来设计，未接入运行时。行程 Markdown 不应包含评论、身份或表态数据。
 
@@ -33,6 +33,8 @@ flowchart TD
   Worker --> Auth[TripAuth Durable Object：每趟旅行一个实例]
   Auth --> SQL[(实例私有 SQLite：6 张业务表)]
   Worker --> Assets[ASSETS：构建后的静态页面、脚本、照片]
+  Worker --> Weather[Open-Meteo官方API：只读天气及日出日落]
+  Worker --> WeatherCache[Workers Cache API：公开气象数据缓存]
   Browser --> GSI[日本国土地理院地图瓦片]
   GitHub[GitHub Actions] --> Worker
 ```
@@ -44,6 +46,7 @@ flowchart TD
 | Durable Objects | 绑定 `TRIP_AUTH`，类 `TripAuth`，实现 `src/auth.ts` | 通过 `getByName(TRIP_ID)` 定位实例；同一旅行的邀请、会话、评论、收藏共享协调和事务边界 |
 | Durable Object SQLite storage | `ctx.storage.sql`、`transactionSync()` | 持久化全部业务数据；不是 D1，不是单独启动的数据库服务，也不是 Workers KV |
 | Worker 自定义域名 | `routes: trip.team0ne.work, custom_domain:true` | 正式入口；应用另以 `APP_ORIGIN` 验证规范来源 |
+| Workers Cache API | `src/weather.ts` | 天气按地点及日本日期缓存1小时，故障时最多使用6小时内数据；不是KV或新数据库 |
 | Worker Secrets／变量 | `AUTH_SECRET` 等，见后文 | 平台保存运行时配置；不把秘密写入代码或网页 |
 | Workers Observability | 日志启用、调用日志关闭；Tracing 启用、采样率 0.01 | 代码记录简短事件名及操作路径，不记录答案、令牌和评论正文；这里只确认仓库配置，不代表查询过线上日志 |
 | Wrangler | 版本 `4.131.1` | 本地模拟、生成类型、打包预检、发布；使用现有 Worker 与 DO 绑定 |
@@ -79,6 +82,8 @@ DO 初始迁移标签为 `v1`，`new_sqlite_classes:["TripAuth"]`。增加业务
 | --- | --- |
 | `src/worker.ts` | HTTP 安全边界、资源鉴权、CSV 下载响应 |
 | `src/auth.ts` | `TripAuth`、认证记录、邀请管理、成员管理和业务分发 |
+| `src/weather.ts`、`weather-days.ts` | 天气查询、格式校验、缓存和构建生成的日期／地点白名单 |
+| `dist/weather-config.js`、`weather.js`、`weather.css` | 地区配置及独立天气组件，不改变正式行程 |
 | `src/crypto.ts` | 加密与答案标准化 |
 | `src/comments.ts` | 正式行程评论、删除、处理状态与限流 |
 | `src/favorites.ts` | 收藏创建、地区排序、URL 校验、兴趣表态、CSV |
@@ -98,7 +103,7 @@ DO 初始迁移标签为 `v1`，`new_sqlite_classes:["TripAuth"]`。增加业务
 | `scripts/build.mjs` | 验证照片与评论编号，生成节点白名单，组装 `.build/assets` |
 | `docs/JOURNEY-*.md`、`journey.example.md` | 未来 Markdown 行程方案及示例，不是生产解析器或数据库 |
 
-地图连线是交通方式与先后顺序示意，不是精确道路路径。日期／Plan A/B／收藏夹选择放在 URL hash，不修改服务器上的行程。尚无天气 API、自动调整、在线预订、成员个人行程编辑或合并。
+地图连线是交通方式与先后顺序示意，不是精确道路路径。日期／Plan A/B／收藏夹选择放在 URL hash，不修改服务器上的行程。已接入 Open-Meteo 只读天气：Day 0 展示日本当前日期的当前天气与24小时预报，各旅行日展示对应日期的逐小时天气及日出日落；尚无自动调整、在线预订、成员个人行程编辑或合并。预报期外不展示旅行日天气及日出日落，详见 [天气模块](WEATHER.md)。
 
 ## 4. 运行配置与凭证
 
@@ -336,6 +341,7 @@ API 返回的 `interested:boolean`（当前用户）、`interestCount:number`（
 
 | 方法／路径 | 权限 | 输入与用途 |
 | --- | --- | --- |
+| GET `/api/weather` | 已登录 | day、plan（默认A）、location（默认该日首个地区）；查询24小时天气及日出日落，固定地点白名单；503时Retry-After=60 |
 | GET `/api/session` | 可匿名 | 返回 user 或 null、setupRequired；user 含 name、role、expires、fresh |
 | POST `/api/setup/options` | 初始化凭证 | setupSecret、可选 name；申请首次 Passkey 注册 |
 | POST `/api/setup/verify` | 有效初始化挑战 | challengeId、response；注册领队并发会话 |
@@ -373,7 +379,7 @@ API 返回的 `interested:boolean`（当前用户）、`interestCount:number`（
 - `/login`、`/invite`、`/setup` 映射到 auth.html；auth.js、auth.css、favicon.svg 可匿名读取。
 - 已登录浏览器再次访问 `/login` 或 `/invite` 会跳转到 `/#`，清除邀请片段，使用现有会话进入行程。成功使用过的邀请不能给另一台未登录浏览器重复兑换。
 - `/` 未登录跳转 `/login`；其他非公开静态资源未登录返回 401。JS 数据、照片、Markdown 快照、HEAD 和条件请求都先经过 Worker，不可只保护首页。
-- 响应统一 private/no-store、no-referrer、nosniff、DENY、noindex/nofollow/noarchive、HSTS。CSP 限制脚本同源、连接同源，图片额外允许 GSI；禁用相机、麦克风、地理位置，允许同源 Passkey。
+- 响应统一 private/no-store、no-referrer、nosniff、DENY、noindex/nofollow/noarchive、HSTS。CSP 限制脚本同源、连接同源，图片额外允许 GSI；天气由后端请求Open-Meteo，未放宽浏览器CSP；禁用相机、麦克风、地理位置，允许同源 Passkey。
 - 前端评论和收藏文本安全渲染；外链新开窗口并设置 noopener/noreferrer。成员填的来源链接不会在后端抓取，因此没有服务端解析短链功能。
 - 登录有效不代表管理窗口一直有效：领队敏感管理操作需 5 分钟内 Passkey 验证；普通查看、评论处理、收藏操作不要求再次验证。
 - 普通重新生成邀请不退出成员的已登录浏览器；撤销／移除成员才清除其全部会话。
@@ -401,7 +407,7 @@ API 返回的 `interested:boolean`（当前用户）、`interestCount:number`（
 | `npm run build` | 生成并验证静态构建产物和评论节点 |
 | `npm run types` | Wrangler 生成绑定类型 |
 | `npm run typecheck` | TypeScript 无输出检查 |
-| `npm test` | Vitest Workers 运行时测试，当前 48 项 |
+| `npm test` | Vitest Workers 运行时测试，当前 56 项 |
 | `npm run dry-run` | Wrangler 只打包预检，不发布 |
 | `npm run check` | build → types → typecheck → test → dry-run |
 | `npm run dev` | 构建后启动本地 Wrangler；需本地变量／Secret 配置 |
@@ -409,7 +415,7 @@ API 返回的 `interested:boolean`（当前用户）、`interestCount:number`（
 | `npm run package` | 生成迁移交付包 |
 | `npm run deploy` | **真实发布**：build 后 Wrangler deploy，需用户明确授权 |
 
-测试文件：auth.test.js、comments.test.js、favorites.test.js；Passkey 测试夹具在 passkey-fixture.js。收藏测试覆盖重复新增、URL 校验、地区迁移、CSV 特殊字符／公式处理、并发表态去重、取消、对象回收后持久化、移除成员和权限边界。
+测试文件：auth.test.js、comments.test.js、favorites.test.js、weather.test.js；Passkey 测试夹具在 passkey-fixture.js。收藏测试覆盖重复新增、URL 校验、地区迁移、CSV 特殊字符／公式处理、并发表态去重、取消、对象回收后持久化、移除成员和权限边界。
 
 当前本地预览曾使用 `http://localhost:8792`，隔离配置和数据在 `/private/tmp/journey-ui-local/`。其中有标注“本地测试”的假地点，不能作为真实行程或同步到生产。临时目录／服务可能随机器状态消失，接手时先检查，不依赖其永久存在。不读取或分享临时 Cookie 文件内容。
 
@@ -431,6 +437,6 @@ API 返回的 `interested:boolean`（当前用户）、`interestCount:number`（
 6. 确认范围后运行相关检查；只有明确发布授权才走 CI。
 7. 本文应随 schema／接口变化更新；旧设计文档可能是历史快照，实际代码与本文标记的时间为核对起点。
 
-进一步阅读：[收藏夹实现](FAVORITES.md)、[未来行程工程设计](JOURNEY-ENGINEERING.md)、[未来描述语言](JOURNEY-LANGUAGE.md)、[部署说明](../DEPLOY-CLOUDFLARE.md)、[自动发布说明](../AUTOMATED-DEPLOY.md)、[安全说明](../SECURITY.md)。
+进一步阅读：[天气模块与许可核对](WEATHER.md)、[收藏夹实现](FAVORITES.md)、[未来行程工程设计](JOURNEY-ENGINEERING.md)、[未来描述语言](JOURNEY-LANGUAGE.md)、[部署说明](../DEPLOY-CLOUDFLARE.md)、[自动发布说明](../AUTOMATED-DEPLOY.md)、[安全说明](../SECURITY.md)。
 
 Cloudflare 官方语义参考：[SQLite 存储 API](https://developers.cloudflare.com/durable-objects/api/sqlite-storage-api/)、[Workers Static Assets](https://developers.cloudflare.com/workers/static-assets/)、[Wrangler 配置](https://developers.cloudflare.com/workers/wrangler/configuration/)。项目实际启用项以本文引用的仓库配置为准，不据产品能力推断已接入功能。

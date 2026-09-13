@@ -1,3 +1,4 @@
+import { weatherResponse } from './weather';
 import { digest, mac, validToken } from './crypto';
 import { SESSION_AGE, type Result } from './auth';
 export { TripAuth } from './auth';
@@ -59,6 +60,11 @@ export default {
       const stub = env.TRIP_AUTH.getByName(env.TRIP_ID);
       const raw = request.headers.get('Cookie')?.split(';').map(p => p.trim()).find(p => p.startsWith(COOKIE + '='))?.slice(COOKIE.length + 1);
       const sessionHash = validToken(raw) ? await digest(raw) : '';
+      if (url.pathname === '/api/weather') {
+        if (request.method !== 'GET') return json({ error: '不支持此请求方式。' }, 405);
+        if (!await stub.identity(sessionHash)) return json({ error: '请先登录后查看天气。' }, 401);
+        return secured(await weatherResponse(url));
+      }
       if (url.pathname.startsWith('/api/')) {
         const read = READ_API.has(url.pathname);
         if (request.method !== (read ? 'GET' : 'POST')) return json({ error: '不支持此请求方式。' }, 405);

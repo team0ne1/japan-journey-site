@@ -70,6 +70,7 @@ function render(){readHash();
  const favoritesView=new URLSearchParams(location.hash.slice(1)).get('view')==='favorites';
  $('content').hidden=favoritesView;$('favorites-panel').hidden=!favoritesView;
  if(favoritesView){
+  tripWeather.hide();
   document.querySelectorAll('[data-day]').forEach(b=>b.removeAttribute('aria-current'));
   $('favorites-nav').setAttribute('aria-current','page');document.title='探店收藏夹｜关西七日';
   window.dispatchEvent(new Event('favorites:show'));return;
@@ -77,6 +78,7 @@ function render(){readHash();
  $('favorites-nav').removeAttribute('aria-current');setReadingView('itinerary');$('map-selection').textContent='选择一个行程地点，查看它在地图上的位置。';document.querySelectorAll('[data-day]').forEach(b=>{if(Number(b.dataset.day)===day)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current');});$('plan-a').setAttribute('aria-pressed',String(plan==='A'));$('plan-b').setAttribute('aria-pressed',String(plan==='B'));$('plan-switch').hidden=!(day===0||day>=6);$('focus').hidden=day===0;$('fit').textContent=day===0?'全程范围':'当天全程';focusMode=true;
  if(day===0){current=overview();renderHeading(current);$('map-title').textContent='城市之间的移动';$('timeline').innerHTML=`<div class="section-label"><h3>七天，逐日展开</h3><span>点击查看每日地图</span></div>${DAYS.map((_,i)=>{const d=getDay(i+1);return `<a class="overview-card" href="#day=${d.id}&plan=${plan}"><div class="over-top"><small>DAY ${String(d.id).padStart(2,'0')} · ${d.date}</small><strong>${escapeHtml(d.city)} ↗</strong></div><p>${escapeHtml(d.title)}</p><small>${d.distance} km · ${d.calories} kcal · ${d.hotel?'宿 '+escapeHtml(HOTELS[d.hotel].name):'机场返程'}</small></a>`;}).join('')}`;$('support').innerHTML='<div class="support-card"><h3>选择最后一晚的节奏</h3><p>Plan A保留神户酒藏、海边与蓝调，再去有马。Plan B整天替换为加太海月休闲日。酒店未预订，切换地图不代表完成订房。</p></div>';$('handoff').innerHTML='<div class="handoff-card"><h3>跨城从哪里开始？</h3><p>从酒店或实际行李寄存点出发，抵达下一城先放好箱子。图上连线概括移动方向，具体铁路、巴士和接驳见每天时间线。</p><p class="next">为蓝调、日落和休息保留必要折返；不把城市间最快车程当成完整转场时间。</p></div>';}
  else{current=getDay(day);renderHeading(current);$('map-title').textContent=`Day ${day} · ${current.city}`;renderTimeline(current);renderSupport(current);}
+ renderWeather(current,plan);
  renderSchedule(current,plan);
  $('day-summary').innerHTML=day===0?'':renderDailySummary(current);
  if(day===0)document.querySelectorAll('.overview-card').forEach((el,i)=>{const b=budgetFor(getDay(i+1),plan);const p=document.createElement('p');p.className='overview-budget';p.textContent=`预计 JPY ${yenRange(sumBudget(b))}／人 · 含当晚住宿`;el.appendChild(p);});
