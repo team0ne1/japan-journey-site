@@ -25,7 +25,7 @@ const ACCESS_HOURS={
  omotesando:outdoor('平等院表参道商店街','主线是茶店与午餐，未包含平等院寺院入内；不能把平等院庭园关门时刻当作商店街统一时间，茶店需各自确认。',[['宇治观光协会步行路线','https://www.kyoto-uji-kankou.or.jp/guide/course09.html']]),
  taihoan:access('对凤庵・薄茶茶席候选','10:00–16:00','抹茶最后开席15:30；须至少提前10分钟换取茶席券','16:00茶席结束','15:30是最后开始时间，不是可随时到场的门票截止。煎茶最后开席15:20、仅指定日提供；所订项目和场次优先。年内1/10–12/20开席，月末休席（遇周末节假日提前），预约仍未完成。',[['官方茶席问答PDF','https://www.kyoto-uji-kankou.or.jp/pdf/taihoan-faq.pdf'],['茶席安排与预约','https://www.kyoto-uji-kankou.or.jp/taihoan.html']],'已公布最后开席'),
  ujibridge:outdoor('宇治桥与公共河岸','桥上及河岸短游；不含游船、鵜饲或收费设施。河岸局部封闭与桥梁通行情况以当天标识为准。',[['宇治观光协会景点介绍','https://www.kyoto-uji-kankou.or.jp/tourism-en.html']]),
- fireworks:access('城阳秋花火2026・10/4专用会场','14:00开场','市政府及主办方页面未单列最终检票截止，待票面/入场细则确认','21:00闭场','花火19:00开始约40分钟；行程目标18:00–18:15入场是人流预留，不是官方截止。当日公园临时休园，需前卖票入场，无现场售票；不套用公园平日开放时间。',[['城阳市2026花火公告','https://www.city.joyo.kyoto.jp/joint/0000012600.html'],['主办方2026专题','https://xn--6oqz6c35b6zh48ipn2e0ys.jp/hanabi/2026/index.html']]),
+ fireworks:access('城阳秋花火2026・10/4专用会场','14:00开场','市政府及主办方页面未单列最终检票截止，待票面/入场细则确认','21:00闭场','花火19:00开始约40分钟；行程目标18:00–18:15入场是人流预留，不是官方截止。当日公园临时休园，需前卖票入场，无现场售票；不套用公园平日开放时间。',[['公园官网｜城阳五里五里之丘','https://fmtpark.com/'],['城阳市2026花火公告','https://www.city.joyo.kyoto.jp/joint/0000012600.html'],['主办方2026专题','https://xn--6oqz6c35b6zh48ipn2e0ys.jp/hanabi/2026/index.html']]),
  kasuga:access('春日大社・参道与御本社参拜所','御本社参拜所06:30–17:30（3–10月）','普通参拜所未单列；特別参拜09:00–16:00，最晚受付未另列','御本社参拜所17:30；特別参拜16:00结束','这里采用官网“基本信息”的分季节时刻；页眉另显示06:00–18:00，信息有差异，按较短窗口安排。林荫参道不等于本殿回廊；主线不含收费特別参拜。若加国宝殿：10:00–17:00、16:30止入馆；万叶植物园：09:00–16:30、16:00止入园。',[['春日大社官方分区时间','https://www.kasugataisha.or.jp/about/basic/']],'分区开放・来源有差异'),
  mizuya:access('水谷茶屋附近；若选择在茶屋休息','店内11:00–16:00','最后点单15:30；最晚入店未单列','店内16:00结束营业','店家官网列周二、周三休息，10/5周一仍须留意临时日历。当前这里只是午休区域，餐厅未选定；最后点单不等于保证15:30前均可入座。',[['水谷茶屋店家官网','https://sites.google.com/view/mizuyachaya-kasugano--winter/%E3%83%9B%E3%83%BC%E3%83%A0?authuser=0']],'已公布最后点单'),
  wakakusa:access('若草山南麓→收费草坡入口','常规开山09:00–17:00（10月在开山期内）','官方未单列“最晚入山”；需另留上山、观景、下山时间','17:00结束开放；本行程按此前退出安排','官方步道图的北门标到16:30、南门到17:00；当前走南侧。10/5日落约17:36，普通开放时段不支持草坡等到完整日落；图中出口标识不能当作获准闭门后停留。',[['奈良县若草山开放信息','https://www.pref.nara.lg.jp/site/park/2585.html'],['官方步道与门禁图','https://www.pref.nara.lg.jp/documents/2378/20251023155602.pdf']]),
@@ -41,7 +41,16 @@ ACCESS_HOURS.ginkaku=ACCESS_HOURS.nyakuoji;
 ACCESS_HOURS.hill=ACCESS_HOURS.wakakusa;
 ACCESS_HOURS.saga=ACCESS_HOURS.kameoka;
 
+// Ticket sales are separate from the event's admission hours.
+ACCESS_HOURS.fireworks.ticketSales = [
+ {label:'购票安排', text:'需使用闲鱼代买服务（团队购票计划，尚未购买；非主办方官方售票渠道）。', name:'', url:''},
+ {label:'线上购票', text:'Ticket Pia：2,500 JPY／人；手续费以结账为准。2026/10/3 17:00（日本时间）停售，售完提前结束。普通会员购票需日本电话号码认证。', name:'Ticket Pia 售票入口', url:'https://t.pia.jp/en/pia/event/event.do?eventBundleCd=b2669988'},
+ {label:'线下售票', text:'城阳市观光协会：2,000 JPY／人；09:00–17:00，周三休息。', name:'城阳市观光协会 · Google 地图', query:'一般社団法人 城陽市観光協会 京都府城陽市寺田樋尻44-8'},
+ {label:'线下售票', text:'京都府立木津川运动公园：2,000 JPY／人；09:00–17:00，周四休息。', name:'木津川运动公园 · Google 地图', query:'京都府立木津川運動公園（城陽五里五里の丘）'},
+ {label:'线下售票', text:'文化パルク城阳：2,000 JPY／人；09:00–17:00，周一休息。', name:'文化パルク城阳 · Google 地图', query:'文化パルク城陽 京都府城陽市'},
+];
+
 function renderAccessHours(id,compact=false){
  const h=ACCESS_HOURS[id];if(!h)return '';
- return `<div class="access-hours${compact?' compact-hours':''}"><div class="hours-heading"><strong>${escapeHtml(h.scope)}</strong><span>${escapeHtml(h.status)}</span></div><dl><div><dt>可游览／使用</dt><dd>${escapeHtml(h.open)}</dd></div><div class="entry-cutoff"><dt>最晚进入／受付</dt><dd>${escapeHtml(h.last)}</dd></div><div><dt>关闭／结束</dt><dd>${escapeHtml(h.close)}</dd></div></dl><details><summary>适用区域、例外与官方来源</summary><p>${escapeHtml(h.note)}</p><div class="hours-sources">${h.sources.map(([label,url])=>external(url,label)).join('')}</div><small>核对于 ${HOURS_CHECKED} · 日本时间 · 临时变更以官方当日公告为准</small></details></div>`;
+ return `<div class="access-hours${compact?' compact-hours':''}"><div class="hours-heading"><strong>${escapeHtml(h.scope)}</strong><span>${escapeHtml(h.status)}</span></div><dl><div><dt>可游览／使用</dt><dd>${escapeHtml(h.open)}</dd></div><div class="entry-cutoff"><dt>最晚进入／受付</dt><dd>${escapeHtml(h.last)}</dd></div><div><dt>关闭／结束</dt><dd>${escapeHtml(h.close)}</dd></div>${(h.ticketSales||[]).map(sale=>`<div><dt>${escapeHtml(sale.label)}</dt><dd>${escapeHtml(sale.text)}<br>${sale.name?external(sale.url||'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(sale.query),sale.name):''}</dd></div>`).join('')}</dl>${h.ticketSales?'<p>仅售预售票：线下售票截至2026/10/3，售完即止；10/4活动当天不售票。</p>':''}<details><summary>适用区域、例外与官方来源</summary><p>${escapeHtml(h.note)}</p><div class="hours-sources">${h.sources.map(([label,url])=>external(url,label)).join('')}</div><small>核对于 ${HOURS_CHECKED} · 日本时间 · 临时变更以官方当日公告为准</small></details></div>`;
 }

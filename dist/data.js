@@ -33,7 +33,8 @@ const PLACES = {
  taihoan:['对凤庵',34.8888,135.809,'Taihoan Uji'],
  ujibridge:['宇治桥',34.8936,135.8064,'Uji Bridge'],
  nagaike:['JR长池站',34.8418,135.7903,'Nagaike Station Kyoto'],
- fireworks:['木津川运动公园・花火会场',34.8381,135.7973,'Kyoto Prefectural Kizugawa Sports Park'],
+ // Park coordinates: https://www.kyoto-kankou.or.jp/info_search/9632 (not the event ticket gate).
+ fireworks:['木津川运动公园・花火会场',34.846066,135.796123,'京都府立木津川運動公園（城陽五里五里の丘）'],
  nara:['御宿野乃奈良',34.6827,135.8201,'Onyado Nono Nara'],
  narast:['JR奈良站',34.6804,135.8189,'Nara Station JR'],
  kasuga:['春日大社・林荫参道',34.6814,135.8485,'Kasuga Taisha Nara'],
@@ -121,7 +122,7 @@ const DAYS=[
  step('d4-ujibridge','ujibridge','午后','宇治川、宇治桥慢走。','walk','河畔短线'),
  step('d4-uji-2','uji','15:00后','办理入住、休息至少一小时，提前吃晚饭。','walk','回房'),
  step('d4-nagaike','nagaike','傍晚','轻装去会场；目标18:00–18:15入场。','rail','JR宇治至长池，酒店到入场留45–75分钟'),
- step('d4-fireworks','fireworks','19:00 · 约40分钟','按实际检票口入场；票务、座位与散场规则待确认。','walk','车站到公园，含入场和人流余量'),
+ step('d4-fireworks','fireworks','19:00 · 约40分钟','会场：京都府立木津川運動公園（城陽五里五里の丘）。地图标注公园位置，按实际检票口入场；票务、座位与散场规则待确认。','walk','车站到公园，含入场和人流余量'),
  step('d4-nagaike-2','nagaike','散场后','排队离场，不承诺固定到站分钟数。','walk','按现场人流组织'),
  step('d4-uji-3','uji','晚间','回JR宇治，走回已入住的酒店。','rail','JR＋酒店短距离步行') ]},
  {id:5,date:'10.05',weekday:'周一',city:'奈良',title:'林间看鹿，草坡等夕照',subtitle:'东大寺作为体力允许时的备选。晚饭留在奈良，吃好再回房。',distance:'6–9',calories:'300–550',intensity:'有坡度',hotel:'nara',focus:['kasuga','mizuya','wakakusa','hill','nandaimon','kintetsunara'],luggage:'宇治退房带行李 → JR奈良 → 御宿野乃寄存 → 公交入公园。',next:'当晚住奈良，避免晚餐后赶跨城车。明天从酒店出发，选择神户有马或加太海月。',rest:'午饭后坐下休息。东大寺可不去，森林只走开放短线，不默认加入长距离环线。',notes:['若草山一般开放至17:00，10/5日落约17:36。草坡日落尚需确认允许停留区域与退出规则；未确认前安排闭门前夕照。','山顶巴士末班17:20早于日落，不拿它解决看完日落下山。','一重目点位仅作山坡示意；按官方步道图走，地图不代表已确认夜间开放。'],links:[['若草山官方步道图','https://www.pref.nara.lg.jp/documents/2378/20251023155602.pdf'],['开放信息','https://www.pref.nara.lg.jp/site/park/2585.html'],['奈良10月日落表','https://eco2.mtk.nao.ac.jp/koyomi/dni/2026/s3010.html']],stops:[

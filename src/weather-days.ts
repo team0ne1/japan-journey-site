@@ -157,8 +157,8 @@ export const WEATHER_DAYS = {
       {
         "id": "fireworks",
         "name": "城阳花火会场",
-        "latitude": 34.8381,
-        "longitude": 135.7973
+        "latitude": 34.846066,
+        "longitude": 135.796123
       }
     ]
   },
@@ -288,8 +288,8 @@ export const WEATHER_DAYS = {
       {
         "id": "fireworks",
         "name": "城阳花火会场",
-        "latitude": 34.8381,
-        "longitude": 135.7973
+        "latitude": 34.846066,
+        "longitude": 135.796123
       }
     ]
   },
