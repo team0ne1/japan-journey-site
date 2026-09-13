@@ -3,6 +3,17 @@ import { build } from 'esbuild';
 import { runInNewContext } from 'node:vm';
 // The same explicit step IDs drive browser anchors and server validation.
 const itinerary = runInNewContext(`${await readFile('dist/data.js', 'utf8')}; ({DAYS, PLAN_B, PLACES})`);
+const routeContext = { window: {} };
+runInNewContext(await readFile('dist/route-data.js', 'utf8'), routeContext);
+const routes = routeContext.window.TripRouteData.validate(JSON.parse(await readFile('dist/routes.json', 'utf8')), itinerary.PLACES);
+for (const segment of routes.segments) {
+  const day = segment.plan === 'B' ? itinerary.PLAN_B[segment.day] ?? itinerary.DAYS[segment.day - 1] : itinerary.DAYS[segment.day - 1];
+  const index = day.stops.findIndex(stop => stop.commentId === segment.toStep);
+  if (index < 1 || day.stops[index - 1].id !== segment.from || day.stops[index].id !== segment.to)
+    throw new Error('Saved route does not match itinerary order: ' + segment.toStep);
+  if (segment.source === 'google-routes' && (Date.parse(segment.expiresAt) <= Date.now() || Date.parse(segment.capturedAt) > Date.now()))
+    throw new Error('Remove or refresh expired Google route geometry before building: ' + segment.toStep);
+}
 // Every itinerary location and the optional Kamo area must ship with its photo.
 const photos = runInNewContext(`${await readFile('dist/place-images.js', 'utf8')}; PLACE_IMAGES`);
 for (const id of new Set([...Object.keys(itinerary.PLACES), 'kamo'])) {
@@ -53,6 +64,8 @@ const target = '.build/assets';
 await rm(target, { recursive: true, force: true });
 await mkdir(target, { recursive: true });
 await cp('dist', target, { recursive: true });
+// The migrated page no longer ships or requests the old map SDK.
+await rm(`${target}/vendor`, { recursive: true, force: true });
 await cp('web/auth.html', `${target}/auth.html`);
 await cp('web/auth.css', `${target}/auth.css`);
 await cp('web/comments.css', `${target}/comments.css`);

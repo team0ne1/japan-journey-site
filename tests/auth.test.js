@@ -29,6 +29,34 @@ async function member(cookie) {
 async function records(prefix) { return runInDurableObject(stub(),(_,state)=>state.storage.sql.exec('SELECT key,value,expires FROM records WHERE key LIKE ?',prefix+'%').toArray()); }
 beforeEach(async()=>{await reset();});
 describe('private itinerary and invitations',()=>{
+  it('keeps map settings private and reports missing setup without exposing other secrets',async()=>{
+    expect((await get('/api/maps-config')).status).toBe(401);
+    const {cookie}=await setup();
+    expect((await get('/api/maps-config',cookie)).status).toBe(503);
+    const response=await worker.fetch(new Request(origin+'/api/maps-config',{headers:{Cookie:cookie}}),{
+      ...env, GOOGLE_MAPS_BROWSER_KEY:'browser-test-key', GOOGLE_MAPS_MAP_ID:'test-map-id',
+    });
+    expect(await response.json()).toEqual({apiKey:'browser-test-key',mapId:'test-map-id'});
+    expect(response.headers.get('Cache-Control')).toBe('private, no-store');
+    expect((await post('/api/maps-config',{},cookie)).status).toBe(405);
+  });
+  it('allows the Google SDK only on authenticated itinerary pages with fresh script nonces',async()=>{
+    const {cookie}=await setup();
+    const page=await get('/',cookie), html=await page.text(), policy=page.headers.get('Content-Security-Policy');
+    const nonce=policy.match(/'nonce-([^']+)'/)[1];
+    expect(policy).toContain("'strict-dynamic'");
+    expect(policy).not.toContain("'unsafe-eval'");
+    const scripts=html.match(/<script\b[^>]*>/g);
+    expect(scripts.length).toBeGreaterThan(3);
+    expect(scripts.every(tag=>tag.includes(`nonce="${nonce}"`))).toBe(true);
+    expect(html).not.toContain('vendor/leaflet');
+    expect(page.headers.get('Referrer-Policy')).toBe('strict-origin');
+    expect((await get('/',cookie)).headers.get('Content-Security-Policy')).not.toContain(`nonce-${nonce}`);
+    const login=await get('/login');
+    expect(login.headers.get('Content-Security-Policy')).not.toContain('maps.googleapis.com');
+    expect(login.headers.get('Referrer-Policy')).toBe('no-referrer');
+    for(const path of ['/routes.json','/google-map.js','/route-data.js'])expect((await get(path)).status).toBe(401);
+  });
   it('returns signed-in members and leaders from old invite/login links to their own itinerary without reusing an invite',async()=>{
     const {cookie:leader}=await setup();const m=await member(leader);
     const signed=await post('/api/invite/verify',{token:m.token,answer:'03-08'});

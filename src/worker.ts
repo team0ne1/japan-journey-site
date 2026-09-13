@@ -7,7 +7,7 @@ const COOKIE = '__Host-trip_session';
 const PUBLIC_FILES = new Set(['/auth.js', '/auth.css', '/favicon.svg']);
 const AUTH_PAGES = new Set(['/login', '/invite', '/setup']);
 const READ_API = new Set(['/api/session', '/api/admin/members', '/api/comments', '/api/comments/summary', '/api/favorites', '/api/favorites/export']);
-function secured(response: Response): Response {
+function secured(response: Response, mapNonce?: string): Response {
   const result = new Response(response.body, response);
   result.headers.set('Cache-Control', 'private, no-store');
   result.headers.set('Referrer-Policy', 'no-referrer');
@@ -15,6 +15,12 @@ function secured(response: Response): Response {
   result.headers.set('X-Frame-Options', 'DENY');
   result.headers.set('X-Robots-Tag', 'noindex, nofollow, noarchive');
   result.headers.set('Content-Security-Policy', "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://cyberjapandata.gsi.go.jp; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'; object-src 'none'");
+  if (mapNonce) {
+    // Only the authenticated itinerary needs Google assets. Login/invitation
+    // pages retain their original policy and never load the third-party SDK.
+    result.headers.set('Referrer-Policy', 'strict-origin');
+    result.headers.set('Content-Security-Policy', `default-src 'self'; script-src 'self' 'nonce-${mapNonce}' 'strict-dynamic' https://maps.googleapis.com https://maps.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: blob: https://*.googleapis.com https://*.gstatic.com https://*.google.com https://*.googleusercontent.com; connect-src 'self' https://*.googleapis.com https://*.gstatic.com https://*.google.com; font-src 'self' https://fonts.gstatic.com; frame-src https://*.google.com; worker-src blob:; frame-ancestors 'none'; base-uri 'none'; form-action 'self'; object-src 'none'`);
+  }
   result.headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=(), publickey-credentials-get=(self), publickey-credentials-create=(self)');
   result.headers.set('Strict-Transport-Security', 'max-age=31536000');
   return result;
@@ -60,6 +66,15 @@ export default {
       const stub = env.TRIP_AUTH.getByName(env.TRIP_ID);
       const raw = request.headers.get('Cookie')?.split(';').map(p => p.trim()).find(p => p.startsWith(COOKIE + '='))?.slice(COOKIE.length + 1);
       const sessionHash = validToken(raw) ? await digest(raw) : '';
+      if (url.pathname === '/api/maps-config') {
+        if (request.method !== 'GET') return json({ error: '不支持此请求方式。' }, 405);
+        if (!await stub.identity(sessionHash)) return json({ error: '请先登录后查看地图。' }, 401);
+        // A browser-restricted Maps key is intentionally sent to the browser;
+        // never use the server-only Routes API key here.
+        if (!env.GOOGLE_MAPS_BROWSER_KEY?.trim() || !env.GOOGLE_MAPS_MAP_ID?.trim())
+          return json({ error: 'Google 地图尚未启用。' }, 503);
+        return json({ apiKey: env.GOOGLE_MAPS_BROWSER_KEY.trim(), mapId: env.GOOGLE_MAPS_MAP_ID.trim() });
+      }
       if (url.pathname === '/api/weather') {
         if (request.method !== 'GET') return json({ error: '不支持此请求方式。' }, 405);
         if (!await stub.identity(sessionHash)) return json({ error: '请先登录后查看天气。' }, 401);
@@ -114,6 +129,13 @@ export default {
       // JS data files, HEAD, encoded paths, and conditional requests.
       const assetURL = new URL(assetPath, url.origin);
       const response = await env.ASSETS.fetch(new Request(assetURL, { method: request.method }));
+      if (assetPath === '/index.html' && response.ok) {
+        const nonce = crypto.randomUUID().replaceAll('-', '');
+        const rewritten = request.method === 'HEAD' ? response : new HTMLRewriter()
+          .on('script', { element(element) { element.setAttribute('nonce', nonce); } })
+          .transform(response);
+        return secured(rewritten, nonce);
+      }
       return secured(response);
     } catch {
       console.error(JSON.stringify({ event: 'request_failed' }));

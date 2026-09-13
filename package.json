@@ -12,12 +12,14 @@
     "types": "wrangler types",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "check": "npm run build && npm run types && npm run typecheck && npm test && npm run dry-run",
+    "check": "npm run build && npm run types && npm run typecheck && npm run test:maps && npm test && npm run dry-run",
+    "test:maps": "node --test tests/maps.node.mjs",
     "dry-run": "wrangler deploy --dry-run --outdir .build/worker",
     "deploy": "npm run build && wrangler deploy",
     "package": "node scripts/package.mjs",
     "secrets:generate": "node scripts/secrets.mjs",
-    "smoke": "node scripts/smoke.mjs"
+    "smoke": "node scripts/smoke.mjs",
+    "preview:maps": "node --watch scripts/preview-maps.mjs"
   },
   "dependencies": {
     "@simplewebauthn/browser": "14.0.0",
@@ -26,6 +28,7 @@
   "devDependencies": {
     "@cloudflare/vitest-plugin": "1.1.8",
     "@types/node": "^22.0.0",
+    "browser-sync": "3.0.4",
     "cbor-x": "1.6.0",
     "esbuild": "0.28.2",
     "typescript": "~5.9.3",

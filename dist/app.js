@@ -6,22 +6,28 @@ const placeLink=id=>'https://www.google.com/maps/search/?api=1&query='+encodeURI
 // Match the supplied Xiaohongshu URL: preserve the place name and percent-encode it twice.
 const xiaohongshuLink=id=>'https://www.xiaohongshu.com/search_result_ai?keyword='+encodeURIComponent(encodeURIComponent(HOTELS[id]?.name||PLACES[id][0]));
 const routeLink=(from,to,mode)=>'https://www.google.com/maps/dir/?api=1&origin='+encodeURIComponent(PLACES[from][3])+'&destination='+encodeURIComponent(PLACES[to][3])+'&travelmode='+(mode==='walk'?'walking':'transit');
-let day=1,plan='A',map=null,layer=null,markers=[],current=null,focusMode=true,tileErrors=0;
+let day=1,plan='A',map=null,current=null,focusMode=true;
 function readHash(){const p=new URLSearchParams(location.hash.slice(1));day=Math.min(7,Math.max(0,Math.floor(Number(p.get('day')??1)||0)));plan=p.get('plan')==='B'?'B':'A';}
 function change(d=day,p=plan){location.hash=`day=${d}&plan=${p}`;}
 function getDay(n){return plan==='B'&&PLAN_B[n]?PLAN_B[n]:DAYS[n-1];}
 function toast(message){$('toast').textContent=message;$('toast').classList.add('show');clearTimeout(toast.timer);toast.timer=setTimeout(()=>$('toast').classList.remove('show'),3500);}
-function initMap(){
- if(!window.L){$('map').innerHTML='<p class="map-loading">地图组件未能加载，请使用行程中的分段导航。</p>';$('map-error').hidden=false;return;}
- $('map').innerHTML='';map=L.map('map',{scrollWheelZoom:false,zoomControl:true,minZoom:5,maxZoom:19}).setView([34.85,135.5],9);
- L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/pale/{z}/{x}/{y}.png',{minZoom:5,maxNativeZoom:18,maxZoom:19,bounds:[[20,122],[46,154]],noWrap:true,attribution:'<a href="https://maps.gsi.go.jp/development/ichiran.html#pale" target="_blank" rel="noopener">国土地理院 · 淡色地図</a>'}).on('tileerror',()=>{tileErrors++;if(tileErrors>=3)$('map-error').hidden=false;}).on('tileload',()=>{tileErrors=0;$('map-error').hidden=true;}).addTo(map);
- layer=L.layerGroup().addTo(map);
+async function initMap(){
+ const view=new TripGoogleMap($('map'),$('map-error'));
+ try{await view.init(PLACES);map=view;drawMap();}
+ catch(error){view.fail(error.name==='AbortError'?'Google 地图连接超时，请稍后重试。':error.message);}
 }
-function fitMap(focused){focusMode=focused;$('focus').setAttribute('aria-pressed',String(focused));$('fit').setAttribute('aria-pressed',String(!focused));if(!map||!current)return;const ids=focused?current.focus:current.stops.map(s=>s.id);const coords=ids.map(id=>PLACES[id].slice(1,3));map.fitBounds(L.latLngBounds(coords),{padding:[38,38],maxZoom:15,animate:false});}
+function fitMap(focused){
+ focusMode=focused;$('focus').setAttribute('aria-pressed',String(focused));$('fit').setAttribute('aria-pressed',String(!focused));
+ if(!map||!current)return;
+ const ids=focused?current.focus:current.stops.map(s=>s.id);
+ const coords=ids.map(id=>PLACES[id].slice(1,3));
+ if(!focused)map.lines.forEach(entry=>coords.push(...entry.path));
+ map.fit(coords);
+}
 function selectStop(index,scroll=false){
  const stop=current?.stops[index];if(!stop)return;
- const m=markers[index];
- if(map&&m){map.setView(m.getLatLng(),Math.max(map.getZoom(),14),{animate:false});m.openPopup();}
+ map?.focusPlace(stop.id);
+ map?.highlight(index);
  document.querySelectorAll('.stop').forEach((el,i)=>el.classList.toggle('active',i===index));
  $('map-selection').innerHTML=`<span class="selected-number">${index+1}</span><div><strong>${escapeHtml(PLACES[stop.id][0])}</strong><p>${escapeHtml(stop.time)}</p></div>${current.id?'<button type="button" id="back-to-stop">查看行程</button>':''}`;
  $('back-to-stop')?.addEventListener('click',()=>{setReadingView('itinerary');const card=document.querySelector(`[data-stop="${index}"]`);card?.scrollIntoView({behavior:'smooth',block:'center'});card?.querySelector('.stop-title')?.focus({preventScroll:true});});
@@ -30,17 +36,35 @@ function selectStop(index,scroll=false){
 function setReadingView(view){
  const reading=view!=='map';document.body.dataset.view=reading?'itinerary':'map';
  document.querySelectorAll('[data-view]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.view===(reading?'itinerary':'map'))));
- requestAnimationFrame(()=>{map?.invalidateSize({animate:false});});
+ requestAnimationFrame(()=>{map?.resize();});
 }
 function drawMap(){
- if(!map)return;layer.clearLayers();markers=[];
+ if(!map||!current)return;map.clear();
  const grouped=new Map();current.stops.forEach((s,i)=>{if(!grouped.has(s.id))grouped.set(s.id,[]);grouped.get(s.id).push(i);});
- current.stops.forEach((s,i)=>{if(!i)return;const prev=current.stops[i-1],m=MODES[s.mode];if(prev.id===s.id)return;const line=L.polyline([PLACES[prev.id].slice(1,3),PLACES[s.id].slice(1,3)],{color:m.color,weight:3.5,opacity:.8,dashArray:m.dash}).addTo(layer);line.bindTooltip(`${escapeHtml(PLACES[prev.id][0])} → ${escapeHtml(PLACES[s.id][0])} · ${m.name}`);line.bindPopup(`<strong>${m.name} · ${i} → ${i+1}</strong><p>${escapeHtml(s.connection||'按当天实际班次衔接')}</p>${external(s.mode==='shuttle'?hotelShuttleUrl():routeLink(prev.id,s.id,s.mode),s.mode==='shuttle'?'查看接驳说明':'打开本段导航')}<p>连线仅示意顺序，并非道路轨迹。</p>`);});
- grouped.forEach((indices,id)=>{const p=PLACES[id],first=indices[0],s=current.stops[first],numbers=indices.map(i=>i+1).join(' / '),short=indices.length>1?`${first+1}⁺`:String(first+1);const marker=L.marker(p.slice(1,3),{icon:L.divIcon({className:'number-marker',html:`<span class="pin-inner ${HOTELS[id]?'hotel':''}">${short}</span>`,iconSize:[30,30],iconAnchor:[15,15]}),title:`${numbers} ${p[0]}`,alt:p[0],keyboard:true}).addTo(layer);
- marker.bindTooltip(`${numbers} · ${escapeHtml(p[0])}`,{direction:'top',offset:[0,-15],className:'map-label'});
- marker.bindPopup(`<strong>${numbers} · ${escapeHtml(p[0])}</strong>${indices.map(i=>`<p><b>${escapeHtml(current.stops[i].time)}</b><br>${escapeHtml(current.stops[i].note)}${durationFor(current,current.stops[i],i)?`<br><strong class="popup-duration">${escapeHtml(durationFor(current,current.stops[i],i))}</strong>`:''}</p>`).join('')}${current.id?renderAccessHours(id,true):''}${external(placeLink(id),'查看地点')}`,{maxHeight:380});
- marker.on('click',()=>{selectStop(first);document.querySelectorAll('.stop').forEach((el,i)=>el.classList.toggle('active',indices.includes(i)));});indices.forEach(i=>markers[i]=marker);
- });fitMap(focusMode);
+ let savedCount=0,missingCount=0;
+ current.stops.forEach((s,i)=>{
+  if(!i)return;const previous=current.stops[i-1];if(previous.id===s.id)return;
+  const found=TripRouteData.find(map.data,current.id,plan,previous,s);
+  const saved=found.segment;
+  if(saved)savedCount++;else missingCount++;
+  const parts=saved?saved.parts:[{mode:s.mode||'walk',label:s.connection||'按行程顺序前往下一站',path:[PLACES[previous.id].slice(1,3),PLACES[s.id].slice(1,3)]}];
+  for(const part of parts){
+   const mode=MODES[part.mode];
+   const status=saved?'预先整理的路线；当天走法和班次以现场为准。':'虚线仅表示游览顺序，不代表实际道路或交通线路。';
+   map.addLine({path:part.path,mode:part.mode,color:mode.color,schematic:!saved,leg:i,
+    html:`<strong>${escapeHtml(mode.name)} · ${i} → ${i+1}</strong><p>${escapeHtml(PLACES[previous.id][0])} → ${escapeHtml(PLACES[s.id][0])}</p><p>${escapeHtml(part.label)}</p>${external(s.mode==='shuttle'?hotelShuttleUrl():routeLink(previous.id,s.id,s.mode),s.mode==='shuttle'?'查看接驳说明':'打开本段导航')}<p>${status}</p>`});
+  }
+ });
+ grouped.forEach((indices,id)=>{
+  const p=PLACES[id],first=indices[0],numbers=indices.map(i=>i+1).join(' / '),short=indices.map(i=>i+1).join('/');
+  const html=`<strong>${numbers} · ${escapeHtml(p[0])}</strong>${indices.map(i=>`<p><b>${escapeHtml(current.stops[i].time)}</b><br>${escapeHtml(current.stops[i].note)}${durationFor(current,current.stops[i],i)?`<br><strong class="popup-duration">${escapeHtml(durationFor(current,current.stops[i],i))}</strong>`:''}</p>`).join('')}${current.id?renderAccessHours(id,true):''}${external(placeLink(id),'查看地点')}`;
+  map.addPlace({id,position:p.slice(1,3),number:short,title:`${numbers} · ${p[0]}`,hotel:!!HOTELS[id],html,
+   onClick:()=>{selectStop(first);document.querySelectorAll('.stop').forEach((el,i)=>el.classList.toggle('active',indices.includes(i)));}});
+ });
+ document.querySelector('.map-caption').textContent=current.id===0?'全程游览顺序：沿箭头查看下一站。虚线为地点连线示意，具体交通请查看每天行程。':
+  savedCount?`已载入 ${savedCount} 段预存路线${missingCount?`；另有 ${missingCount} 段以虚线示意游览顺序`:''}。不同颜色表示交通方式；点选路线看说明。`:
+  '沿箭头按编号游览；颜色表示计划交通方式。虚线仅为顺序示意，点击连线查看两站之间的说明与导航。';
+ fitMap(focusMode);
 }
 function hotelShuttleUrl(){return plan==='B'?'https://kada-kaigetsu.com/access/':'https://www.arima-gh.jp/etc/access/';}
 function renderHeading(d){
@@ -93,11 +117,11 @@ $('favorites-nav').addEventListener('click',()=>{location.hash=`view=favorites&d
 $('plan-a').addEventListener('click',()=>change(day,'A'));$('plan-b').addEventListener('click',()=>change(day,'B'));$('focus').addEventListener('click',()=>fitMap(true));$('fit').addEventListener('click',()=>fitMap(false));
 $('share').addEventListener('click',async()=>{try{await navigator.clipboard.writeText(location.href);toast('已复制当前日期与方案的链接');}catch{toast('无法自动复制，请复制浏览器地址栏中的链接');}});
 document.querySelectorAll('[data-view]').forEach(b=>b.addEventListener('click',()=>setReadingView(b.dataset.view)));
-window.addEventListener('resize',()=>map?.invalidateSize({animate:false}));
+window.addEventListener('resize',()=>map?.resize());
 window.addEventListener('itinerary:reveal',()=>setReadingView('itinerary'));
 const headerObserver=new ResizeObserver(entries=>{
  document.documentElement.style.setProperty('--header',`${Math.ceil(entries[0].target.getBoundingClientRect().height)}px`);
- map?.invalidateSize({animate:false});
+ map?.resize();
 });
 headerObserver.observe(document.querySelector('.topbar'));
 window.addEventListener('hashchange',render);initMap();render();

@@ -1,0 +1,7 @@
+.trip-map-marker{display:flex;align-items:center;justify-content:center;min-width:32px;height:32px;padding:0 5px;border:2px solid #fff;border-radius:50%;background:#315f76;color:#fff;font:700 13px/1 system-ui,sans-serif;box-shadow:0 2px 7px #132c4055;box-sizing:border-box;cursor:pointer}
+.trip-map-marker.is-hotel{background:#8c6848}
+#map .gm-style-iw{color:#243c48;font-family:inherit;font-size:13px;line-height:1.65}
+#map .gm-style-iw p{margin:8px 0}
+#map .gm-style-iw a{color:#315f76;text-decoration:underline}
+#map gmp-advanced-marker:focus-visible .trip-map-marker{outline:3px solid #132c40;outline-offset:3px}
+.map-error[hidden]{display:none}

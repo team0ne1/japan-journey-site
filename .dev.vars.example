@@ -3,3 +3,7 @@
 APP_ORIGIN="http://localhost:8787"
 AUTH_SECRET="GENERATE_A_FRESH_32_BYTE_BASE64URL_SECRET"
 SETUP_SECRET="GENERATE_ANOTHER_FRESH_32_BYTE_BASE64URL_SECRET"
+# Browser key: restrict to Maps JavaScript API and approved website origins.
+# Use a separate key for development-time Routes API calls; never put it here.
+GOOGLE_MAPS_BROWSER_KEY=""
+GOOGLE_MAPS_MAP_ID=""
