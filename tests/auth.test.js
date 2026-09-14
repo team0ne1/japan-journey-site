@@ -32,7 +32,7 @@ describe('private itinerary and invitations',()=>{
   it('keeps map settings private and reports missing setup without exposing other secrets',async()=>{
     expect((await get('/api/maps-config')).status).toBe(401);
     const {cookie}=await setup();
-    expect((await get('/api/maps-config',cookie)).status).toBe(503);
+    expect((await worker.fetch(new Request(origin+'/api/maps-config',{headers:{Cookie:cookie}}),{...env,GOOGLE_MAPS_BROWSER_KEY:'',GOOGLE_MAPS_MAP_ID:''})).status).toBe(503);
     const response=await worker.fetch(new Request(origin+'/api/maps-config',{headers:{Cookie:cookie}}),{
       ...env, GOOGLE_MAPS_BROWSER_KEY:'browser-test-key', GOOGLE_MAPS_MAP_ID:'test-map-id',
     });

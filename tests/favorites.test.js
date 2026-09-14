@@ -92,15 +92,15 @@ describe('shared exploration favorites', () => {
     expect(response.headers.get('Content-Type')).toBe('text/csv; charset=utf-8');
     const bytes = new Uint8Array(await response.arrayBuffer());expect([...bytes.slice(0, 3)]).toEqual([239, 187, 191]);
     const rows = parseCsv(new TextDecoder().decode(bytes));
-    expect(rows).toHaveLength(37);expect(rows.every(row => row.length === 8)).toBe(true);
-    expect(rows[0]).toEqual(['地区', '地点名称', '营业时间', 'Google 地图链接', '消息来源链接', '添加者', '感兴趣人数', '感兴趣成员']);
+    expect(rows).toHaveLength(37);expect(rows.every(row => row.length === 9)).toBe(true);
+    expect(rows[0]).toEqual(['地区', '地点名称', '营业时间', 'Google 地图链接', '消息来源链接', '添加者', '感兴趣人数', '感兴趣成员', '消息来源标题']);
     expect(rows[1][1]).toBe('店铺 34');expect(rows[35][1]).toBe('店铺 0');
-    expect(rows[36]).toEqual(['京都', title, hours, 'https://maps.app.goo.gl/example', '', '旅伴甲', '0', '']);
+    expect(rows[36]).toEqual(['京都', title, hours, 'https://maps.app.goo.gl/example', '', '旅伴甲', '0', '', '']);
   });
   it('exports a header-only CSV for an empty collection', async () => {
     const { a } = await family();
     const response = await exports.default.fetch(origin + '/api/favorites/export', { headers: { Cookie: a.cookie } });
-    expect(parseCsv(await response.text())).toEqual([['地区', '地点名称', '营业时间', 'Google 地图链接', '消息来源链接', '添加者', '感兴趣人数', '感兴趣成员']]);
+    expect(parseCsv(await response.text())).toEqual([['地区', '地点名称', '营业时间', 'Google 地图链接', '消息来源链接', '添加者', '感兴趣人数', '感兴趣成员', '消息来源标题']]);
   });
   it('neutralizes spreadsheet formulas in exported text without altering stored entries', async () => {
     const { a } = await family();
@@ -209,4 +209,24 @@ describe('shared exploration favorites', () => {
     expect((await post('/api/favorites/interest', body, a.cookie)).status).toBe(401);
   });
 
+});
+
+it('persists multiple sources and blank titles; preserves retry semantics and CSV alignment', async () => {
+ const {a}=await family();const requestId=crypto.randomUUID();
+ const sources=[{url:'https://www.youtube.com/watch?v=one',title:'京都, "小店"'},{url:'https://example.com/review',title:''}];
+ expect((await create(a.cookie,{sources,requestId})).status).toBe(200);
+ expect((await create(a.cookie,{sources,requestId})).status).toBe(200);
+ expect((await create(a.cookie,{sources:[{...sources[0],title:'changed'}],requestId})).status).toBe(409);
+ const list=await get('/api/favorites',a.cookie);expect(list.data.favorites[0].sources).toEqual(sources);
+ const csv=await exports.default.fetch(origin+'/api/favorites/export',{headers:{Cookie:a.cookie}});
+ const rows=parseCsv(await csv.text());expect(rows[1][4]).toBe(sources.map(s=>s.url).join('\n'));expect(rows[1][8]).toBe(sources.map(s=>s.title).join('\n'));
+ expect((await create(a.cookie,{sources:Array(9).fill(sources[0])})).status).toBe(400);
+ expect((await create(a.cookie,{sources:[{url:'javascript:alert(1)',title:''}]})).status).toBe(400);
+});
+it('preview requires authentication, same origin, and enforces its own rate limit',async()=>{
+ expect((await post('/api/favorites/preview',{url:'https://example.com'})).status).toBe(401);
+ const {a}=await family();
+ expect((await post('/api/favorites/preview',{url:'https://example.com'},a.cookie,{Origin:'https://evil.example'})).status).toBe(403);
+ for(let i=0;i<40;i++)expect((await post('/api/favorites/preview',{url:'http://127.0.0.1'},a.cookie)).data.title).toBe('');
+ expect((await post('/api/favorites/preview',{url:'https://example.com'},a.cookie)).status).toBe(429);
 });

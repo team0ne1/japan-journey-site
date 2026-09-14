@@ -116,12 +116,12 @@ function departureSchedule(p){
  ...rows.map(([end,type,label,place])=>({end,type,label,place}))
  ]};
 }
-function scheduleFor(d,p){const source=d.id===7?departureSchedule(p):d.id===6&&p==='B'?SCHEDULE_B6:SCHEDULES[d.id];if(!source)return null;let cursor=source.start;return {...source,slots:source.slots.map((s,i)=>{const result={...s,start:cursor,duration:s.end-cursor,index:i};cursor=s.end;return result;}),end:source.slots.at(-1).end};}
+function scheduleFor(d,p){if(d.schedulePending)return null;const source=d.schedule?.slots?.length?{...d.schedule,start:typeof d.schedule.start==='string'?minutesOf(d.schedule.start):d.schedule.start,slots:d.schedule.slots.map(s=>({...s,end:typeof s.end==='string'?minutesOf(s.end):s.end}))}:d.id===7?departureSchedule(p):d.id===6&&p==='B'?SCHEDULE_B6:SCHEDULES[d.id];if(!source)return null;let cursor=source.start;return {...source,slots:source.slots.map((s,i)=>{const result={...s,start:cursor,duration:s.end-cursor,index:i};cursor=s.end;return result;}),end:source.slots.at(-1).end};}
 function clockLabel(m,relative=false){if(relative){if(m===0)return '离店';const n=Math.abs(m);return `${m<0?'−':'+'}${Math.floor(n/60)}:${String(n%60).padStart(2,'0')}`;}return `${String(Math.floor(m/60)).padStart(2,'0')}:${String(m%60).padStart(2,'0')}`;}
 function durationLabel(m){return m<60?`${m}分钟`:`${Math.floor(m/60)}小时${m%60?`${m%60}分钟`:''}`;}
 function allocationDetails(s,schedule){return `<span class="allocation-type" style="--activity:${ACTIVITY_TYPES[s.type].color}">${ACTIVITY_TYPES[s.type].name}</span><strong>${escapeHtml(s.label)}</strong><span>${clockLabel(s.start,schedule.relative)}–${clockLabel(s.end,schedule.relative)} · ${durationLabel(s.duration)}</span><p>${escapeHtml(s.note||(s.type==='free'?'弹性时间可按体力调整；候场缓冲须保留必要余量。':s.type==='hotel'?'酒店色块只统计当前时间轴内的停留，不代表整晚睡眠时长。':'本段为暂定时间分配，需随实际交通、预约与当天进度调整。'))}</p>`;}
 function renderSchedule(d,p){
- const target=$('day-schedule'),s=scheduleFor(d,p);if(!s){target.innerHTML='';return;}
+ const target=$('day-schedule'),s=scheduleFor(d,p);if(!s){target.innerHTML=d.schedulePending?`<section class="allocation-card"><h3>时间分配待复核</h3><p>${escapeHtml(d.schedulePending)}</p><p>请按下方卡片的先后顺序与宽泛时段查看，未沿用旧路线的分钟表。</p></section>`:'';return;}
  const span=s.end-s.start,position=m=>(m-s.start)/span*100,ticks=[s.start];
  for(let m=Math.ceil(s.start/60)*60;m<s.end;m+=60)if(m-s.start>=45&&s.end-m>=45)ticks.push(m);
  ticks.push(s.end);

@@ -170,6 +170,12 @@ export const WEATHER_DAYS = {
         "name": "奈良",
         "latitude": 34.6827,
         "longitude": 135.8201
+      },
+      {
+        "id": "hanamusubi",
+        "name": "有马温泉",
+        "latitude": 34.796301,
+        "longitude": 135.25009
       }
     ]
   },
@@ -189,10 +195,10 @@ export const WEATHER_DAYS = {
         "longitude": 135.1136
       },
       {
-        "id": "arima",
+        "id": "hanamusubi",
         "name": "有马温泉",
-        "latitude": 34.8003,
-        "longitude": 135.2424
+        "latitude": 34.796301,
+        "longitude": 135.25009
       }
     ]
   },
@@ -206,10 +212,10 @@ export const WEATHER_DAYS = {
         "longitude": 135.2441
       },
       {
-        "id": "arima",
-        "name": "有马温泉",
-        "latitude": 34.8003,
-        "longitude": 135.2424
+        "id": "sannomiya",
+        "name": "神户",
+        "latitude": 34.693,
+        "longitude": 135.1947
       }
     ]
   },
@@ -309,7 +315,7 @@ export const WEATHER_DAYS = {
     "locations": [
       {
         "id": "kaigetsu",
-        "name": "加太海月",
+        "name": "加太地区",
         "latitude": 34.2742,
         "longitude": 135.0632
       },
@@ -332,7 +338,7 @@ export const WEATHER_DAYS = {
       },
       {
         "id": "kaigetsu",
-        "name": "加太海月",
+        "name": "加太地区",
         "latitude": 34.2742,
         "longitude": 135.0632
       }

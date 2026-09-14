@@ -14,6 +14,7 @@ const VISIT_TIMES={
  kaigetsu:'入住后酒店休闲 3–4小时；海边短走15–30分钟可省略',arima:'入住后预留 60–90分钟洗漱、泡汤与放松，不要求持续浸泡'
 };
 function durationFor(d,s,i){
+ if(s.duration)return s.duration;
  if(d.id===0)return '';
  if(s.id==='arima')return d.id===6?VISIT_TIMES.arima:'早餐、收拾与退房预留60–90分钟，按航班缩短';
  if(s.id==='kaigetsu')return d.id===6?VISIT_TIMES.kaigetsu:'早餐、收拾与退房预留60–90分钟，按送站时间倒排';
@@ -72,5 +73,12 @@ const BUDGETS={
  expense('当晚住宿',0,0,'当天返程，不安排日本住宿。'),
  expense('杂项预留',200,600,'少量行程必需支出预留。')],notes:['若航班要求早于酒店送站离开，另行交通费用需追加；不在当前公共交通预算中。']}
 };
-function budgetFor(d,p){return BUDGETS[p==='B'&&d.id>=6?`${d.id}B`:d.id];}
+function budgetFor(d,p){
+ const b=structuredClone(d.budget||BUDGETS[p==='B'&&d.id>=6?`${d.id}B`:d.id]);b.items??=[];b.pending=Boolean(d.budgetPending);
+ if(d.id===5&&!b.items.some(i=>i.name.includes('门票')))b.items.push(expense('若草山成人入山费',150,150,'正常开放时段入山；其他费用待报价。','https://www.pref.nara.lg.jp/site/park/2585.html',true));
+ if(d.choices?.includes('东大寺＋南大门'))b.items.push(expense('东大寺成人门票',800,800,'选择支线时计入；南大门外观不另收费。','https://www.todaiji.or.jp/information/haikan/',true));
+ if(d.choices?.includes('跳过茶体验'))b.items=b.items.filter(i=>!i.name.includes('对凤庵'));
+ if(d.choices?.includes('饭后Venus Bridge')){b.pending=true;b.notes=[...(b.notes||[]),'五人出租车往返费用待报价。'];}
+ return b;
+}
 function sumBudget(b,includeHotel=true){return b.items.filter(x=>includeHotel||x.name!=='当晚住宿').reduce((a,x)=>[a[0]+x.min,a[1]+x.max],[0,0]);}

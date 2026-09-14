@@ -1,4 +1,3 @@
-// Curated photo references; source and rights are recorded per image.
 const PLACE_IMAGES = Object.freeze({
   "kix": {
     "src": "photos/kix.jpg",
@@ -1113,5 +1112,20 @@ const PLACE_IMAGES = Object.freeze({
     "thumbnail": "photos/thumbs/kamo.jpg",
     "thumbnailWidth": 420,
     "thumbnailHeight": 279
+  },
+  "hanamusubi": {
+    "kind": "official",
+    "src": "photos/hanamusubi.jpg",
+    "thumbnail": "photos/thumbs/hanamusubi.jpg",
+    "width": 450,
+    "height": 320,
+    "thumbnailWidth": 450,
+    "thumbnailHeight": 320,
+    "alt": "御幸荘 花結び酒店外观参考",
+    "caption": "花結び官网外观参考；未预订。",
+    "author": "御幸荘 花結び",
+    "license": "官网图片 · 版权所有",
+    "source": "https://www.hanamusubi.co.jp/access/",
+    "note": "仅作住宿地点参考，具体房型以预订为准。"
   }
 });

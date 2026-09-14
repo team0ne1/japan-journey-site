@@ -72,7 +72,7 @@ function card(item) {
   el.append(detail);
   const link = node('a', 'Google 地图 ↗'); link.href = item.mapsUrl; link.target = '_blank'; link.rel = 'noopener noreferrer';
   const links = node('div', undefined, 'favorite-card-links');links.append(link);
-  if (item.sourceUrl) { const source = node('a', '消息来源 ↗');source.href = item.sourceUrl;source.target = '_blank';source.rel = 'noopener noreferrer';links.append(source); }
+  for (const entry of item.sources ?? (item.sourceUrl ? [{url:item.sourceUrl,title:''}] : [])) { const source = node('a', entry.title || entry.url);source.href = entry.url;source.target = '_blank';source.rel = 'noopener noreferrer';source.title = entry.url;links.append(source); }
   el.append(links, node('p', `${item.name} 收藏 · ${new Intl.DateTimeFormat('zh-CN', { timeZone: 'Asia/Tokyo', dateStyle: 'medium' }).format(item.created)}`, 'favorite-meta'));
   el.append(interestControls(item));
   return el;
@@ -104,6 +104,34 @@ async function load() {
 }
 function init() {
   const form = $('favorite-form'); if (!form) return;
+  const sourceBox = $('favorite-sources'), addSource = $('favorite-source-add');
+  function addRow() {
+    if(sourceBox.children.length >= 8) return;
+    const row = node('div', undefined, 'favorite-source-row');
+    const urlLabel = node('label','来源链接'), input = node('input');input.type='url';input.maxLength=2048;input.placeholder='https://…';input.dataset.sourceUrl='';urlLabel.append(input);
+    const titleLabel = node('label','来源标题（可选）'), title = node('input');title.maxLength=300;title.dataset.sourceTitle='';titleLabel.append(title);
+    const status = node('small','');status.setAttribute('role','status');
+    const remove = node('button','移除来源','favorite-button');remove.type='button';
+    let revision=0, edited=false, timer;
+    title.addEventListener('input',()=>{edited=true;});
+    input.addEventListener('input',()=>{
+      const current=++revision;clearTimeout(timer);if(!edited)title.value='';status.textContent='';
+      timer=setTimeout(async()=>{
+        const url=input.value.trim();if(!url || !input.validity.valid)return;
+        status.textContent='正在读取标题…';
+        try { const data=await api('/api/favorites/preview',{url});
+          if(current!==revision || !row.isConnected)return;
+          if(data.title && !edited && !title.value)title.value=data.title;
+          status.textContent=data.title?'已读取标题，可自行修改。':'未取得标题，可留空并直接显示URL。';
+        } catch { if(current===revision && row.isConnected)status.textContent='未取得标题，可直接保存链接。'; }
+      },600);
+    });
+    remove.addEventListener('click',()=>{revision++;clearTimeout(timer);row.remove();addSource.disabled=false;});
+    row.append(urlLabel,titleLabel,status,remove);sourceBox.append(row);addSource.disabled=sourceBox.children.length>=8;
+  }
+  addSource.addEventListener('click',()=>{addRow();sourceBox.lastElementChild?.querySelector('input')?.focus();});
+  addRow();
+  form.addEventListener('reset',()=>{sourceBox.replaceChildren();addSource.disabled=false;addRow();});
   const hoursInput = form.elements.hours;
   const syncHoursMode = () => {
     const pendingHours = form.elements.hoursMode.value === 'pending';
@@ -113,7 +141,7 @@ function init() {
   form.querySelectorAll('[name=hoursMode]').forEach(radio => radio.addEventListener('change', syncHoursMode));
   form.addEventListener('reset', () => queueMicrotask(syncHoursMode));
   syncHoursMode();
-  const values = () => ({ region: form.elements.region.value, title: form.elements.title.value.trim(), hours: form.elements.hoursMode.value === 'pending' ? '待确认' : hoursInput.value.trim(), mapsUrl: form.elements.mapsUrl.value.trim(), sourceUrl: form.elements.sourceUrl.value.trim() });
+  const values = () => ({ region: form.elements.region.value, title: form.elements.title.value.trim(), hours: form.elements.hoursMode.value === 'pending' ? '待确认' : hoursInput.value.trim(), mapsUrl: form.elements.mapsUrl.value.trim(), sources: [...sourceBox.children].map(row=>({url:row.querySelector('[data-source-url]').value.trim(),title:row.querySelector('[data-source-title]').value.trim()})).filter(s=>s.url) });
   const regionSelect = $('favorite-region');
   for (const region of FAVORITE_REGIONS) { const option = node('option', region.name);option.value = region.id;regionSelect.append(option); }
   $('favorites-refresh').addEventListener('click', load);

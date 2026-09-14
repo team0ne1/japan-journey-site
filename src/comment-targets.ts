@@ -49,11 +49,29 @@ export const COMMENT_TARGETS: Record<string, CommentTarget> = {
     "place": "Cross Hotel Osaka",
     "time": "较早出发"
   },
+  "route-shared-d2-osakast": {
+    "day": 2,
+    "plan": "shared",
+    "place": "大阪站",
+    "time": "衔接时段 · 待确认"
+  },
+  "route-shared-d2-kyotost-in": {
+    "day": 2,
+    "plan": "shared",
+    "place": "京都站",
+    "time": "衔接时段 · 待确认"
+  },
   "d2-kyoto": {
     "day": 2,
     "plan": "shared",
     "place": "京都站前酒店",
     "time": "上午"
+  },
+  "route-shared-d2-kyotost-out": {
+    "day": 2,
+    "plan": "shared",
+    "place": "京都站",
+    "time": "衔接时段 · 待确认"
   },
   "d2-umahori": {
     "day": 2,
@@ -72,6 +90,18 @@ export const COMMENT_TARGETS: Record<string, CommentTarget> = {
     "plan": "shared",
     "place": "小火车嵯峨站",
     "time": "约25分钟车程后"
+  },
+  "route-shared-d2-nonomiya": {
+    "day": 2,
+    "plan": "shared",
+    "place": "野宫站",
+    "time": "衔接时段 · 待确认"
+  },
+  "route-shared-d2-otagibus": {
+    "day": 2,
+    "plan": "shared",
+    "place": "爱宕寺前",
+    "time": "衔接时段 · 待确认"
   },
   "d2-otagi": {
     "day": 2,
@@ -102,6 +132,18 @@ export const COMMENT_TARGETS: Record<string, CommentTarget> = {
     "plan": "shared",
     "place": "渡月桥",
     "time": "下午"
+  },
+  "route-shared-d2-sagajr": {
+    "day": 2,
+    "plan": "shared",
+    "place": "JR嵯峨岚山站",
+    "time": "衔接时段 · 待确认"
+  },
+  "route-shared-d2-kyotost-back": {
+    "day": 2,
+    "plan": "shared",
+    "place": "京都站",
+    "time": "衔接时段 · 待确认"
   },
   "d2-kyoto-2": {
     "day": 2,
@@ -139,6 +181,12 @@ export const COMMENT_TARGETS: Record<string, CommentTarget> = {
     "place": "京都站前酒店",
     "time": "晚上"
   },
+  "route-shared-d2-kamo": {
+    "day": 2,
+    "plan": "shared",
+    "place": "鸭川公共河岸・备选",
+    "time": "衔接时段 · 待确认"
+  },
   "d3-kyoto": {
     "day": 3,
     "plan": "shared",
@@ -150,6 +198,12 @@ export const COMMENT_TARGETS: Record<string, CommentTarget> = {
     "plan": "shared",
     "place": "若王子桥・哲学小道南端",
     "time": "上午"
+  },
+  "route-shared-d3-03": {
+    "day": 3,
+    "plan": "shared",
+    "place": "哲学小道",
+    "time": "衔接时段 · 待确认"
   },
   "d3-ginkaku": {
     "day": 3,
@@ -175,6 +229,12 @@ export const COMMENT_TARGETS: Record<string, CommentTarget> = {
     "place": "贵船神社本宫",
     "time": "约16:00–18:00"
   },
+  "route-shared-d3-kifune-return": {
+    "day": 3,
+    "plan": "shared",
+    "place": "贵船神社本宫",
+    "time": "下山前"
+  },
   "d3-kibuneguchi-2": {
     "day": 3,
     "plan": "shared",
@@ -193,11 +253,29 @@ export const COMMENT_TARGETS: Record<string, CommentTarget> = {
     "place": "京都站前酒店",
     "time": "晚饭／返房"
   },
+  "route-shared-d3-okumiya": {
+    "day": 3,
+    "plan": "shared",
+    "place": "贵船奥宫方向",
+    "time": "衔接时段 · 待确认"
+  },
   "d4-kyoto": {
     "day": 4,
     "plan": "shared",
     "place": "京都站前酒店",
     "time": "早上"
+  },
+  "route-shared-d4-kyotost-out": {
+    "day": 4,
+    "plan": "shared",
+    "place": "京都站",
+    "time": "衔接时段 · 待确认"
+  },
+  "route-shared-d4-inarist-out": {
+    "day": 4,
+    "plan": "shared",
+    "place": "JR稻荷站",
+    "time": "衔接时段 · 待确认"
   },
   "d4-inari": {
     "day": 4,
@@ -205,11 +283,59 @@ export const COMMENT_TARGETS: Record<string, CommentTarget> = {
     "place": "伏见稻荷大社",
     "time": "早上短线"
   },
+  "route-shared-d4-senbon-out": {
+    "day": 4,
+    "plan": "shared",
+    "place": "千本鸟居",
+    "time": "衔接时段 · 待确认"
+  },
+  "route-shared-d4-okusha": {
+    "day": 4,
+    "plan": "shared",
+    "place": "奥社",
+    "time": "衔接时段 · 待确认"
+  },
+  "route-shared-d4-senbon-back": {
+    "day": 4,
+    "plan": "shared",
+    "place": "千本鸟居",
+    "time": "衔接时段 · 待确认"
+  },
+  "route-shared-d4-inari-return": {
+    "day": 4,
+    "plan": "shared",
+    "place": "伏见稻荷大社",
+    "time": "短线折返后"
+  },
+  "route-shared-d4-inarist-back": {
+    "day": 4,
+    "plan": "shared",
+    "place": "JR稻荷站",
+    "time": "衔接时段 · 待确认"
+  },
+  "route-shared-d4-kyotost-back": {
+    "day": 4,
+    "plan": "shared",
+    "place": "京都站",
+    "time": "衔接时段 · 待确认"
+  },
   "d4-kyoto-2": {
     "day": 4,
     "plan": "shared",
     "place": "京都站前酒店",
     "time": "上午"
+  },
+  "route-shared-d4-kyotost-uji": {
+    "day": 4,
+    "plan": "shared",
+    "place": "京都站",
+    "time": "衔接时段 · 待确认"
+  },
+  "route-shared-d4-ujist-arrive": {
+    "day": 4,
+    "plan": "shared",
+    "place": "JR宇治站",
+    "time": "衔接时段 · 待确认"
   },
   "d4-uji": {
     "day": 4,
@@ -229,6 +355,12 @@ export const COMMENT_TARGETS: Record<string, CommentTarget> = {
     "place": "对凤庵",
     "time": "午后 · 待预约"
   },
+  "route-shared-d4-ujiriver": {
+    "day": 4,
+    "plan": "shared",
+    "place": "宇治川",
+    "time": "衔接时段 · 待确认"
+  },
   "d4-ujibridge": {
     "day": 4,
     "plan": "shared",
@@ -240,6 +372,12 @@ export const COMMENT_TARGETS: Record<string, CommentTarget> = {
     "plan": "shared",
     "place": "Hotel Trend JR Uji Ekimae",
     "time": "15:00后"
+  },
+  "route-shared-d4-ujist-fireworks": {
+    "day": 4,
+    "plan": "shared",
+    "place": "JR宇治站",
+    "time": "衔接时段 · 待确认"
   },
   "d4-nagaike": {
     "day": 4,
@@ -259,209 +397,359 @@ export const COMMENT_TARGETS: Record<string, CommentTarget> = {
     "place": "JR长池站",
     "time": "散场后"
   },
+  "route-shared-d4-ujist-return": {
+    "day": 4,
+    "plan": "shared",
+    "place": "JR宇治站",
+    "time": "衔接时段 · 待确认"
+  },
   "d4-uji-3": {
     "day": 4,
     "plan": "shared",
     "place": "Hotel Trend JR Uji Ekimae",
     "time": "晚间"
   },
-  "d5-uji": {
+  "d5a-uji": {
     "day": 5,
-    "plan": "shared",
+    "plan": "A",
     "place": "Hotel Trend JR Uji Ekimae",
     "time": "早餐后"
   },
-  "d5-nara": {
+  "route-a-d5-ujist": {
     "day": 5,
-    "plan": "shared",
-    "place": "御宿野乃奈良",
+    "plan": "A",
+    "place": "JR宇治站",
+    "time": "衔接时段 · 待确认"
+  },
+  "route-a-d5-narast-arrive": {
+    "day": 5,
+    "plan": "A",
+    "place": "JR奈良站",
+    "time": "衔接时段 · 待确认"
+  },
+  "d5a-kintetsu-storage": {
+    "day": 5,
+    "plan": "A",
+    "place": "近铁奈良站・行李寄存",
     "time": "上午"
   },
-  "d5-kasuga": {
+  "d5a-kasuga": {
     "day": 5,
-    "plan": "shared",
+    "plan": "A",
     "place": "春日大社・林荫参道",
     "time": "上午"
   },
-  "d5-mizuya": {
+  "d5a-mizuya": {
     "day": 5,
-    "plan": "shared",
+    "plan": "A",
     "place": "水谷茶屋附近",
-    "time": "午饭／午后"
+    "time": "午前或午间"
   },
-  "d5-wakakusa": {
+  "d5a-wakakusa": {
     "day": 5,
-    "plan": "shared",
+    "plan": "A",
     "place": "若草山南侧山麓",
-    "time": "下午"
+    "time": "午前至午后较早"
   },
-  "d5-hill": {
+  "d5a-hill": {
     "day": 5,
-    "plan": "shared",
+    "plan": "A",
     "place": "若草山一重目草坡",
-    "time": "闭门前夕照"
+    "time": "目标13:00左右开始下山"
   },
-  "d5-wakakusa-2": {
+  "d5a-down": {
     "day": 5,
-    "plan": "shared",
+    "plan": "A",
     "place": "若草山南侧山麓",
-    "time": "17:00前退出"
+    "time": "约13:20到山麓（预算）"
   },
-  "d5-nandaimon": {
+  "d5a-kintetsu-pickup": {
     "day": 5,
-    "plan": "shared",
-    "place": "东大寺南大门",
-    "time": "返城方向"
+    "plan": "A",
+    "place": "近铁奈良站・行李寄存",
+    "time": "约13:35到、约14:05取件进站完成（目标预算）"
   },
-  "d5-kintetsunara": {
+  "d5a-kintetsu-depart": {
     "day": 5,
-    "plan": "shared",
-    "place": "近铁奈良・晚餐区域",
-    "time": "晚饭"
+    "plan": "A",
+    "place": "近铁奈良站",
+    "time": "取件后进站"
   },
-  "d5-nara-2": {
+  "d5a-sannomiya": {
     "day": 5,
-    "plan": "shared",
-    "place": "御宿野乃奈良",
-    "time": "晚饭后"
-  },
-  "d6-nara": {
-    "day": 6,
-    "plan": "A",
-    "place": "御宿野乃奈良",
-    "time": "08:00左右"
-  },
-  "d6-storage": {
-    "day": 6,
-    "plan": "A",
-    "place": "三宫たびサポ・寄存候选",
-    "time": "09:30–09:45"
-  },
-  "d6-hakutsuru": {
-    "day": 6,
-    "plan": "A",
-    "place": "白鹤酒造资料馆",
-    "time": "10:15–11:30"
-  },
-  "d6-sannomiya": {
-    "day": 6,
     "plan": "A",
     "place": "三宫站",
-    "time": "12:00–13:00"
+    "time": "午后铁路换乘"
   },
-  "d6-suma": {
-    "day": 6,
-    "plan": "A",
-    "place": "JR须磨站",
-    "time": "13:20左右"
-  },
-  "d6-beach": {
-    "day": 6,
-    "plan": "A",
-    "place": "须磨站前海边",
-    "time": "13:30–15:00"
-  },
-  "d6-suma-2": {
-    "day": 6,
-    "plan": "A",
-    "place": "JR须磨站",
-    "time": "15:00左右"
-  },
-  "d6-motomachi": {
-    "day": 6,
-    "plan": "A",
-    "place": "神户元町站",
-    "time": "15:00后"
-  },
-  "d6-kencho": {
-    "day": 6,
-    "plan": "A",
-    "place": "县厅前站",
-    "time": "下午"
-  },
-  "d6-venus": {
-    "day": 6,
-    "plan": "A",
-    "place": "Venus Bridge",
-    "time": "17:00–18:00"
-  },
-  "d6-storage-2": {
-    "day": 6,
-    "plan": "A",
-    "place": "三宫たびサポ・寄存候选",
-    "time": "18:30–18:45"
-  },
-  "d6-sannomiya-2": {
-    "day": 6,
-    "plan": "A",
-    "place": "三宫站",
-    "time": "晚饭至19:30"
-  },
-  "d6-tanigami": {
-    "day": 6,
+  "d5a-tanigami": {
+    "day": 5,
     "plan": "A",
     "place": "谷上站",
-    "time": "19:30后"
+    "time": "换乘"
   },
-  "d6-arimaguchi": {
-    "day": 6,
+  "d5a-arimaguchi": {
+    "day": 5,
     "plan": "A",
     "place": "有马口站",
     "time": "换乘"
+  },
+  "d5a-arimast": {
+    "day": 5,
+    "plan": "A",
+    "place": "有马温泉站",
+    "time": "约16:55（目标预算）"
+  },
+  "d5a-hotel": {
+    "day": 5,
+    "plan": "A",
+    "place": "御幸荘 花結び",
+    "time": "约17:25到店、17:45完成入住（目标预算）"
+  },
+  "route-a-d5-08": {
+    "day": 5,
+    "plan": "A",
+    "place": "东大寺南大门",
+    "time": "衔接时段 · 待确认"
+  },
+  "route-a-d5-todaiji": {
+    "day": 5,
+    "plan": "A",
+    "place": "东大寺",
+    "time": "衔接时段 · 待确认"
+  },
+  "d6-arima-hotel": {
+    "day": 6,
+    "plan": "A",
+    "place": "御幸荘 花結び",
+    "time": "上午"
+  },
+  "d6-arima-town": {
+    "day": 6,
+    "plan": "A",
+    "place": "有马温泉小镇",
+    "time": "上午至午间"
+  },
+  "d6-arima-lunch": {
+    "day": 6,
+    "plan": "A",
+    "place": "有马温泉小镇",
+    "time": "12:00–13:00左右（规划）"
+  },
+  "d6-arima-pickup": {
+    "day": 6,
+    "plan": "A",
+    "place": "御幸荘 花結び",
+    "time": "午餐后"
   },
   "d6-arimast": {
     "day": 6,
     "plan": "A",
     "place": "有马温泉站",
-    "time": "20:15左右"
+    "time": "取件后"
   },
-  "d6-arima": {
+  "d6-arimaguchi": {
     "day": 6,
     "plan": "A",
-    "place": "有马 Grand Hotel",
-    "time": "20:30左右"
-  },
-  "d7-arima": {
-    "day": 7,
-    "plan": "A",
-    "place": "有马 Grand Hotel",
-    "time": "按航班倒排"
-  },
-  "d7-arimast": {
-    "day": 7,
-    "plan": "A",
-    "place": "有马温泉站",
-    "time": "出发"
-  },
-  "d7-arimaguchi": {
-    "day": 7,
-    "plan": "A",
     "place": "有马口站",
-    "time": "换乘"
+    "time": "午后转场"
   },
-  "d7-tanigami": {
-    "day": 7,
+  "d6-tanigami": {
+    "day": 6,
     "plan": "A",
     "place": "谷上站",
-    "time": "换乘"
+    "time": "午后转场"
+  },
+  "d6-sannomiya": {
+    "day": 6,
+    "plan": "A",
+    "place": "三宫站",
+    "time": "午后抵达"
+  },
+  "route-a-d6-02": {
+    "day": 6,
+    "plan": "A",
+    "place": "神户市区酒店（待选）",
+    "time": "目标14:30左右（规划）"
+  },
+  "route-a-d6-city": {
+    "day": 6,
+    "plan": "A",
+    "place": "三宫・元町一带",
+    "time": "衔接时段 · 待确认"
+  },
+  "d6-motomachi": {
+    "day": 6,
+    "plan": "A",
+    "place": "神户元町站",
+    "time": "神户酒店放妥行李后至下午较晚"
+  },
+  "d6-suma": {
+    "day": 6,
+    "plan": "A",
+    "place": "JR须磨站",
+    "time": "约16:00前后出发方向，依当天节奏调整"
+  },
+  "d6-beach": {
+    "day": 6,
+    "plan": "A",
+    "place": "须磨站前海边",
+    "time": "傍晚至日落前后"
+  },
+  "d6-suma-2": {
+    "day": 6,
+    "plan": "A",
+    "place": "JR须磨站",
+    "time": "海边休息尽兴后"
+  },
+  "route-a-d6-dinner": {
+    "day": 6,
+    "plan": "A",
+    "place": "神户市区（晚餐店待选）",
+    "time": "海边休息后 · 晚上"
+  },
+  "d6-kobe-hotel": {
+    "day": 6,
+    "plan": "A",
+    "place": "神户市区酒店（待选）",
+    "time": "当晚尽兴后"
+  },
+  "d6-city-return": {
+    "day": 6,
+    "plan": "A",
+    "place": "神户元町站",
+    "time": "晚饭后 · 仅在选择夜景时"
+  },
+  "d6-venus": {
+    "day": 6,
+    "plan": "A",
+    "place": "Venus Bridge",
+    "time": "晚饭后可选，不设必到时刻"
+  },
+  "route-a-d6-return": {
+    "day": 6,
+    "plan": "A",
+    "place": "神户元町站",
+    "time": "夜景后"
+  },
+  "d7-kobe-hotel": {
+    "day": 7,
+    "plan": "A",
+    "place": "神户市区酒店（待选）",
+    "time": "按航班倒排"
   },
   "d7-sannomiya": {
     "day": 7,
     "plan": "A",
     "place": "三宫站",
-    "time": "换乘机场巴士"
+    "time": "按班次倒排"
   },
   "d7-kix": {
     "day": 7,
     "plan": "A",
     "place": "关西国际机场",
-    "time": "提前抵达航站楼"
+    "time": "按航班要求提前抵达"
+  },
+  "d5-uji": {
+    "day": 5,
+    "plan": "B",
+    "place": "Hotel Trend JR Uji Ekimae",
+    "time": "早餐后"
+  },
+  "route-b-d5-ujist": {
+    "day": 5,
+    "plan": "B",
+    "place": "JR宇治站",
+    "time": "衔接时段 · 待确认"
+  },
+  "route-b-d5-narast-arrive": {
+    "day": 5,
+    "plan": "B",
+    "place": "JR奈良站",
+    "time": "衔接时段 · 待确认"
+  },
+  "d5-nara": {
+    "day": 5,
+    "plan": "B",
+    "place": "御宿野乃奈良",
+    "time": "上午"
+  },
+  "d5-kasuga": {
+    "day": 5,
+    "plan": "B",
+    "place": "春日大社・林荫参道",
+    "time": "上午"
+  },
+  "d5-mizuya": {
+    "day": 5,
+    "plan": "B",
+    "place": "水谷茶屋附近",
+    "time": "午饭／午后"
+  },
+  "d5-wakakusa": {
+    "day": 5,
+    "plan": "B",
+    "place": "若草山南侧山麓",
+    "time": "下午"
+  },
+  "d5-hill": {
+    "day": 5,
+    "plan": "B",
+    "place": "若草山一重目草坡",
+    "time": "闭门前夕照"
+  },
+  "d5-wakakusa-2": {
+    "day": 5,
+    "plan": "B",
+    "place": "若草山南侧山麓",
+    "time": "17:00前退出"
+  },
+  "d5-kintetsunara": {
+    "day": 5,
+    "plan": "B",
+    "place": "近铁奈良站",
+    "time": "晚饭"
+  },
+  "route-b-d5-sanjo": {
+    "day": 5,
+    "plan": "B",
+    "place": "三条通",
+    "time": "衔接时段 · 待确认"
+  },
+  "route-b-d5-narast-return": {
+    "day": 5,
+    "plan": "B",
+    "place": "JR奈良站",
+    "time": "衔接时段 · 待确认"
+  },
+  "d5-nara-2": {
+    "day": 5,
+    "plan": "B",
+    "place": "御宿野乃奈良",
+    "time": "晚饭后"
+  },
+  "route-b-d5-08": {
+    "day": 5,
+    "plan": "B",
+    "place": "东大寺南大门",
+    "time": "衔接时段 · 待确认"
+  },
+  "route-b-d5-todaiji": {
+    "day": 5,
+    "plan": "B",
+    "place": "东大寺",
+    "time": "衔接时段 · 待确认"
   },
   "d6-b-nara": {
     "day": 6,
     "plan": "B",
     "place": "御宿野乃奈良",
     "time": "09:30–10:00"
+  },
+  "route-b-d6b-narast": {
+    "day": 6,
+    "plan": "B",
+    "place": "JR奈良站",
+    "time": "衔接时段 · 待确认"
   },
   "d6-b-shinimamiya": {
     "day": 6,
@@ -516,5 +804,71 @@ export const COMMENT_TARGETS: Record<string, CommentTarget> = {
     "plan": "B",
     "place": "关西国际机场",
     "time": "提前抵达航站楼"
+  },
+  "d6-b2-nara": {
+    "day": 6,
+    "plan": "B",
+    "place": "御宿野乃奈良",
+    "time": "上午，随住宿方案调整"
+  },
+  "route-b2-d6b-narast": {
+    "day": 6,
+    "plan": "B",
+    "place": "JR奈良站",
+    "time": "衔接时段 · 待确认"
+  },
+  "d6-b2-shinimamiya": {
+    "day": 6,
+    "plan": "B",
+    "place": "新今宫站",
+    "time": "交通衔接"
+  },
+  "d6-b2-wakayamashi": {
+    "day": 6,
+    "plan": "B",
+    "place": "和歌山市站",
+    "time": "交通衔接"
+  },
+  "d6-b2-kada": {
+    "day": 6,
+    "plan": "B",
+    "place": "加太站",
+    "time": "下午"
+  },
+  "d6-b2-hotel": {
+    "day": 6,
+    "plan": "B",
+    "place": "休暇村紀州加太",
+    "time": "常规15:00起入住"
+  },
+  "d7-b2-hotel": {
+    "day": 7,
+    "plan": "B",
+    "place": "休暇村紀州加太",
+    "time": "按航班倒排，常规10:00退房"
+  },
+  "d7-b2-kada": {
+    "day": 7,
+    "plan": "B",
+    "place": "加太站",
+    "time": "选定送站班次"
+  },
+  "d7-b2-wakayamashi": {
+    "day": 7,
+    "plan": "B",
+    "place": "和歌山市站",
+    "time": "铁路换乘"
+  },
+  "d7-b2-izumisano": {
+    "day": 7,
+    "plan": "B",
+    "place": "泉佐野站",
+    "time": "铁路换乘"
+  },
+  "d7-b2-kix": {
+    "day": 7,
+    "plan": "B",
+    "place": "关西国际机场",
+    "time": "按航班要求提前抵达"
   }
 };

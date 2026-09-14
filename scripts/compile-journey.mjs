@@ -1,0 +1,78 @@
+import {readFile,writeFile} from 'node:fs/promises';
+import {createHash} from 'node:crypto';
+import YAML from 'yaml';
+export function parseGraph(markdown){
+ const block=markdown.match(/```mermaid\s*\n([\s\S]*?)```/);if(!block)throw Error('Missing Mermaid route');
+ const nodes={},edges=[];let day=0;
+ for(const [i,raw] of block[1].split('\n').entries()){
+  const s=raw.trim();if(!s||s.startsWith('%%')||s==='flowchart TD'||s==='direction TB')continue;
+  let m;if((m=s.match(/^subgraph day([1-7])\[/))){day=+m[1];continue;}if(s==='end'){day=0;continue;}
+  if((m=s.match(/^(\w+)\["([^"]+)"\]$/))){if(!day||nodes[m[1]])throw Error('Duplicate/outside-day node at line '+(i+1));nodes[m[1]]={id:m[1],name:m[2],day};continue;}
+  if((m=s.match(/^(\w+)\s+(-->|-\.->)(?:\|([^|]+)\|)?\s*(\w+)$/))){edges.push({from:m[1],to:m[4],optional:m[2]==='-.->',label:m[3]||''});continue;}
+  throw Error('Unsupported route syntax at line '+(i+1)+': '+s);
+ }
+ const adjacency=Object.fromEntries(Object.keys(nodes).map(k=>[k,[]]));const incoming=new Set();
+ for(const e of edges){if(!nodes[e.from]||!nodes[e.to])throw Error('Unknown route node');if(nodes[e.from].day>nodes[e.to].day)throw Error('Backward day edge');adjacency[e.from].push(e);incoming.add(e.to);}
+ const roots=Object.keys(nodes).filter(k=>!incoming.has(k));if(roots.length!==1)throw Error('Route needs one root');
+ const paths=[],seen=new Set();function walk(id,path){if(path.includes(id))throw Error('Route cycle: '+id);seen.add(id);const next=[...path,id];if(!adjacency[id].length){if(nodes[id].name!=='关西国际机场'||nodes[id].day!==7)throw Error('Route does not reach airport');paths.push(next);if(paths.length>256)throw Error('Too many variants');}else for(const e of adjacency[id])walk(e.to,next);}
+ walk(roots[0],[]);if(seen.size!==Object.keys(nodes).length)throw Error('Unreachable node');return {nodes,edges,paths};
+}
+export async function compileJourney(){
+ const route=await readFile('docs/journey/route.md','utf8'),catalog=await readFile('docs/journey/catalog.md','utf8');const graph=parseGraph(route);
+ const blocks={};for(const m of catalog.matchAll(/```yaml journey:(\w+)\n([\s\S]*?)```/g))(blocks[m[1]]??=[]).push(YAML.parse(m[2]));
+ const places=Object.fromEntries(blocks.place.map(p=>[p.id,p]));if(Object.keys(places).length!==blocks.place.length)throw Error('Duplicate place IDs');
+ const aliases={'落柿舍':'rakushisha','若王子桥':'nyakuoji','银阁寺桥':'ginkaku','贵船神社奥宫':'okumiya','春日大社林荫参道':'kasuga','水谷茶屋':'mizuya','近铁奈良站':'kintetsunara','木津川运动公园':'fireworks','鸭川':'kamo','有马温泉小镇（午餐店待选）':'arima-town'};
+ for(const n of Object.values(graph.nodes)){n.place=aliases[n.name]||blocks.place.find(p=>p.name===n.name)?.id;if(!n.place)throw Error('Missing catalog entry: '+n.name);}
+ const keys={A:{5:'day-05-a',6:'day-06-a',7:'day-07-a'},B:{5:'day-05',6:'day-06-b',7:'day-07-b'},B2:{5:'day-05',6:'day-06-b2',7:'day-07-b2'}};
+ const variants={A:{},B:{},B2:{}};const binding={};
+ // Explicit same-place visit matching is persisted in the generated model; graph IDs
+ // identify newly introduced visits. Never attach an old ID to a replacement place.
+ const reserved={'d6-storage':'storage','d6-sannomiya-2':'sannomiya'};
+ for(const full of graph.paths){const p=full.includes('d5a_hotel')?'A':full.includes('d6b_kyukamura')?'B2':'B';
+  if(graph.edges.some(e=>full.includes(e.from)&&full[full.indexOf(e.from)+1]===e.to&&((e.label.includes('Plan A')&&p!=='A')||(e.label.includes('Plan B')&&p==='A'))))continue;
+  for(let day=1;day<=7;day++){
+   const ids=full.filter(id=>graph.nodes[id].day===day),signature=ids.join(',');const list=variants[p][day]??=[];if(list.some(v=>v.signature===signature))continue;
+   const base=blocks.day.find(d=>d.id===(keys[p][day]||'day-0'+day));if(!base)throw Error('Missing day metadata');const used=new Set();
+   const stops=ids.map((id,index)=>{const node=graph.nodes[id],candidates=base.stops.filter(s=>s.place===node.place&&!used.has(s.id));let original=candidates[0];if(original)used.add(original.id);
+    const bindKey=(day<5?'shared':p==='B2'&&day===5?'B':p)+':'+id;
+    const oldAllowed=original&&(!reserved[original.id]||reserved[original.id]===node.place);
+    let cid=binding[bindKey]??(oldAllowed?original.id:'route-'+bindKey.replace(':','-').replaceAll('_','-').toLowerCase());binding[bindKey]=cid;
+    let mode=original?.mode||'walk';let connection=original?.connection||'按路线图顺序衔接；实际步行出口与候车时间待核';
+    if(/站$/.test(node.name)&&index&&/站$/.test(graph.nodes[ids[index-1]].name)){mode='rail';connection='铁路换乘，班次与带箱换乘时间待核';}
+    if(node.place==='otagi-bus'){mode='bus';connection='野宫乘京都巴士94路至爱宕寺前；实际班次待核';}
+    if(node.place==='otagi'){mode='walk';connection='爱宕寺前下车后短走至寺门';}
+    if(node.place==='kobe-city')connection='酒店放妥行李后，三宫・元町短逛与咖啡休息';
+    if(node.place==='kobe-dinner'){mode='rail';connection='须磨返回神户市区；餐厅待选';}
+    if(node.place==='venus'){mode='taxi';connection='元町附近打车往返，五人需两辆普通车或确认大车；回程叫车待核';}
+    if(day===5&&p==='A'&&id==='d5a_sannomiya'){mode='rail';connection=original.connection;}
+    if(id==='d6_return'){mode='taxi';connection='从观景点附近允许上车处返回元町；预约回程车辆';}
+    // Newly split station legs must not inherit the original combined rail leg.
+    if(index&&/站$/.test(graph.nodes[ids[index-1]].name)&&places[node.place].hotel&&mode==='rail')mode='walk';
+    if(index&&/站$/.test(graph.nodes[ids[index-1]].name)&&places[node.place].hotel&&mode==='walk')connection='出站后步行至酒店；出口与拖箱时间以酒店实际位置为准';
+    if(node.place==='kobe-dinner')original={time:'海边休息后 · 晚上',note:'神户市区晚餐店待选，预留60–90分钟，餐饮未预订不计入费用。'};
+    if(id==='d6_evening')original={time:'晚饭后 · 仅在选择夜景时',note:'在元町附近乘出租车去Venus Bridge，非白天逛店段。'};
+    if(id==='d6_return')original={time:'夜景后',note:'预约或确认返程出租车，返回元町后回酒店。'};
+    if(id==='d3_kifune_return')original={time:'下山前',note:'在本宫附近收束；若选择奥宫支线，先回到本宫再乘巴士下山。'};
+    if(id==='d4_inari_return')original={time:'短线折返后',note:'经千本鸟居原路返回，不继续登山。'};
+    return {id:node.place,commentId:cid,graphId:id,time:original?.time||'衔接时段 · 待确认',note:original?.note||places[node.place].duration||'途经点；预留步行、换乘与等候时间。',mode,connection,duration:original?.duration,deadline:original?.deadline};
+   });
+   if(day===5&&p==='A'&&stops.some(s=>s.id==='nara'))throw Error('Plan A must not use Nara hotel storage');
+   const choices=[];if(ids.includes('d2_kamo'))choices.push('鸭川');if(ids.includes('d3_okumiya'))choices.push('贵船奥宫');if(day===4&&!ids.includes('d4_06'))choices.push('跳过茶体验');if(ids.includes('d5_todaiji'))choices.push('东大寺＋南大门');if(ids.includes('d6_10'))choices.push('饭后Venus Bridge');
+   const baseline=choices.length===0;const metrics=day<5?({1:['3–5','120–250'],2:['8–11','300–550'],3:['5–7','200–350'],4:['6–9','250–500']}[day]):day===5?(p==='A'?['4–6','200–350']:['6–9','300–550']):day===6?(p==='A'?['3–5','120–250']:['1–3','50–150']):day===7?['1–2','40–100']:null;
+   const d={...base,id:day,date:base.date.slice(5).replace('-','.'),weekday:'周'+'日一二三四五六'[new Date(base.date+'T12:00:00+09:00').getUTCDay()],links:base.links||[],notes:base.notes||[],stops,focus:[...new Set(stops.map(s=>s.id))],signature,key:ids.join('~'),label:choices.join(' · ')||'主线',choices,baseline,variantPlan:p,distance:metrics?.[0]||base.distance||'待复核',calories:metrics?.[1]||base.calories||'待复核'};
+   if(choices.length){d.distance='待复核';d.calories='待复核';d.schedulePending='已切换可选路线；时间分配需按所选支线复核，以卡片顺序和宽泛时段为准。';}
+   if(day>=5&&!(p==='B'&&day===6))d.schedulePending=base.schedule?.note||'路线已更新，交通班次与停留时间待复核。';
+   if(!base.budget?.items?.length)d.budgetPending=base.budget?.summary||'交通和酒店预算待报价，不代表免费。';
+   if(day===5&&p==='B')d.notes=d.notes.filter(n=>!n.includes('前五晚住宿'));
+   if(day>=6&&p==='B2')d.notes=d.notes.filter(n=>!n.includes('前五晚住宿')).concat('第五晚住奈良；第六、七天联动使用休暇村接驳。');
+   list.push(d);
+  }
+ }
+ for(const days of Object.values(variants))for(const list of Object.values(days))list.sort((a,b)=>Number(b.baseline)-Number(a.baseline));
+ const model={version:1,routeHash:createHash('sha256').update(route).digest('hex'),catalogHash:createHash('sha256').update(catalog).digest('hex'),nodes:graph.nodes,edges:graph.edges,places,variants};
+ const usedIds=new Set(Object.values(graph.nodes).map(n=>n.place));const coords=Object.fromEntries([...usedIds].map(id=>{const p=places[id];return [id,[p.name,p.lat??null,p.lng??null,p.mapQuery||p.name]];}));
+ const hotels=Object.fromEntries([...usedIds].filter(id=>places[id].hotel).map(id=>[id,places[id].hotel]));
+ const code=`// Generated from docs/journey/route.md and catalog.md. Do not edit.\nconst JOURNEY_MODEL=${JSON.stringify(model)};\nObject.assign(PLACES,${JSON.stringify(coords)});\nObject.assign(HOTELS,${JSON.stringify(hotels)});\nDAYS.splice(0,DAYS.length,...Object.values(JOURNEY_MODEL.variants.A).map(v=>v[0]));\nfor(const [id,v] of Object.entries(JOURNEY_MODEL.variants.B))if(+id>=5)PLAN_B[id]=v[0];\nMODES.taxi={name:'出租车',color:'#9b723c',dash:'8 5',icon:'车'};\nif(typeof ACCESS_HOURS!=='undefined')for(const p of Object.values(JOURNEY_MODEL.places)){if(p.hours)ACCESS_HOURS[p.id]=p.hours;}\nif(typeof VISIT_TIMES!=='undefined')for(const p of Object.values(JOURNEY_MODEL.places)){if(p.duration)VISIT_TIMES[p.id]=p.duration;}\n`;
+ await writeFile('dist/journey-model.js',code);return model;
+}
+if(process.argv[1]?.endsWith('compile-journey.mjs'))await compileJourney();

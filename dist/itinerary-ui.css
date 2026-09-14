@@ -31,3 +31,7 @@ html{scroll-padding-top:100px}body{background:var(--page);color:var(--ink);margi
 .allocation-tick:nth-last-child(2):not(.first)>span{display:none}
 
 .place-photo .photo-description{font-size:10px;line-height:1.6;color:#657784;text-align:left;margin:5px 0 0}.support-card .place-photo{margin:0}.support-card .stop-content{margin-top:10px}
+
+.route-choices{margin:16px 0}.route-choices label{display:block;margin-top:12px}.route-choices select{display:block;width:100%;max-width:100%;padding:10px;border:1px solid #c8d4cc;border-radius:6px;background:white;color:#28332f;margin-top:6px}
+
+.departure-deadline{margin:16px 0;padding:14px 16px;border:1px solid #b68b50;border-left:3px solid #99723d;border-radius:10px;background:#fffaf2;color:#544731;font-size:13px;line-height:1.7}.departure-deadline>strong{font-size:14px}.departure-deadline p{margin:8px 0}.departure-deadline-times{font-weight:650;color:#80551f}

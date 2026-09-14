@@ -1,3 +1,4 @@
+import { previewTitle } from './source-preview';
 import { weatherResponse } from './weather';
 import { digest, mac, validToken } from './crypto';
 import { SESSION_AGE, type Result } from './auth';
@@ -94,6 +95,7 @@ export default {
         }
         const ipHash = read ? '' : await mac(env.AUTH_SECRET!, 'ip:' + (request.headers.get('CF-Connecting-IP') ?? 'local'));
         const result = JSON.parse(await stub.execute(url.pathname, JSON.stringify(body), { sessionHash, ipHash })) as Result;
+        if (url.pathname === '/api/favorites/preview' && result.status === 200) return json({ title: await previewTitle(body.url) });
         if (url.pathname === '/api/favorites/export' && result.status === 200) {
           return secured(new Response(String(result.data.csv), { headers: {
             'Content-Type': 'text/csv; charset=utf-8',

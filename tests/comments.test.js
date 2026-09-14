@@ -55,8 +55,8 @@ describe('shared itinerary suggestions', () => {
   });
   it('isolates distinct days, repeat visits, and A/B routes while preserving shared-day threads', async () => {
     const { a } = await family();
-    for (const target of ['d1-osaka', 'd1-osaka-2', 'd2-osaka', 'd6-nara', 'd6-b-nara']) expect((await create(a.cookie, { target })).status).toBe(200);
-    for (const target of ['d1-osaka', 'd1-osaka-2', 'd2-osaka', 'd6-nara', 'd6-b-nara']) expect((await get('/api/comments?target=' + target, a.cookie)).data.comments).toHaveLength(1);
+    for (const target of ['d1-osaka', 'd1-osaka-2', 'd2-osaka', 'd6-arima-hotel', 'd6-b-nara']) expect((await create(a.cookie, { target })).status).toBe(200);
+    for (const target of ['d1-osaka', 'd1-osaka-2', 'd2-osaka', 'd6-arima-hotel', 'd6-b-nara']) expect((await get('/api/comments?target=' + target, a.cookie)).data.comments).toHaveLength(1);
     const shared = (await get('/api/comments?target=d1-osaka', a.cookie)).data.comments[0];
     expect(shared.context.plan).toBe('shared');
     expect((await get('/api/comments/summary', a.cookie)).data.counts).toHaveLength(5);
