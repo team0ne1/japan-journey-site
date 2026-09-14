@@ -75,6 +75,29 @@ function card(item) {
   for (const entry of item.sources ?? (item.sourceUrl ? [{url:item.sourceUrl,title:''}] : [])) { const source = node('a', entry.title || entry.url);source.href = entry.url;source.target = '_blank';source.rel = 'noopener noreferrer';source.title = entry.url;links.append(source); }
   el.append(links, node('p', `${item.name} 收藏 · ${new Intl.DateTimeFormat('zh-CN', { timeZone: 'Asia/Tokyo', dateStyle: 'medium' }).format(item.created)}`, 'favorite-meta'));
   el.append(interestControls(item));
+  if (item.canDelete) {
+    const actions = node('div', undefined, 'favorite-delete-actions');
+    const remove = node('button', '删除收藏点', 'favorite-button favorite-delete-button');remove.type = 'button';
+    remove.setAttribute('aria-label', `删除收藏点：${item.title}`);
+    const status = node('span', '');status.setAttribute('role', 'status');
+    remove.addEventListener('click', async () => {
+      if (!confirm(`删除「${item.title}」？所有成员都将看不到这个收藏点，其来源链接和感兴趣记录也会一并删除。此操作无法撤销。`)) return;
+      remove.disabled = true;status.textContent = '正在删除…';
+      try {
+        await api('/api/favorites/delete', { favoriteId: item.id });
+        // Invalidate earlier list responses and remove locally even if refresh fails.
+        version++;el.remove();
+        const remaining = document.querySelectorAll('#favorite-list .favorite-card').length;
+        $('favorite-count').textContent = `· ${remaining}`;
+        document.querySelectorAll('#favorite-list .favorite-region').forEach(group => {
+          const count = group.querySelectorAll('.favorite-card').length;
+          if (!count) group.remove();else group.querySelector('h3 span').textContent = `${count} 个地点`;
+        });
+        await load();
+      } catch (error) { status.textContent = error.message;remove.disabled = false; }
+    });
+    actions.append(remove, status);el.append(actions);
+  }
   return el;
 }
 function groups(items) {

@@ -87,13 +87,24 @@ export class Favorites {
       rows.sort((a, b) => FAVORITE_REGIONS.findIndex(r => r.id === a.region) - FAVORITE_REGIONS.findIndex(r => r.id === b.region));
       const interests = sql.exec<Interest>('SELECT * FROM favorite_interests ORDER BY author').toArray();
       const states = new Map(rows.map(row => [row.id, this.interest(row.id, user, interests.filter(person => person.favoriteId === row.id))]));
-      if (path === '/api/favorites') return { favorites: rows.map(({ id, region, title, hours, mapsUrl, sourceUrl, sources, name, created }) => ({ id, region, title, hours, mapsUrl, sourceUrl, sources: storedSources({sources, sourceUrl}), name, created, ...states.get(id) })) };
+      if (path === '/api/favorites') return { favorites: rows.map(({ id, region, title, hours, mapsUrl, sourceUrl, sources, name, created }) => ({ id, region, title, hours, mapsUrl, sourceUrl, sources: storedSources({sources, sourceUrl}), name, created, canDelete: user.role === 'leader', ...states.get(id) })) };
       const records = [
         ['地区', '地点名称', '营业时间', 'Google 地图链接', '消息来源链接', '添加者', '感兴趣人数', '感兴趣成员', '消息来源标题'],
         ...rows.map(row => [FAVORITE_REGIONS.find(region => region.id === row.region)?.name ?? '待分类', row.title, row.hours, row.mapsUrl, storedSources(row).map(s => s.url).join("\n"), row.name, String(states.get(row.id)!.interestCount), states.get(row.id)!.interestNames.join('、'), storedSources(row).map(s => s.title).join("\n")]),
       ];
       // UTF-8 BOM lets Excel recognize Chinese; quoted cells preserve multiline hours.
       return { csv: '\uFEFF' + records.map(record => record.map(csvCell).join(',')).join('\r\n') + '\r\n' };
+    }
+    if (path === '/api/favorites/delete') {
+      if (user.role !== 'leader') return fail(403, '只有领队可以删除收藏地点。');
+      const id = body.favoriteId;
+      if (typeof id !== 'number' || !Number.isSafeInteger(id) || id < 1) return fail(400, '收藏地点编号不正确。');
+      return this.storage.transactionSync(() => {
+        // Explicitly remove interests too; retrying deletion is harmless.
+        sql.exec('DELETE FROM favorite_interests WHERE favoriteId=?', id);
+        sql.exec('DELETE FROM favorites WHERE id=?', id);
+        return { deleted: true, favoriteId: id };
+      });
     }
     if (path === '/api/favorites/interest') {
       const id = body.favoriteId;

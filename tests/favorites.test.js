@@ -230,3 +230,24 @@ it('preview requires authentication, same origin, and enforces its own rate limi
  for(let i=0;i<40;i++)expect((await post('/api/favorites/preview',{url:'http://127.0.0.1'},a.cookie)).data.title).toBe('');
  expect((await post('/api/favorites/preview',{url:'https://example.com'},a.cookie)).status).toBe(429);
 });
+
+it('only leader can delete any favorite, including interests; retries are safe',async()=>{
+ const {a,b,leader}=await family();const made=await create(a.cookie);const favoriteId=made.data.id;
+ await post('/api/favorites/interest',{favoriteId,interested:true},b.cookie);
+ expect((await get('/api/favorites',a.cookie)).data.favorites[0].canDelete).toBe(false);
+ expect((await get('/api/favorites',leader)).data.favorites[0].canDelete).toBe(true);
+ expect((await post('/api/favorites/delete',{favoriteId})).status).toBe(401);
+ expect((await post('/api/favorites/delete',{favoriteId,role:'leader'},a.cookie)).status).toBe(403);
+ expect((await post('/api/favorites/delete',{favoriteId},b.cookie)).status).toBe(403);
+ expect((await post('/api/favorites/delete',{favoriteId},leader,{Origin:'https://evil.example'})).status).toBe(403);
+ expect((await post('/api/favorites/delete',{favoriteId:-1},leader)).status).toBe(400);
+ expect((await post('/api/favorites/delete',{favoriteId},leader)).status).toBe(200);
+ expect((await post('/api/favorites/delete',{favoriteId},leader)).status).toBe(200);
+ expect((await get('/api/favorites',a.cookie)).data.favorites).toEqual([]);
+ await runInDurableObject(stub(),async(_instance,state)=>{
+  expect(state.storage.sql.exec('SELECT * FROM favorite_interests WHERE favoriteId=?',favoriteId).toArray()).toEqual([]);
+ });
+ expect((await post('/api/favorites/interest',{favoriteId,interested:true},b.cookie)).status).toBe(404);
+ const csv=await exports.default.fetch(origin+'/api/favorites/export',{headers:{Cookie:leader}});expect(parseCsv(await csv.text())).toHaveLength(1);
+ expect((await create(a.cookie)).status).toBe(200);
+});

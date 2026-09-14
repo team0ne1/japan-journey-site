@@ -25,3 +25,5 @@
 .favorite-region[data-region=unassigned]{--region-bg:#fff;--region-border:#77716A;--region-ink:#77716A}
 
 .favorite-sources{border:0;padding:0;margin:16px 0;min-width:0}.favorite-source-row{display:grid;gap:8px;border:1px solid #c7d1cf;border-radius:10px;padding:12px;margin:10px 0}.favorite-source-row label{display:grid;gap:6px}.favorite-source-row .favorite-button{justify-self:start}.favorite-card-links a{overflow-wrap:anywhere}
+
+.favorite-delete-actions{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin-top:14px;padding-top:12px;border-top:1px solid #e5e8e6}.favorite-delete-button{color:#934c47;border-color:#dfc9c6;background:#fff}.favorite-delete-actions [role=status]{font-size:12px;color:#715953}
