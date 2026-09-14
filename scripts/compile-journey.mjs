@@ -14,7 +14,7 @@ export function parseGraph(markdown){
  const adjacency=Object.fromEntries(Object.keys(nodes).map(k=>[k,[]]));const incoming=new Set();
  for(const e of edges){if(!nodes[e.from]||!nodes[e.to])throw Error('Unknown route node');if(nodes[e.from].day>nodes[e.to].day)throw Error('Backward day edge');adjacency[e.from].push(e);incoming.add(e.to);}
  const roots=Object.keys(nodes).filter(k=>!incoming.has(k));if(roots.length!==1)throw Error('Route needs one root');
- const paths=[],seen=new Set();function walk(id,path){if(path.includes(id))throw Error('Route cycle: '+id);seen.add(id);const next=[...path,id];if(!adjacency[id].length){if(nodes[id].name!=='关西国际机场'||nodes[id].day!==7)throw Error('Route does not reach airport');paths.push(next);if(paths.length>256)throw Error('Too many variants');}else for(const e of adjacency[id])walk(e.to,next);}
+ const paths=[],seen=new Set();function walk(id,path){if(path.includes(id))throw Error('Route cycle: '+id);seen.add(id);const next=[...path,id];if(!adjacency[id].length){if(nodes[id].name!=='关西国际机场'||nodes[id].day!==7)throw Error('Route does not reach airport');paths.push(next);if(paths.length>1024)throw Error('Too many variants');}else for(const e of adjacency[id])walk(e.to,next);}
  walk(roots[0],[]);if(seen.size!==Object.keys(nodes).length)throw Error('Unreachable node');return {nodes,edges,paths};
 }
 export async function compileJourney(){
@@ -33,14 +33,17 @@ export async function compileJourney(){
   for(let day=1;day<=7;day++){
    const ids=full.filter(id=>graph.nodes[id].day===day),signature=ids.join(',');const list=variants[p][day]??=[];if(list.some(v=>v.signature===signature))continue;
    const base=blocks.day.find(d=>d.id===(keys[p][day]||'day-0'+day));if(!base)throw Error('Missing day metadata');const used=new Set();
-   const stops=ids.map((id,index)=>{const node=graph.nodes[id],candidates=base.stops.filter(s=>s.place===node.place&&!used.has(s.id));let original=candidates[0];if(original)used.add(original.id);
+   const lazy=day===2&&ids.includes('d2_06')&&!ids.includes('d2_kyotost_out'), lazyBranch=lazy?base.optional.find(o=>o.id==='day-02-optional-lazy'):null;
+   const hozu=ids.includes('d2h_board'), branch=hozu?base.optional.find(o=>o.id==='day-02-optional-hozu'):null;
+   const stops=ids.map((id,index)=>{const node=graph.nodes[id],candidates=base.stops.filter(s=>s.place===node.place&&!used.has(s.id));let original=candidates[0];if(hozu&&id.startsWith('d2h_'))original=branch.stops.find(s=>s.id===id.replaceAll('_','-'));if(hozu&&id==='d2_sagajr')original=branch.stops.find(s=>s.id==='d2h-return');if(original)used.add(original.id);
     const bindKey=(day<5?'shared':p==='B2'&&day===5?'B':p)+':'+id;
     const oldAllowed=original&&(!reserved[original.id]||reserved[original.id]===node.place);
     let cid=binding[bindKey]??(oldAllowed?original.id:'route-'+bindKey.replace(':','-').replaceAll('_','-').toLowerCase());binding[bindKey]=cid;
     let mode=original?.mode||'walk';let connection=original?.connection||'按路线图顺序衔接；实际步行出口与候车时间待核';
     if(/站$/.test(node.name)&&index&&/站$/.test(graph.nodes[ids[index-1]].name)){mode='rail';connection='铁路换乘，班次与带箱换乘时间待核';}
+    if(hozu&&id.startsWith('d2h_')&&original){mode=original.mode||mode;connection=original.connection||connection;}
     if(node.place==='otagi-bus'){mode='bus';connection='野宫乘京都巴士94路至爱宕寺前；实际班次待核';}
-    if(node.place==='otagi'){mode='walk';connection='爱宕寺前下车后短走至寺门';}
+    if(node.place==='otagi'&&!hozu){mode='walk';connection='爱宕寺前下车后短走至寺门';}
     if(node.place==='kobe-city')connection='酒店放妥行李后，三宫・元町短逛与咖啡休息';
     if(node.place==='kobe-dinner'){mode='rail';connection='须磨返回神户市区；餐厅待选';}
     if(node.place==='venus'){mode='taxi';connection='元町附近打车往返，五人需两辆普通车或确认大车；回程叫车待核';}
@@ -54,17 +57,39 @@ export async function compileJourney(){
     if(id==='d6_return')original={time:'夜景后',note:'预约或确认返程出租车，返回元町后回酒店。'};
     if(id==='d3_kifune_return')original={time:'下山前',note:'在本宫附近收束；若选择奥宫支线，先回到本宫再乘巴士下山。'};
     if(id==='d4_inari_return')original={time:'短线折返后',note:'经千本鸟居原路返回，不继续登山。'};
+    if(hozu&&id==='d2_01')original={...original,time:'约06:00–06:30出发（倒排预算）',note:'为10:00游船提前离开大阪；早餐另安排，班次与酒店寄存待确认。'};
+    if(hozu&&id==='d2_02')original={...original,time:'目标08:00–08:15寄存完成',note:'先寄存后乘JR赴龟冈站北口；寄存、车站移动和候车需留余量。'};
+    if(hozu&&id==='d2_11')original={...original,time:'岚山返程后',note:'回酒店办理入住并休息约60分钟；晚间祇园按体力缩短。'};
+    if(lazy){
+     original={...original,time:id==='d2_01'?'10:00起床后退房（暂定）':id==='d2_osakast'?'目标10:30出发，视酒店衔接调整':id==='d2_02'?'抵达京都后寄存、午餐':id==='d2_06'?'午餐后上山，争取15:00前到寺':id==='d2_11'?'回酒店休息约60分钟':'按当日进度从容衔接'};
+     if(id==='d2_06'){mode='taxi';connection=lazyBranch.stops[0].connection;original.note=lazyBranch.stops[0].note+' '+lazyBranch.scheduleNote;}
+    }
     return {id:node.place,commentId:cid,graphId:id,time:original?.time||'衔接时段 · 待确认',note:original?.note||places[node.place].duration||'途经点；预留步行、换乘与等候时间。',mode,connection,duration:original?.duration,deadline:original?.deadline};
    });
    if(day===5&&p==='A'&&stops.some(s=>s.id==='nara'))throw Error('Plan A must not use Nara hotel storage');
-   const choices=[];if(ids.includes('d2_kamo'))choices.push('鸭川');if(ids.includes('d3_okumiya'))choices.push('贵船奥宫');if(day===4&&!ids.includes('d4_06'))choices.push('跳过茶体验');if(ids.includes('d5_todaiji'))choices.push('东大寺＋南大门');if(ids.includes('d6_10'))choices.push('饭后Venus Bridge');
+   const choices=[];if(lazy)choices.push('究极懒人');if(hozu)choices.push('保津川游船');if(ids.includes('d2_kamo'))choices.push('鸭川');if(ids.includes('d3_okumiya'))choices.push('贵船奥宫');if(day===4&&!ids.includes('d4_06'))choices.push('跳过茶体验');if(ids.includes('d5_todaiji'))choices.push('东大寺＋南大门');if(ids.includes('d6_10'))choices.push('饭后Venus Bridge');
    const baseline=choices.length===0;const metrics=day<5?({1:['3–5','120–250'],2:['8–11','300–550'],3:['5–7','200–350'],4:['6–9','250–500']}[day]):day===5?(p==='A'?['4–6','200–350']:['6–9','300–550']):day===6?(p==='A'?['3–5','120–250']:['1–3','50–150']):day===7?['1–2','40–100']:null;
-   const d={...base,id:day,date:base.date.slice(5).replace('-','.'),weekday:'周'+'日一二三四五六'[new Date(base.date+'T12:00:00+09:00').getUTCDay()],links:base.links||[],notes:base.notes||[],stops,focus:[...new Set(stops.map(s=>s.id))],signature,key:ids.join('~'),label:choices.join(' · ')||'主线',choices,baseline,variantPlan:p,distance:metrics?.[0]||base.distance||'待复核',calories:metrics?.[1]||base.calories||'待复核'};
+   const d={...base,id:day,date:base.date.slice(5).replace('-','.'),weekday:'周'+'日一二三四五六'[new Date(base.date+'T12:00:00+09:00').getUTCDay()],links:base.links||[],notes:base.notes||[],stops,focus:[...new Set(stops.map(s=>s.id))],signature,key:ids.join('~'),label:choices.map(c=>c==='保津川游船'?'高精力版本':c).join(' · ')||'主线',choices,baseline,variantPlan:p,distance:metrics?.[0]||base.distance||'待复核',calories:metrics?.[1]||base.calories||'待复核'};
    if(choices.length){d.distance='待复核';d.calories='待复核';d.schedulePending='已切换可选路线；时间分配需按所选支线复核，以卡片顺序和宽泛时段为准。';}
    if(day>=5&&!(p==='B'&&day===6))d.schedulePending=base.schedule?.note||'路线已更新，交通班次与停留时间待复核。';
    if(!base.budget?.items?.length)d.budgetPending=base.budget?.summary||'交通和酒店预算待报价，不代表免费。';
    if(day===5&&p==='B')d.notes=d.notes.filter(n=>!n.includes('前五晚住宿'));
    if(day>=6&&p==='B2')d.notes=d.notes.filter(n=>!n.includes('前五晚住宿')).concat('第五晚住奈良；第六、七天联动使用休暇村接驳。');
+   if(hozu){
+    d.title='高精力版本 · 游船与岚山上行徒步';
+    d.schedulePending=branch.scheduleNote;
+    d.notes=[branch.scheduleNote,'京都酒店寄存目标08:00–08:15完成，暂按06:00–06:30离开大阪酒店倒排；JR、寄存与船票余位均待确认。','上行徒步主干约3.5–4.5公里、70–95分钟，寺内与车站步行另计；含午餐停留至寺内结束约3小时15分–4小时15分。全日里程与热量待复核。','若13:00才下船，应缩短沿途停留，时间不足取消爱宕寺末段；停航或订不到车船则选原路线。'];
+    d.budget={summary:branch.budgetNote,items:[{name:'保津川成人船票',min:6000,max:6000,note:'仅本支线计入；五位成人30,000 JPY，未订票。',source:places['hozu-board'].tickets[0].source,confirmed:true},{name:'爱宕念佛寺成人门票',min:1000,max:1000,note:'完整支线包含寺院参观；取消寺院时不产生本项。',source:'https://www.otagiji.com/visit-en',confirmed:true}],notes:[branch.budgetNote,'住宿、税费、JR和两辆返程出租车待核；本支线不含小火车及龟冈接驳巴士；未预订餐饮不计。']};
+    d.budgetPending='游船版全日总额待复核，下面仅列已知门票，不套用原路线交通合计。';
+   }
+   if(lazy){
+    d.title='究极懒人 · 打车上山，沿街下行';d.intensity='省换乘，仍有下坡步行';
+    d.subtitle='京都酒店寄存、午餐后直接打车到爱宕念佛寺，再经鸟居本、落柿舍、竹林至渡月桥。';
+    d.schedulePending=lazyBranch.scheduleNote;
+    d.notes=[lazyBranch.note,lazyBranch.stops[0].note,lazyBranch.scheduleNote,'10:00起床、10:30大阪站出发仅作目标，酒店至大阪站的退房与交通需另留时间。京都寄存后可先用午餐再乘车上山。','寺内及下行仍需步行；累了随时收束。回酒店休息约60分钟，祇园夜游按体力决定。'];
+    d.budget={summary:lazyBranch.budgetNote,items:[{name:'爱宕念佛寺成人门票',min:1000,max:1000,note:'只计一次，实际进入寺院时发生。',source:'https://www.otagiji.com/visit-en',confirmed:true}],notes:[lazyBranch.budgetNote,'JR往返、京都酒店直达寺院出租车、住宿及税费尚待核算；未预订餐饮不计入。']};
+    d.budgetPending='究极懒人版总额待复核，不套用原路线交通预算。';
+   }
    list.push(d);
   }
  }
@@ -72,7 +97,7 @@ export async function compileJourney(){
  const model={version:1,routeHash:createHash('sha256').update(route).digest('hex'),catalogHash:createHash('sha256').update(catalog).digest('hex'),nodes:graph.nodes,edges:graph.edges,places,variants};
  const usedIds=new Set(Object.values(graph.nodes).map(n=>n.place));const coords=Object.fromEntries([...usedIds].map(id=>{const p=places[id];return [id,[p.name,p.lat??null,p.lng??null,p.mapQuery||p.name]];}));
  const hotels=Object.fromEntries([...usedIds].filter(id=>places[id].hotel).map(id=>[id,places[id].hotel]));
- const code=`// Generated from docs/journey/route.md and catalog.md. Do not edit.\nconst JOURNEY_MODEL=${JSON.stringify(model)};\nObject.assign(PLACES,${JSON.stringify(coords)});\nObject.assign(HOTELS,${JSON.stringify(hotels)});\nDAYS.splice(0,DAYS.length,...Object.values(JOURNEY_MODEL.variants.A).map(v=>v[0]));\nfor(const [id,v] of Object.entries(JOURNEY_MODEL.variants.B))if(+id>=5)PLAN_B[id]=v[0];\nMODES.taxi={name:'出租车',color:'#9b723c',dash:'8 5',icon:'车'};\nif(typeof ACCESS_HOURS!=='undefined')for(const p of Object.values(JOURNEY_MODEL.places)){if(p.hours)ACCESS_HOURS[p.id]=p.hours;}\nif(typeof VISIT_TIMES!=='undefined')for(const p of Object.values(JOURNEY_MODEL.places)){if(p.duration)VISIT_TIMES[p.id]=p.duration;}\n`;
+ const code=`// Generated from docs/journey/route.md and catalog.md. Do not edit.\nconst JOURNEY_MODEL=${JSON.stringify(model)};\nObject.assign(PLACES,${JSON.stringify(coords)});\nObject.assign(HOTELS,${JSON.stringify(hotels)});\nDAYS.splice(0,DAYS.length,...Object.values(JOURNEY_MODEL.variants.A).map(v=>v[0]));\nfor(const [id,v] of Object.entries(JOURNEY_MODEL.variants.B))if(+id>=5)PLAN_B[id]=v[0];\nMODES.boat={name:'游船',color:'#4f8194',dash:'8 4',icon:'船'};\nMODES.taxi={name:'出租车',color:'#9b723c',dash:'8 5',icon:'车'};\nif(typeof ACCESS_HOURS!=='undefined')for(const p of Object.values(JOURNEY_MODEL.places)){if(p.hours)ACCESS_HOURS[p.id]=p.hours;}\nif(typeof VISIT_TIMES!=='undefined')for(const p of Object.values(JOURNEY_MODEL.places)){if(p.duration)VISIT_TIMES[p.id]=p.duration;}\n`;
  await writeFile('dist/journey-model.js',code);return model;
 }
 if(process.argv[1]?.endsWith('compile-journey.mjs'))await compileJourney();

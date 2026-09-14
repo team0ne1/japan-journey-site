@@ -4,6 +4,10 @@
 
 Plan A：第五天下午从奈良前往有马温泉，住宿首选为御幸荘 花結び（一泊二食）；第六天在有马小镇午餐后进入神户市区，傍晚去须磨，第六晚住神户。Plan B：第五晚住奈良，第六天去加太，酒店二选一，次日在加太站合并。各方案第七天在关西国际机场汇合。
 
+第二天完整保津川游船路线命名为“高精力版本”，为全队可选支线：选择后从京都站乘JR至龟冈站，北口步行至乘船场，不乘小火车；游船回岚山，下船后徒步向北至爱宕念佛寺，首选打车下山；两条路线在返程JR嵯峨岚山站合并。
+
+第二天另设“究极懒人”支线：若在大阪睡醒较晚，抵达京都酒店寄存后直接打车到爱宕念佛寺，跳过小火车和游船，在寺院接回鸟居本→落柿舍→竹林→渡月桥的下行路线。
+
 节点仅列地点名；交通方式与时段写入资料文件，不为不同交通方式增加分支。东大寺及南大门仅为备选。酒店及餐厅尚未预订。编辑时遵循[《行程路线图维护规则》](行程路线图维护规则.md)。
 
 ```mermaid
@@ -66,13 +70,31 @@ flowchart TD
         d2_osakast --> d2_kyotost_in
         d2_kyotost_in --> d2_02
         d2_02 --> d2_kyotost_out
-        d2_kyotost_out --> d2_03
+        d2_02 -.->|备选·究极懒人| d2_06
+        d2_kyotost_out -->|原路线| d2_03
         d2_05 --> d2_nonomiya
         d2_nonomiya --> d2_otagibus
         d2_otagibus --> d2_06
         d2_10 --> d2_sagajr
         d2_sagajr --> d2_kyotost_back
         d2_kyotost_back --> d2_11
+        d2h_jrkameoka["龜岡車站"]
+        d2h_board["保津川漂流（保津川游船）"]
+        d2h_land["保津川游船岚山下船场"]
+        d2h_togetsu["渡月桥"]
+        d2h_bamboo["岚山竹林"]
+        d2h_rakushisha["落柿舍"]
+        d2h_toriimoto["嵯峨鸟居本"]
+        d2h_otagi["爱宕念佛寺"]
+        d2_kyotost_out -.->|备选·高精力版本| d2h_jrkameoka
+        d2h_jrkameoka -.-> d2h_board
+        d2h_board -.-> d2h_land
+        d2h_land -.-> d2h_togetsu
+        d2h_togetsu -.-> d2h_bamboo
+        d2h_bamboo -.-> d2h_rakushisha
+        d2h_rakushisha -.-> d2h_toriimoto
+        d2h_toriimoto -.-> d2h_otagi
+        d2h_otagi -.-> d2_sagajr
         d2_11 -.->|备选·顺路时加入·衔接待定| d2_kamo
         d2_kamo -.-> d2_12
     end

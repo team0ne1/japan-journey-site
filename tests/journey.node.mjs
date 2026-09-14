@@ -38,3 +38,29 @@ test('Day5 A uses Kintetsu storage and through train with conservative deadline'
  }
  for(const p of ['B','B2'])for(const d of model.variants[p][5])assert.ok(d.stops.every(s=>s.id!=='nara-kintetsu-storage'&&!s.deadline));
 });
+
+test('Hozu branch uses JR Kameoka without sightseeing train and returns by taxi',()=>{
+ for(const plan of ['A','B','B2']){
+  const days=model.variants[plan][2];assert.equal(days.length,6);assert.ok(!days[0].stops.some(s=>s.id==='hozu-board'));
+  for(const d of days.filter(d=>d.choices.includes('保津川游船'))){
+   const places=d.stops.map(s=>s.id);assert.ok(places.includes('jr-kameoka'));
+   assert.ok(!places.includes('kameoka')&&!places.includes('saga'));assert.ok(!places.includes('umahori'));
+   assert.equal(d.stops.find(s=>s.id==='hozu-land').mode,'boat');
+   assert.equal(d.stops.find(s=>s.graphId==='d2_sagajr').mode,'taxi');
+   assert.match(d.stops.find(s=>s.graphId==='d2h_jrkameoka').connection,/JR山阴/);assert.equal(d.stops.find(s=>s.id==='hozu-board').mode,'walk');
+   assert.ok(d.budgetPending);assert.ok(d.schedulePending);assert.equal(d.calories,'待复核');
+   assert.equal(d.budget.items.filter(i=>i.name.includes('船票')).length,1);
+   assert.equal(d.budget.items.find(i=>i.name.includes('船票')).min,6000);
+  }
+ }
+});
+
+test('lazy route taxis directly from Kyoto hotel and excludes boat and sightseeing train',()=>{
+ for(const p of ['A','B','B2'])for(const d of model.variants[p][2].filter(d=>d.choices.includes('究极懒人'))){
+  const i=d.stops.findIndex(s=>s.id==='otagi');assert.equal(d.stops[i-1].id,'kyoto');assert.equal(d.stops[i].mode,'taxi');
+  assert.ok(d.stops.every(s=>!['saga','kameoka','hozu-board','hozu-land','umahori'].includes(s.id)));
+  assert.ok(d.budgetPending&&d.schedulePending);assert.equal(d.calories,'待复核');assert.equal(d.budget.items.length,1);
+ }
+ assert.ok(model.variants.A[2].some(d=>d.label==='高精力版本'));
+ assert.ok(model.variants.A[2].some(d=>d.label==='究极懒人'));
+});

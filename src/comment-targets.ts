@@ -187,6 +187,54 @@ export const COMMENT_TARGETS: Record<string, CommentTarget> = {
     "place": "鸭川公共河岸・备选",
     "time": "衔接时段 · 待确认"
   },
+  "d2h-jrkameoka": {
+    "day": 2,
+    "plan": "shared",
+    "place": "龜岡車站",
+    "time": "目标09:00–09:15到站（预算）"
+  },
+  "d2h-board": {
+    "day": 2,
+    "plan": "shared",
+    "place": "保津川漂流（保津川游船）",
+    "time": "优先10:00船，未订"
+  },
+  "d2h-land": {
+    "day": 2,
+    "plan": "shared",
+    "place": "保津川游船岚山下船场",
+    "time": "目标约12:00下船；水位和候船会影响到达"
+  },
+  "d2h-togetsu": {
+    "day": 2,
+    "plan": "shared",
+    "place": "渡月桥",
+    "time": "衔接时段 · 待确认"
+  },
+  "d2h-bamboo": {
+    "day": 2,
+    "plan": "shared",
+    "place": "岚山竹林",
+    "time": "衔接时段 · 待确认"
+  },
+  "d2h-rakushisha": {
+    "day": 2,
+    "plan": "shared",
+    "place": "落柿舍周边",
+    "time": "衔接时段 · 待确认"
+  },
+  "d2h-toriimoto": {
+    "day": 2,
+    "plan": "shared",
+    "place": "嵯峨鸟居本",
+    "time": "衔接时段 · 待确认"
+  },
+  "d2h-otagi": {
+    "day": 2,
+    "plan": "shared",
+    "place": "爱宕念佛寺",
+    "time": "争取14:45–15:00抵达，留45–60分钟参观"
+  },
   "d3-kyoto": {
     "day": 3,
     "plan": "shared",

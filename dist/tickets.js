@@ -14,7 +14,8 @@ const ADULT_TICKETS = Object.freeze({
  kameoka: {label:'成人小火车单程参考', amount:'880', source:'https://www.kameoka.info/seeing/tram.php', note:'已含在交通预留，票价以订票时为准'}
 });
 function renderTicket(placeId) {
- const ticket=ADULT_TICKETS[placeId];
+ const meta=typeof JOURNEY_MODEL!=='undefined'?JOURNEY_MODEL.places[placeId]?.tickets?.find(t=>t.audience==='adult'):null;
+ const ticket=ADULT_TICKETS[placeId]||(meta?{label:meta.name,amount:Number(meta.amount).toLocaleString('en-US'),source:meta.source,note:meta.note,checked:meta.checked,booking:meta.booking}:null);
  if(!ticket)return '';
- return `<div class="ticket-price"><p><span>${escapeHtml(ticket.label)}</span><strong>${ticket.amount==='0'?'免费 · 0 JPY':escapeHtml(ticket.amount)+' JPY／人'}</strong></p><small>${escapeHtml(ticket.note)} · ${external(ticket.source,'票价来源')} · 核对 2026.09.12</small></div>`;
+ return `<div class="ticket-price"><p><span>${escapeHtml(ticket.label)}</span><strong>${ticket.amount==='0'?'免费 · 0 JPY':escapeHtml(ticket.amount)+' JPY／人'}</strong></p><small>${escapeHtml(ticket.note)} · ${external(ticket.source,'票价来源')} · 核对 ${escapeHtml(ticket.checked||'2026.09.12')}${ticket.booking?' · '+external(ticket.booking,'官方预约'):''}</small></div>`;
 }

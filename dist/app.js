@@ -6,10 +6,10 @@ function renderDepartureDeadline(deadline){
 const $=id=>document.getElementById(id);
 const escapeHtml=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const external=(url,label)=>`<a href="${escapeHtml(url)}" target="_blank" rel="noopener">${escapeHtml(label)} ↗</a>`;
-const placeLink=id=>'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(PLACES[id][3]);
+const placeLink=id=>(typeof JOURNEY_MODEL!=='undefined'&&JOURNEY_MODEL.places[id]?.mapUrl)||'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(PLACES[id][3]);
 // Match the supplied Xiaohongshu URL: preserve the place name and percent-encode it twice.
 const xiaohongshuLink=id=>'https://www.xiaohongshu.com/search_result_ai?keyword='+encodeURIComponent(encodeURIComponent(HOTELS[id]?.name||PLACES[id][0]));
-const routeLink=(from,to,mode)=>'https://www.google.com/maps/dir/?api=1&origin='+encodeURIComponent(PLACES[from][3])+'&destination='+encodeURIComponent(PLACES[to][3])+'&travelmode='+(mode==='walk'?'walking':mode==='taxi'?'driving':'transit');
+const routeLink=(from,to,mode)=>mode==='boat'?'https://www.hozugawakudari.jp/access':'https://www.google.com/maps/dir/?api=1&origin='+encodeURIComponent(PLACES[from][3])+'&destination='+encodeURIComponent(PLACES[to][3])+'&travelmode='+(mode==='walk'?'walking':mode==='taxi'?'driving':'transit');
 let day=1,plan='A',map=null,current=null,focusMode=true;
 function readHash(){const p=new URLSearchParams(location.hash.slice(1));day=Math.min(7,Math.max(0,Math.floor(Number(p.get('day')??1)||0)));plan=p.get('plan')==='B'?'B':'A';}
 function change(d=day,p=plan){const params=new URLSearchParams(location.hash.slice(1));params.delete('view');params.set('day',d);params.set('plan',p);location.hash=params.toString();}

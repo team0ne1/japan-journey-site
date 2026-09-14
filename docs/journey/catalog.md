@@ -13,7 +13,7 @@ timezone: Asia/Tokyo
 partySize: 5
 weightKg: 70
 currency: JPY
-updated: 2026-09-14
+updated: 2026-09-15
 hoursChecked: 2026-09-11
 status: 规划草案
 intro: 公共交通与步行
@@ -310,7 +310,88 @@ mapQuery: Torokko Saga Station
 hoursFrom: kameoka
 ```
 
+## 地点 · 保津川漂流（保津川游船）
+
+2026-09-15核查。保津川下り从龟冈单向到岚山，约16公里；这里是上船处，不能在小火车嵯峨站附近直接上这班船。选择第二天游船支线时，从京都站乘JR至龟冈站，北口步行至乘船场，不坐小火车。地址：京都府亀岡市保津町下中島2，咨询0771-22-5846。[游船官网](https://www.hozugawakudari.jp/)；[用户提供的铁路官网介绍](https://www.sagano-kanko.co.jp/tc/spot/89/)
+
+2026年3月10日至12月13日，平日定期船09:00至15:00每小时一班。官网票价页船程约2小时，FAQ约100分钟且随水位变化；排程按约2小时，加接驳、受付和候船余量。10月2日周五按此时段规划，实际运航仍以当日公告为准。[官方时刻](https://www.hozugawakudari.jp/service/timetable)；[官方票价](https://www.hozugawakudari.jp/tickets)；[官方FAQ](https://www.hozugawakudari.jp/faq)
+
+五人可按个人在线预约，官网预约说明称前日截止；无预约可现场排队，但不保证余位或等候长度。官网旧“个人预约案内”与当前说明不一致，以预约说明、2026/8/4公告及实际购票页面为准。小火车与船分开确认，五人同船需求随预订核实；未订票。票价每位成人6,000日元，五位成人30,000日元。[官方预约说明](https://www.hozugawakudari.jp/tickets/reservation)；[当日券公告](https://www.hozugawakudari.jp/emergency/43635)
+
+```yaml journey:place
+id: hozu-board
+name: 保津川漂流（保津川游船）
+mapQuery: 35.017202,135.5868593
+mapUrl: https://maps.app.goo.gl/qsj8R7UKqQ3Bv2L78
+lat: 35.017202
+lng: 135.5868593
+coordinateSource: https://maps.app.goo.gl/qsj8R7UKqQ3Bv2L78
+duration: 船程按约2小时规划；接驳、受付及候船另计
+checked: 2026-09-15
+coordinateNote: 用户指定Google地点的3d/4d坐标，2026-09-15核对；不是地图视角中心。到场后前往建筑二楼受付，实际登船位置听从工作人员指引。
+photoStatus: 待补充对应地点照片
+hours:
+  scope: 2026/3/10至12/13平日定期船
+  open: 09:00／10:00／11:00／12:00／13:00／14:00／15:00
+  last: 须在预约时刻前办理受付；本支线优先上午船
+  close: 常规定期船末班15:00
+  note: >-
+    导航目的地：保津川下り乗船場（龟冈），地址京都府亀岡市保津町下中島2；咨询0771-22-5846。
+    到场先去乘船场建筑2楼受付报到，再按工作人员指引登船，不直接到河边等船。
+    当前路线：京都站乘JR山阴本线（嵯峨野线）到JR亀岡駅，走北口，步行约8分钟到乘船场，勿走南口；五人可留10–15分钟步行余量。
+    JR龟冈站与小火车龟冈站不是同一站；本支线不坐小火车、不乘小火车站接驳巴士。目标09:15–09:30抵达受付，优先10:00船，具体报到要求以订单为准。
+    官方文章标注2011年发布，接驳班次、票价与现场动线需行前复核；天气水位可能导致停航，10/2余位尚未确认。
+  sources:
+    - - 官方JR北口步行指引
+      - https://www.hozugawakudari.jp/blog/保津川下り・・・
+    - - 官方JR步行指引视频
+      - https://www.youtube.com/watch?v=GoaQWTE-8aY
+    - - 官方小火车接驳与二楼受付指引
+      - https://www.hozugawakudari.jp/blog/経路案内・トロッコ編
+    - - 官方乘船场周边交通图
+      - https://www.hozugawakudari.jp/access
+    - - 官方指定Google地图地点
+      - https://maps.google.co.jp/maps?cid=16382368630482245859
+    - - 官方2026年时刻表
+      - https://www.hozugawakudari.jp/service/timetable
+    - - 官方预约说明
+      - https://www.hozugawakudari.jp/tickets/reservation
+  status: 2026-09-15核查；非订票确认
+tickets:
+  - id: hozu-adult
+    name: 保津川游船定期乘合船
+    category: experience
+    audience: adult
+    currency: JPY
+    amount: 6000
+    priceStatus: verified
+    checked: 2026-09-15
+    source: https://www.hozugawakudari.jp/tickets
+    booking: https://www.hozugawakudari.jp/tickets/reservation
+    note: 每位成人；五位成人合计30000日元，仅选择游船支线时计入，JR及返程交通另计。
+```
+
+## 地点 · 保津川游船岚山下船场
+
+此处为保津川下り在岚山的着船场，位于渡月桥上游一带；不是龟冈售票乘船场，也不是岚山当地短程租船的码头。以[运营方交通图](https://www.hozugawakudari.jp/access)及[FAQ中“保津川下り着船場”地图入口](https://www.hozugawakudari.jp/faq)定位。官网列下船场步行至JR嵯峨岚山站约15–20分钟，这是直接返程走法，不能当作游玩到爱宕念佛寺的时间。
+
+```yaml journey:place
+id: hozu-land
+name: 保津川游船岚山下船场
+mapQuery: Hozugawa River Boat Ride End Point
+mapUrl: https://maps.google.com/?cid=8699325452857230238
+lat: 35.0132166
+lng: 135.6731493
+coordinateSource: Google Places ChIJr-wW1QCqAWARnsMRi2g2ung
+duration: 下船整理、洗手间及休息预留15分钟
+checked: 2026-09-15
+coordinateNote: 2026-09-15通过Google Places核对Hozugawa River Boat Ride End Point坐标；此处仅为岚山下船场，不是龟冈乘船场。
+photoStatus: 待补充对应地点照片
+```
+
 ## 地点 · 爱宕念佛寺
+
+2026-09-15补充：游船支线由岚山步行上行至本寺，游览后首选打车下山到JR嵯峨岚山站，避免重复走回。寺院官网列车站至寺院出租车约5分钟、约1,500日元／车，仅作相反方向参考；返程按行车10–15分钟加叫车等待规划，实际费用与到位时间另核。五人安排两辆普通车或确认可载五名乘客的车型，不能把一辆普通车当五人车；提前约回程车，不默认寺门口有候客车辆。出租车是支线的返程交通，不另画交通分支。官网同时注明从车站步行约1小时且多上坡，不能把本支线当作全程轻松下坡。[寺院官方交通及开放信息](https://www.otagiji.com/visit-en)
 
 ```yaml journey:place
 id: otagi
@@ -432,7 +513,7 @@ hours:
   open: 户外散步区域；未查到统一门禁时刻
   last: 不适用统一景区检票；现场限制优先
   close: 官方介绍未列统一闭园时间
-  note: 按公共步行段规划；游船、商店及河边收费设施各有时间，未安排这些项目。
+  note: 按公共步行段规划；保津川游船仅在第二天可选支线加入，其他河边收费项目未安排。
   sources:
     - - 京都官方岚山地区地图
       - https://ja.kyoto.travel/doc/pdf/map/areamap_saga_arashiyama.pdf
@@ -1915,7 +1996,7 @@ id: day-02
 date: 2026-10-02
 city: 京都 · 岚山
 title: 沿山脚下行，夜里走进祇园
-subtitle: 小火车、表情各异的石像、鸟居本与竹林。晚间短游由体力决定。
+subtitle: 原路线沿山脚下行；另可选JR直达龟冈＋保津川游船，岚山下船后徒步上行至爱宕念佛寺，再打车下山。另设究极懒人版：京都酒店直接打车至爱宕念佛寺，再下行闲逛。晚间短游由体力决定。
 intensity: 较充实
 hotel: kyoto
 focus:
@@ -1931,6 +2012,8 @@ luggage: 大阪酒店退房 → 京都酒店寄存 → 轻装去岚山。下午�
 next: 明天不换酒店，行李留房间；哲学小道与贵船之间乘公共交通。
 rest: 岚山后回房休息约60分钟。结束较晚就缩短祇园夜游，正常吃晚饭。
 notes:
+  - 2026-09-15新增究极懒人支线：大阪晚起后到京都寄存，酒店直接打车到爱宕念佛寺，跳过小火车和游船，再沿原路线下行；不沿用主线早起时刻表。
+  - 2026-09-15新增游船支线；下列主线stops、时刻和预算不包含游船，选择支线须整体替换对应白天段，不能叠加两条路线。
   - 爱宕念佛寺官网列周三、周六休息，保留在10/2周五。
   - 小火车及上山巴士待核班次。鸭川黄昏仅在餐厅位置顺路且时间允许时加入。
 links:
@@ -1939,6 +2022,86 @@ links:
   - - 爱宕念佛寺开放信息
     - https://www.otagiji.com/visit-en
 optional:
+  - id: day-02-optional-lazy
+    place: otagi
+    note: 究极懒人版，适用于第二天在大阪晚起或想省体力时；全队跳过小火车和游船，京都酒店寄存后直接打车上山。
+    fromStep: d2-kyoto
+    toStep: d2-otagi
+    budgetNote: 不计小火车、游船或原上山巴士费用，改计京都酒店至寺院出租车；五人两辆普通车或可载五名乘客的车型，费用待酒店地址和车型确认。爱宕寺门票仍只计一次。
+    scheduleNote: 按实际起床和抵达京都时间安排，不设必须搭乘的观光班次。寺院16:00关闭，争取15:00前抵达并留45–60分钟参观；若太晚则放弃寺院，不赶关门。15:00是规划目标，非官方最晚入场。
+    stops:
+      - id: d2l-otagi
+        place: otagi
+        mode: taxi
+        connection: 京都站前酒店寄存行李后，从酒店直接打车至爱宕念佛寺
+        note: 不先坐JR到岚山再换车。五人两辆普通出租车或合适车型，集合出发；车程、车费及等车按具体酒店和路况另核，不套用JR嵯峨岚山站出发的5分钟报价。
+    next: 到寺院后接回d2-otagi参观及d2-toriimoto、d2-rakushisha、d2-bamboo、d2-togetsu下行顺序，再回京都酒店；这是替代抵达方式，不重复参观寺院。
+  - id: day-02-optional-hozu
+    place: hozu-board
+    note: 高精力版本：全队共同选择的完整保津川游船支线；京都站JR→龟冈站北口步行登船、船回岚山，徒步到爱宕念佛寺后首选打车下山。详见本日支线说明。
+    fromStep: d2-kyoto
+    toStep: d2-kyoto-2
+    budgetNote: 游船另加6000日元／成人；五位成人30000日元。不含小火车或龟冈接驳巴士，JR及爱宕寺返程出租车另核，不直接套用原路线交通合计。
+    scheduleNote: 优先10:00船，京都酒店争取08:00–08:15寄存完成，JR至龟冈后北口步行约8分钟；09:15–09:30抵达受付，约中午下船，14:45–15:00到寺。均为倒排预算，班次及船票待确认。
+    stops:
+      - id: d2h-jrkameoka
+        place: jr-kameoka
+        mode: rail
+        connection: 京都站乘JR山阴本线（嵯峨野线）至JR龟冈站；官方参考快速约19分钟、普通约30分钟，候车另计
+        time: 目标09:00–09:15到站（预算）
+        note: 从北口出站，不走南口；这里不是小火车龟冈站，本支线不坐小火车。
+      - id: d2h-board
+        place: hozu-board
+        mode: walk
+        connection: JR龟冈站北口步行约8分钟至乘船场；五人按10–15分钟预算，先去建筑二楼受付
+        time: 优先10:00船，未订
+        note: 目标09:15–09:30抵达并办理受付，优先预约10:00船；报到截止以订单要求为准。
+        fees:
+          - ticketOptions:
+              - hozu-adult
+            accounting: optional
+      - id: d2h-land
+        place: hozu-land
+        mode: boat
+        connection: 龟冈顺流至岚山，船程按约2小时规划
+        time: 目标约12:00下船；水位和候船会影响到达
+        note: 先整理及洗手间，再开始徒步；不把下船时刻当成保证。
+      - id: d2h-togetsu
+        place: togetsu
+        mode: walk
+        connection: 下船场沿河至渡月桥北端，步行暂留5–10分钟
+        note: 河畔短看，在周边坐下吃午餐45–60分钟；不过桥绕去南岸，餐厅待选。
+      - id: d2h-bamboo
+        place: bamboo
+        mode: walk
+        connection: 从桥北端沿岚山主街至竹林小径，沿公共道路进入
+        note: 从东向西穿竹林再向北，不穿越天龙寺收费庭园抄近路；不另加庭园参观。
+      - id: d2h-rakushisha
+        place: rakushisha
+        mode: walk
+        connection: 从竹林西侧向北，沿公共道路至落柿舍周边
+        note: 周边短停，不默认入内。
+      - id: d2h-toriimoto
+        place: toriimoto
+        mode: walk
+        connection: 沿嵯峨野街巷向北接鸟居本老街
+        note: 老街短逛，途中按需要坐下休息；化野念佛寺不自动加入。
+      - id: d2h-otagi
+        place: otagi
+        mode: walk
+        connection: 沿鸟居本旧街道继续向北上行至爱宕念佛寺，走寺院入口方向
+        time: 争取14:45–15:00抵达，留45–60分钟参观
+        note: 16:00关闭，最晚入场另核；延误时缩短或放弃末段，不赶路追关门。
+      - id: d2h-return
+        place: sagaarashiyama
+        mode: taxi
+        connection: 爱宕念佛寺→JR嵯峨岚山站，首选打车下山
+        note: 行车先留10–15分钟，叫车等待另计；五人两辆普通车或合适车型，提前约车。不再步行原路下山。
+      - id: d2h-kyoto
+        place: kyoto
+        mode: rail
+        connection: JR返回京都站，步行回酒店，接回d2-kyoto-2入住休息
+        note: 保留约60分钟回房休息；晚间祇园按体力缩短。
   - place: kamo
     note: 鸭川黄昏：20–30分钟，仅在餐厅位置顺路且体力允许时加入。
     id: day-02-optional-01
@@ -2335,6 +2498,28 @@ activityKcal:
   - 550
 dining: []
 ```
+
+### 第二天可选支线 · JR龟冈与保津川游船（2026-09-15更新）
+
+本支线不乘小火车：京都酒店寄存 → JR京都站 → JR龟冈站北口 → 步行约8分钟至乘船场 → 建筑2楼受付 → 游船至岚山。原路线的小火车安排保留，仅用于原路线。
+
+优先10:00船；暂按大阪酒店06:00–06:30出发、京都酒店08:00–08:15寄存完成、09:00–09:15到JR龟冈、09:15–09:30抵达受付倒排。车次、酒店寄存及预约仍待确认，报到截止以订单为准。JR快速约19分钟、普通约30分钟是官方参考，不含候车和站内移动。
+
+约中午下船 → 渡月桥午餐 → 竹林 → 落柿舍周边 → 鸟居本 → 爱宕念佛寺 → 打车下山至JR嵯峨岚山 → 京都酒店休息 → 按体力夜游祇园。上行步行主干约3.5–4.5公里、70–95分钟，寺内另计；连同用餐停留约3小时15分–4小时15分，晚下船时缩短或取消寺院末段，不赶16:00关门。全日里程、热量及JR、出租车总费用待核；船票6000 JPY／成人，五人30000 JPY；本支线没有小火车票或龟冈接驳巴士费。
+
+[官方JR北口交通指引](https://www.hozugawakudari.jp/blog/保津川下り・・・)。
+
+### 第二天可选支线 · 究极懒人版（2026-09-15）
+
+适用于第一晚住大阪后，第二天睡醒已晚，或当天想减少换乘和体力消耗的情况。全队选择同一走法，**不乘小火车、不坐保津川游船**：
+
+**大阪酒店退房 → 京都酒店寄存 → 从酒店直接打车到爱宕念佛寺 → 嵯峨鸟居本 → 落柿舍周边 → 岚山竹林 → 渡月桥 → JR嵯峨岚山站 → 京都酒店。**
+
+在京都酒店寄存处分岔，爱宕念佛寺处接回原路线；从寺院开始总体下行，按兴致逛，不再徒步上山。这里打车指京都酒店直接送到寺院，不是先乘JR到岚山再叫车。五人用两辆普通出租车或确认可载五名乘客的车型，车程与费用待具体酒店地址、车型和路况确认，不把官网“JR嵯峨岚山站出发约5分钟、1,500日元”的短程参考套用于京都酒店。
+
+不安排必须早起赶上的小火车或船班；按实际到达时间安排午餐、茶歇和休息，若未吃午饭就在京都酒店附近先吃再上山，餐厅待选。寺院开放09:00–16:00、周三及周六关闭，10/2为周五。宜争取15:00前到寺，留45–60分钟参观；这不是官方最晚入场承诺。如果起得太晚而无法从容参观，就取消寺院参观，改在岚山短逛，不为补全行程赶路。[寺院官方开放及交通说明](https://www.otagiji.com/visit-en)
+
+下山以鸟居本、落柿舍周边、竹林、渡月桥为顺序，不要求每处停满时间，也不自动添加其他寺院。疲惫时可以提前收束并叫车，交通调整不另画分支。寺内和下山仍需步行；省去的是上山步行及车船衔接。回京都酒店继续保留休息，祇园夜游依体力决定。费用剔除未乘坐的小火车、游船和上山巴士，加入酒店直达寺院的出租车，爱宕寺门票只计一次；原主线的时间表、交通总额和体力估算不直接沿用。
 
 ## 2026-10-03 · 京都 · 贵船
 
@@ -4216,4 +4401,28 @@ hours:
     - - 阪神官方直通运行说明
       - https://www.hanshin.co.jp/company/division/
   status: 2026-09-14核查设施，空位及时段待确认
+```
+
+## 地点 · JR龟冈站
+
+```yaml journey:place
+id: jr-kameoka
+name: 龜岡車站
+mapQuery: 35.0166895,135.5824658
+mapUrl: https://maps.app.goo.gl/bkWVswwsDiDPUT9d7
+lat: 35.0166895
+lng: 135.5824658
+coordinateSource: https://maps.app.goo.gl/bkWVswwsDiDPUT9d7
+duration: 北口出站至乘船场步行约8分钟，按10–15分钟留量
+coordinateNote: 用户指定Google龜岡車站地点坐标（非地图视角中心），2026-09-15核对；标记为车站地点，出站仍选择北口前往乘船场。
+hours:
+  scope: 乘船场步行衔接
+  open: 以JR实际列车时刻为准
+  last: 乘船受付须按订单提前抵达
+  close: 不适用景区闭园时间
+  note: 京都乘JR山阴本线（嵯峨野线），快速约19分钟、普通约30分钟；出JR龟冈站北口步行约8分钟至乘船场，先去2楼受付。
+  sources:
+    - - 官方JR交通指引
+      - https://www.hozugawakudari.jp/blog/保津川下り・・・
+  status: 2026-09-15核查；实际班次待确认
 ```
