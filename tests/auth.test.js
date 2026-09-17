@@ -269,8 +269,8 @@ describe('permanent member removal',()=>{
     expect((await post('/api/comments/create',{target:'d1-dotonbori',body:'建议保留休息时间',requestId},first.cookie)).status).toBe(200);
     expect((await post('/api/comments/create',{target:'d1-dotonbori',body:'领队的反馈',requestId},cookie)).status).toBe(200);
     await post('/api/admin/invite/rotate',{memberId:m.id},cookie); // encrypted, unclaimed replacement
-    for(let i=0;i<4;i++)await member(cookie);
-    expect((await post('/api/admin/member/create',{name:'第六位',question:'q',answer:'a'},cookie)).status).toBe(409);
+    for(let i=0;i<9;i++)await member(cookie);
+    expect((await post('/api/admin/member/create',{name:'第十一位',question:'q',answer:'a'},cookie)).status).toBe(409);
     expect((await post('/api/admin/member/remove',{memberId:m.id},cookie)).status).toBe(200);
     await evictDurableObject(stub());
     expect((await post('/api/admin/member/remove',{memberId:m.id},cookie)).status).toBe(200); // retry is safe
@@ -288,7 +288,7 @@ describe('permanent member removal',()=>{
     const stored=await runInDurableObject(stub(),(_,state)=>({rows:state.storage.sql.exec('SELECT author,name FROM comments').toArray(),rates:state.storage.sql.exec('SELECT author FROM comment_rates').toArray()}));
     expect(stored.rows.some(c=>c.author===m.id||c.name==='旅伴一')).toBe(false);
     expect(stored.rates.some(c=>c.author===m.id)).toBe(false);
-    const listing=await (await get('/api/admin/members',cookie)).json();expect(listing.members).toHaveLength(4);expect(listing.members.some(x=>x.id===m.id)).toBe(false);
+    const listing=await (await get('/api/admin/members',cookie)).json();expect(listing.members).toHaveLength(9);expect(listing.members.some(x=>x.id===m.id)).toBe(false);
     const replacement=await post('/api/admin/member/create',{name:'新旅伴',question:'q',answer:'a'},cookie);
     expect(replacement.status).toBe(200);expect(replacement.data.id).not.toBe(m.id);
     expect((await get('/',cookie)).status).toBe(200);
@@ -334,4 +334,18 @@ describe('permanent member removal',()=>{
     await runInDurableObject(stub(),(_,state)=>state.storage.sql.exec('DROP TRIGGER test_stop_removal'));
     expect((await post('/api/admin/member/remove',{memberId:m.id},cookie)).status).toBe(200);
   });
+});
+
+it('allows ten invited members, rejects an eleventh and frees a slot after removal', async()=>{
+ const {cookie}=await setup();const ids=[];
+ for(let i=0;i<10;i++){
+  const result=await post('/api/admin/member/create',{name:'朋友'+i,question:'生日',answer:'03-08'},cookie);
+  expect(result.status).toBe(200);ids.push(result.data.id);
+ }
+ const extra=()=>post('/api/admin/member/create',{name:'参考攻略的朋友',question:'生日',answer:'03-08'},cookie);
+ expect((await extra()).data.code).toBe('MEMBER_LIMIT');
+ expect((await records('member:')).length).toBe(10);
+ expect((await post('/api/admin/member/remove',{memberId:ids[0]},cookie)).status).toBe(200);
+ expect((await extra()).status).toBe(200);
+ expect((await records('member:')).length).toBe(10);
 });

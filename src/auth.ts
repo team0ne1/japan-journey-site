@@ -245,7 +245,7 @@ export class TripAuth extends DurableObject<AppEnv> {
     const next = await this.candidate(id, 1);
     this.ctx.storage.transactionSync(() => {
       this.requireLeader(context, true);
-      if (this.all('member:').length >= 5) return fail(409, 'MEMBER_LIMIT', '最多添加 5 位成员。');
+      if (this.all('member:').length >= 10) return fail(409, 'MEMBER_LIMIT', '最多添加 10 位成员。');
       this.replaceInvite(member, next);
     });
     return ok({ id });
