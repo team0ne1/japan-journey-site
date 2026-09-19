@@ -47,415 +47,427 @@ export const COMMENT_TARGETS: Record<string, CommentTarget> = {
     "day": 2,
     "plan": "shared",
     "place": "Cross Hotel Osaka",
-    "time": "较早出发"
+    "time": "按新住宿衔接 · 时刻待确认"
   },
   "route-shared-d2-osakast": {
     "day": 2,
     "plan": "shared",
     "place": "大阪站",
-    "time": "衔接时段 · 待确认"
+    "time": "按新住宿衔接 · 时刻待确认"
   },
   "route-shared-d2-kyotost-in": {
     "day": 2,
     "plan": "shared",
     "place": "京都站",
-    "time": "衔接时段 · 待确认"
+    "time": "按新住宿衔接 · 时刻待确认"
   },
-  "d2-kyoto": {
+  "d2-crosskeys-storage": {
     "day": 2,
     "plan": "shared",
-    "place": "京都站前酒店",
-    "time": "上午"
+    "place": "Cross Keys",
+    "time": "按新住宿衔接 · 时刻待确认"
   },
   "route-shared-d2-kyotost-out": {
     "day": 2,
     "plan": "shared",
     "place": "京都站",
-    "time": "衔接时段 · 待确认"
+    "time": "按新住宿衔接 · 时刻待确认"
   },
   "d2-umahori": {
     "day": 2,
     "plan": "shared",
     "place": "JR马堀站",
-    "time": "上午"
+    "time": "按新住宿衔接 · 时刻待确认"
   },
   "d2-kameoka": {
     "day": 2,
     "plan": "shared",
     "place": "小火车龟冈站",
-    "time": "按预约班次"
+    "time": "按新住宿衔接 · 时刻待确认"
   },
   "d2-saga": {
     "day": 2,
     "plan": "shared",
     "place": "小火车嵯峨站",
-    "time": "约25分钟车程后"
+    "time": "按新住宿衔接 · 时刻待确认"
   },
   "route-shared-d2-nonomiya": {
     "day": 2,
     "plan": "shared",
     "place": "野宫站",
-    "time": "衔接时段 · 待确认"
+    "time": "按新住宿衔接 · 时刻待确认"
   },
   "route-shared-d2-otagibus": {
     "day": 2,
     "plan": "shared",
     "place": "爱宕寺前",
-    "time": "衔接时段 · 待确认"
+    "time": "按新住宿衔接 · 时刻待确认"
   },
   "d2-otagi": {
     "day": 2,
     "plan": "shared",
     "place": "爱宕念佛寺",
-    "time": "上午末段"
+    "time": "按新住宿衔接 · 时刻待确认"
   },
   "d2-toriimoto": {
     "day": 2,
     "plan": "shared",
     "place": "嵯峨鸟居本",
-    "time": "午餐／茶点"
+    "time": "按新住宿衔接 · 时刻待确认"
   },
   "d2-rakushisha": {
     "day": 2,
     "plan": "shared",
     "place": "落柿舍周边",
-    "time": "下午"
+    "time": "按新住宿衔接 · 时刻待确认"
   },
   "d2-bamboo": {
     "day": 2,
     "plan": "shared",
     "place": "岚山竹林",
-    "time": "下午"
+    "time": "按新住宿衔接 · 时刻待确认"
   },
   "d2-togetsu": {
     "day": 2,
     "plan": "shared",
     "place": "渡月桥",
-    "time": "下午"
+    "time": "按新住宿衔接 · 时刻待确认"
   },
   "route-shared-d2-sagajr": {
     "day": 2,
     "plan": "shared",
     "place": "JR嵯峨岚山站",
-    "time": "衔接时段 · 待确认"
+    "time": "按新住宿衔接 · 时刻待确认"
   },
   "route-shared-d2-kyotost-back": {
     "day": 2,
     "plan": "shared",
     "place": "京都站",
-    "time": "衔接时段 · 待确认"
+    "time": "按新住宿衔接 · 时刻待确认"
   },
-  "d2-kyoto-2": {
+  "d2-kind-checkin": {
     "day": 2,
     "plan": "shared",
-    "place": "京都站前酒店",
-    "time": "休息约60分钟"
+    "place": "the kind cafe",
+    "time": "16:00–21:00（JST）"
+  },
+  "d2-kyoto-2-crosskeys": {
+    "day": 2,
+    "plan": "shared",
+    "place": "Cross Keys",
+    "time": "按新住宿衔接 · 时刻待确认"
   },
   "d2-yasaka": {
     "day": 2,
     "plan": "shared",
     "place": "八坂神社",
-    "time": "晚饭前后"
+    "time": "按新住宿衔接 · 时刻待确认"
   },
   "d2-hanami": {
     "day": 2,
     "plan": "shared",
     "place": "花见小路",
-    "time": "晚饭后"
+    "time": "按新住宿衔接 · 时刻待确认"
   },
   "d2-shirakawa": {
     "day": 2,
     "plan": "shared",
     "place": "祇园白川",
-    "time": "晚饭后"
+    "time": "按新住宿衔接 · 时刻待确认"
   },
   "d2-gionshijo": {
     "day": 2,
     "plan": "shared",
     "place": "祇园四条站",
-    "time": "返程"
+    "time": "按新住宿衔接 · 时刻待确认"
   },
-  "d2-kyoto-3": {
+  "d2-kyoto-3-crosskeys": {
     "day": 2,
     "plan": "shared",
-    "place": "京都站前酒店",
-    "time": "晚上"
+    "place": "Cross Keys",
+    "time": "按新住宿衔接 · 时刻待确认"
   },
   "route-shared-d2-kamo": {
     "day": 2,
     "plan": "shared",
     "place": "鸭川公共河岸・备选",
-    "time": "衔接时段 · 待确认"
+    "time": "按新住宿衔接 · 时刻待确认"
   },
   "d2h-jrkameoka": {
     "day": 2,
     "plan": "shared",
     "place": "龜岡車站",
-    "time": "目标09:00–09:15到站（预算）"
+    "time": "按新住宿衔接 · 时刻待确认"
   },
   "d2h-board": {
     "day": 2,
     "plan": "shared",
     "place": "保津川漂流（保津川游船）",
-    "time": "优先10:00船，未订"
+    "time": "按新住宿衔接 · 时刻待确认"
   },
   "d2h-land": {
     "day": 2,
     "plan": "shared",
     "place": "保津川游船岚山下船场",
-    "time": "目标约12:00下船；水位和候船会影响到达"
+    "time": "按新住宿衔接 · 时刻待确认"
   },
   "d2h-togetsu": {
     "day": 2,
     "plan": "shared",
     "place": "渡月桥",
-    "time": "衔接时段 · 待确认"
+    "time": "按新住宿衔接 · 时刻待确认"
   },
   "d2h-bamboo": {
     "day": 2,
     "plan": "shared",
     "place": "岚山竹林",
-    "time": "衔接时段 · 待确认"
+    "time": "按新住宿衔接 · 时刻待确认"
   },
   "d2h-rakushisha": {
     "day": 2,
     "plan": "shared",
     "place": "落柿舍周边",
-    "time": "衔接时段 · 待确认"
+    "time": "按新住宿衔接 · 时刻待确认"
   },
   "d2h-toriimoto": {
     "day": 2,
     "plan": "shared",
     "place": "嵯峨鸟居本",
-    "time": "衔接时段 · 待确认"
+    "time": "按新住宿衔接 · 时刻待确认"
   },
   "d2h-otagi": {
     "day": 2,
     "plan": "shared",
     "place": "爱宕念佛寺",
-    "time": "争取14:45–15:00抵达，留45–60分钟参观"
+    "time": "按新住宿衔接 · 时刻待确认"
   },
-  "d3-kyoto": {
+  "d3-kyoto-crosskeys": {
     "day": 3,
     "plan": "shared",
-    "place": "京都站前酒店",
-    "time": "上午"
+    "place": "Cross Keys",
+    "time": "按新住宿衔接 · 时刻待确认"
   },
   "d3-nyakuoji": {
     "day": 3,
     "plan": "shared",
     "place": "若王子桥・哲学小道南端",
-    "time": "上午"
+    "time": "按新住宿衔接 · 时刻待确认"
   },
   "route-shared-d3-03": {
     "day": 3,
     "plan": "shared",
     "place": "哲学小道",
-    "time": "衔接时段 · 待确认"
+    "time": "按新住宿衔接 · 时刻待确认"
   },
   "d3-ginkaku": {
     "day": 3,
     "plan": "shared",
     "place": "银阁寺桥附近・小道北端",
-    "time": "慢走60–90分钟"
+    "time": "按新住宿衔接 · 时刻待确认"
   },
   "d3-demachi": {
     "day": 3,
     "plan": "shared",
     "place": "出町柳站",
-    "time": "午后"
+    "time": "按新住宿衔接 · 时刻待确认"
   },
   "d3-kibuneguchi": {
     "day": 3,
     "plan": "shared",
     "place": "贵船口站",
-    "time": "下午"
+    "time": "按新住宿衔接 · 时刻待确认"
   },
   "d3-kifune": {
     "day": 3,
     "plan": "shared",
     "place": "贵船神社本宫",
-    "time": "约16:00–18:00"
+    "time": "按新住宿衔接 · 时刻待确认"
   },
   "route-shared-d3-kifune-return": {
     "day": 3,
     "plan": "shared",
     "place": "贵船神社本宫",
-    "time": "下山前"
+    "time": "按新住宿衔接 · 时刻待确认"
   },
   "d3-kibuneguchi-2": {
     "day": 3,
     "plan": "shared",
     "place": "贵船口站",
-    "time": "按末班倒排"
+    "time": "按新住宿衔接 · 时刻待确认"
   },
   "d3-demachi-2": {
     "day": 3,
     "plan": "shared",
     "place": "出町柳站",
-    "time": "晚间"
+    "time": "按新住宿衔接 · 时刻待确认"
   },
-  "d3-kyoto-2": {
+  "d3-kyoto-2-crosskeys": {
     "day": 3,
     "plan": "shared",
-    "place": "京都站前酒店",
-    "time": "晚饭／返房"
+    "place": "Cross Keys",
+    "time": "按新住宿衔接 · 时刻待确认"
   },
   "route-shared-d3-okumiya": {
     "day": 3,
     "plan": "shared",
     "place": "贵船奥宫方向",
-    "time": "衔接时段 · 待确认"
+    "time": "按新住宿衔接 · 时刻待确认"
   },
-  "d4-kyoto": {
+  "d4-kyoto-crosskeys": {
     "day": 4,
     "plan": "shared",
-    "place": "京都站前酒店",
-    "time": "早上"
+    "place": "Cross Keys",
+    "time": "出游前退房 · 10:00前（JST）"
   },
-  "route-shared-d4-kyotost-out": {
+  "route-shared-d4-kiyomizu-out": {
     "day": 4,
     "plan": "shared",
-    "place": "京都站",
-    "time": "衔接时段 · 待确认"
+    "place": "清水五条站",
+    "time": "按新住宿衔接 · 时刻待确认"
   },
-  "route-shared-d4-inarist-out": {
+  "route-shared-d4-keihan-inari-out": {
     "day": 4,
     "plan": "shared",
-    "place": "JR稻荷站",
-    "time": "衔接时段 · 待确认"
+    "place": "京阪伏见稻荷站",
+    "time": "按新住宿衔接 · 时刻待确认"
   },
   "d4-inari": {
     "day": 4,
     "plan": "shared",
     "place": "伏见稻荷大社",
-    "time": "早上短线"
+    "time": "按新住宿衔接 · 时刻待确认"
   },
   "route-shared-d4-senbon-out": {
     "day": 4,
     "plan": "shared",
     "place": "千本鸟居",
-    "time": "衔接时段 · 待确认"
+    "time": "按新住宿衔接 · 时刻待确认"
   },
   "route-shared-d4-okusha": {
     "day": 4,
     "plan": "shared",
     "place": "奥社",
-    "time": "衔接时段 · 待确认"
+    "time": "按新住宿衔接 · 时刻待确认"
   },
   "route-shared-d4-senbon-back": {
     "day": 4,
     "plan": "shared",
     "place": "千本鸟居",
-    "time": "衔接时段 · 待确认"
+    "time": "按新住宿衔接 · 时刻待确认"
   },
   "route-shared-d4-inari-return": {
     "day": 4,
     "plan": "shared",
     "place": "伏见稻荷大社",
-    "time": "短线折返后"
+    "time": "按新住宿衔接 · 时刻待确认"
   },
-  "route-shared-d4-inarist-back": {
+  "route-shared-d4-keihan-inari-back": {
     "day": 4,
     "plan": "shared",
-    "place": "JR稻荷站",
-    "time": "衔接时段 · 待确认"
+    "place": "京阪伏见稻荷站",
+    "time": "按新住宿衔接 · 时刻待确认"
   },
-  "route-shared-d4-kyotost-back": {
+  "route-shared-d4-kiyomizu-back": {
     "day": 4,
     "plan": "shared",
-    "place": "京都站",
-    "time": "衔接时段 · 待确认"
+    "place": "清水五条站",
+    "time": "按新住宿衔接 · 时刻待确认"
   },
-  "d4-kyoto-2": {
+  "d4-kyoto-2-crosskeys": {
     "day": 4,
     "plan": "shared",
-    "place": "京都站前酒店",
-    "time": "上午"
+    "place": "Cross Keys",
+    "time": "按新住宿衔接 · 时刻待确认"
   },
-  "route-shared-d4-kyotost-uji": {
+  "route-shared-d4-kiyomizu-uji": {
     "day": 4,
     "plan": "shared",
-    "place": "京都站",
-    "time": "衔接时段 · 待确认"
+    "place": "清水五条站",
+    "time": "按新住宿衔接 · 时刻待确认"
+  },
+  "route-shared-d4-tofukuji-uji": {
+    "day": 4,
+    "plan": "shared",
+    "place": "东福寺站",
+    "time": "按新住宿衔接 · 时刻待确认"
   },
   "route-shared-d4-ujist-arrive": {
     "day": 4,
     "plan": "shared",
     "place": "JR宇治站",
-    "time": "衔接时段 · 待确认"
+    "time": "按新住宿衔接 · 时刻待确认"
   },
   "d4-uji": {
     "day": 4,
     "plan": "shared",
     "place": "Hotel Trend JR Uji Ekimae",
-    "time": "午前／午间"
+    "time": "按新住宿衔接 · 时刻待确认"
   },
   "d4-omotesando": {
     "day": 4,
     "plan": "shared",
     "place": "平等院表参道",
-    "time": "午饭"
+    "time": "按新住宿衔接 · 时刻待确认"
   },
   "d4-taihoan": {
     "day": 4,
     "plan": "shared",
     "place": "对凤庵",
-    "time": "午后 · 待预约"
+    "time": "按新住宿衔接 · 时刻待确认"
   },
   "route-shared-d4-ujiriver": {
     "day": 4,
     "plan": "shared",
     "place": "宇治川",
-    "time": "衔接时段 · 待确认"
+    "time": "按新住宿衔接 · 时刻待确认"
   },
   "d4-ujibridge": {
     "day": 4,
     "plan": "shared",
     "place": "宇治桥",
-    "time": "午后"
+    "time": "按新住宿衔接 · 时刻待确认"
   },
   "d4-uji-2": {
     "day": 4,
     "plan": "shared",
     "place": "Hotel Trend JR Uji Ekimae",
-    "time": "15:00后"
+    "time": "按新住宿衔接 · 时刻待确认"
   },
   "route-shared-d4-ujist-fireworks": {
     "day": 4,
     "plan": "shared",
     "place": "JR宇治站",
-    "time": "衔接时段 · 待确认"
+    "time": "按新住宿衔接 · 时刻待确认"
   },
   "d4-nagaike": {
     "day": 4,
     "plan": "shared",
     "place": "JR长池站",
-    "time": "傍晚"
+    "time": "按新住宿衔接 · 时刻待确认"
   },
   "d4-fireworks": {
     "day": 4,
     "plan": "shared",
     "place": "木津川运动公园・花火会场",
-    "time": "19:00 · 约40分钟"
+    "time": "按新住宿衔接 · 时刻待确认"
   },
   "d4-nagaike-2": {
     "day": 4,
     "plan": "shared",
     "place": "JR长池站",
-    "time": "散场后"
+    "time": "按新住宿衔接 · 时刻待确认"
   },
   "route-shared-d4-ujist-return": {
     "day": 4,
     "plan": "shared",
     "place": "JR宇治站",
-    "time": "衔接时段 · 待确认"
+    "time": "按新住宿衔接 · 时刻待确认"
   },
   "d4-uji-3": {
     "day": 4,
     "plan": "shared",
     "place": "Hotel Trend JR Uji Ekimae",
-    "time": "晚间"
+    "time": "按新住宿衔接 · 时刻待确认"
   },
   "d5a-uji": {
     "day": 5,

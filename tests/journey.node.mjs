@@ -57,10 +57,19 @@ test('Hozu branch uses JR Kameoka without sightseeing train and returns by taxi'
 
 test('lazy route taxis directly from Kyoto hotel and excludes boat and sightseeing train',()=>{
  for(const p of ['A','B','B2'])for(const d of model.variants[p][2].filter(d=>d.choices.includes('究极懒人'))){
-  const i=d.stops.findIndex(s=>s.id==='otagi');assert.equal(d.stops[i-1].id,'kyoto');assert.equal(d.stops[i].mode,'taxi');
+  const i=d.stops.findIndex(s=>s.id==='otagi');assert.equal(d.stops[i-1].id,'cross-keys');assert.equal(d.stops[i].mode,'taxi');
   assert.ok(d.stops.every(s=>!['saga','kameoka','hozu-board','hozu-land','umahori'].includes(s.id)));
   assert.ok(d.budgetPending&&d.schedulePending);assert.equal(d.calories,'待复核');assert.equal(d.budget.items.length,1);
  }
  assert.ok(model.variants.A[2].some(d=>d.label==='高精力版本'));
  assert.ok(model.variants.A[2].some(d=>d.label==='究极懒人'));
+});
+
+test('booked Kyoto stay uses cafe check-in and Keihan luggage loop',()=>{
+ for(const plan of ['A','B','B2']){
+  for(const day of [2,3])for(const d of model.variants[plan][day]){assert.equal(d.hotel,'cross-keys');assert.ok(d.schedulePending&&d.budgetPending);assert.ok(!d.stops.some(s=>s.id==='kyoto'));}
+  for(const d of model.variants[plan][2]){assert.equal(d.stops.find(s=>s.graphId==='d2_02').id,'cross-keys');const check=d.stops.findIndex(s=>s.graphId==='d2_checkin');assert.equal(d.stops[check].id,'kind-cafe');assert.equal(d.stops[check+1].id,'cross-keys');assert.match(d.stops[check].time,/21:00/);}
+  for(const d of model.variants[plan][4]){const ids=d.stops.map(s=>s.id);assert.ok(!ids.includes('kyotost'));assert.equal(ids.filter(id=>id==='kiyomizu-gojo').length,3);assert.ok(ids.includes('keihan-inari'));assert.ok(ids.indexOf('tofukuji')<ids.indexOf('ujist'));}
+ }
+ assert.match(model.places['cross-keys'].hotel.status,/已预订/);assert.notEqual(model.places['cross-keys'].mapQuery,model.places['kind-cafe'].mapQuery);
 });

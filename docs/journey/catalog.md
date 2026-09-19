@@ -1998,7 +1998,7 @@ city: 京都 · 岚山
 title: 沿山脚下行，夜里走进祇园
 subtitle: 原路线沿山脚下行；另可选JR直达龟冈＋保津川游船，岚山下船后徒步上行至爱宕念佛寺，再打车下山。另设究极懒人版：京都酒店直接打车至爱宕念佛寺，再下行闲逛。晚间短游由体力决定。
 intensity: 较充实
-hotel: kyoto
+hotel: cross-keys
 focus:
   - umahori
   - kameoka
@@ -2008,10 +2008,14 @@ focus:
   - rakushisha
   - bamboo
   - togetsu
-luggage: 大阪酒店退房 → 京都酒店寄存 → 轻装去岚山。下午回同一家京都酒店入住。
+luggage: 入住前和退房后的行李均在Cross Keys民宿交接；咖啡厅仅用于办理入住，寄存可用时段另核。
 next: 明天不换酒店，行李留房间；哲学小道与贵船之间乘公共交通。
 rest: 岚山后回房休息约60分钟。结束较晚就缩短祇园夜游，正常吃晚饭。
 notes:
+  - Cross Keys 已预订10/2–10/4两晚。住宿查询口径4位成人、2间房；实际订单房间与寝具、房费未提供。16:00–21:00到对面the
+    kind
+    cafe办理入住，最迟10/1告知预计到达时间；10/4须10:00前退房。入住前及退房后可寄存，交接点已确认在Cross Keys民宿，可用时段另核。住宿税现金另付，金额待房东告知。电话+81-90-3710-5869。
+  - 原京都站前酒店的交通时长与住宿预算已失效；餐饮营业时间不等于民宿接待时间。
   - 2026-09-15新增究极懒人支线：大阪晚起后到京都寄存，酒店直接打车到爱宕念佛寺，跳过小火车和游船，再沿原路线下行；不沿用主线早起时刻表。
   - 2026-09-15新增游船支线；下列主线stops、时刻和预算不包含游船，选择支线须整体替换对应白天段，不能叠加两条路线。
   - 爱宕念佛寺官网列周三、周六休息，保留在10/2周五。
@@ -2033,8 +2037,8 @@ optional:
       - id: d2l-otagi
         place: otagi
         mode: taxi
-        connection: 京都站前酒店寄存行李后，从酒店直接打车至爱宕念佛寺
-        note: 不先坐JR到岚山再换车。五人两辆普通出租车或合适车型，集合出发；车程、车费及等车按具体酒店和路况另核，不套用JR嵯峨岚山站出发的5分钟报价。
+        connection: Cross Keys民宿寄存并午餐后，直接打车到爱宕念佛寺
+        note: 从Cross Keys本町2丁目89出发，不从旧京都站前酒店出发；住宿按4位成人2间房，同行乘车人数及行李容量另核，出租车费用重新报价。
     next: 到寺院后接回d2-otagi参观及d2-toriimoto、d2-rakushisha、d2-bamboo、d2-togetsu下行顺序，再回京都酒店；这是替代抵达方式，不重复参观寺院。
   - id: day-02-optional-hozu
     place: hozu-board
@@ -2042,7 +2046,7 @@ optional:
     fromStep: d2-kyoto
     toStep: d2-kyoto-2
     budgetNote: 游船另加6000日元／成人；五位成人30000日元。不含小火车或龟冈接驳巴士，JR及爱宕寺返程出租车另核，不直接套用原路线交通合计。
-    scheduleNote: 优先10:00船，京都酒店争取08:00–08:15寄存完成，JR至龟冈后北口步行约8分钟；09:15–09:30抵达受付，约中午下船，14:45–15:00到寺。均为倒排预算，班次及船票待确认。
+    scheduleNote: 高精力版本以早班船为目标，但咖啡厅最早寄存时间尚未确认；原08:00–08:15寄存、10:00船的倒排暂不可执行，需确认寄存及新地址衔接后重新排程。
     stops:
       - id: d2h-jrkameoka
         place: jr-kameoka
@@ -2108,20 +2112,8 @@ optional:
 overview:
   - d2-kyoto
 budget:
-  summary: 岚山是游览重点，也是较费体力的一天。祇园只留短线，回酒店的休息时间应保留。
+  summary: 新住宿相关交通、税费及订单金额待确认，仅保留其他已知费用。
   items:
-    - name: 交通
-      min: 3500
-      max: 5000
-      note: 含大阪转京都、JR、小火车、市内巴士及晚间返程。小火车成人单程参考价见地点票价记录；交通合计仍沿用整体规划预留，尚未逐段按所订车次报价。小火车已覆盖在本项，不另加。
-      source: https://www.sagano-kanko.co.jp/ticket/
-      confirmed: false
-      kind: daily
-      id: day-02-cost-01
-      currency: JPY
-      coveredTickets:
-        - sagano-adult-one-way
-      category: transport
     - id: day-02-cost-02
       name: 门票 · 爱宕念佛寺
       kind: daily
@@ -2131,246 +2123,13 @@ budget:
       quantity: 1
       step: d2-otagi
       note: 按一位成人计费，票价与景点卡片引用同一记录。
-    - name: 当晚住宿
-      min: 9000
-      max: 16000
-      note: 京都站前酒店每人分摊占位，未查指定日期房价，按不含餐估算。
-      source: null
-      confirmed: false
-      kind: lodging
-      id: day-02-cost-04
-      currency: JPY
-    - name: 税费／杂项预留
-      min: 500
-      max: 1500
-      note: 住宿相关税费和小额必需支出预留。
-      source: null
-      confirmed: false
-      kind: daily
-      id: day-02-cost-05
-      currency: JPY
   notes:
     - 小火车费用归入交通，不在门票中重复相加。
     - 岚山各点时长不含点与点之间交通；街区与竹林内部步行已含在游览时长内。
     - 目前没有已确认预订的餐厅。餐饮未纳入本日统计合计，临时用餐另计；时间轴中的吃饭与休息安排仍保留。
 schedule:
-  start: 06:30
-  note: 全程较紧的一天。小火车与94路班次尚未核定，以下不是车票时刻；晚间祇园可缩短。鸭川备选未计入主线。
-  slots:
-    - end: 07:00
-      type: meal
-      label: 早餐
-      place: ""
-      note: ""
-      id: day-02-slot-01
-    - end: 07:15
-      type: hotel
-      label: 收拾、退房
-      place: osaka
-      note: ""
-      id: day-02-slot-02
-      step: d2-osaka
-    - end: 08:45
-      type: travel
-      label: 大阪→京都酒店
-      place: kyoto
-      note: ""
-      id: day-02-slot-03
-      step: d2-kyoto
-    - end: 09:00
-      type: hotel
-      label: 京都寄存
-      place: kyoto
-      note: ""
-      id: day-02-slot-04
-      step: d2-kyoto
-    - end: 09:45
-      type: travel
-      label: JR京都→马堀
-      place: umahori
-      note: ""
-      id: day-02-slot-05
-      step: d2-umahori
-    - end: 10:00
-      type: travel
-      label: 步行到龟冈站
-      place: kameoka
-      note: ""
-      id: day-02-slot-06
-      step: d2-kameoka
-    - end: 10:20
-      type: travel
-      label: 进站、候车
-      place: kameoka
-      note: 20分钟候车预留；实际车次未定，整段需随订票平移。
-      id: day-02-slot-07
-      step: d2-kameoka
-    - end: 10:45
-      type: travel
-      label: 观光小火车
-      place: saga
-      note: 观光列车约25分钟，发车时间是排程占位。
-      id: day-02-slot-08
-      step: d2-saga
-    - end: 11:30
-      type: travel
-      label: 步行＋巴士上山
-      place: otagi
-      note: 含到野宫站、候车和94路乘车，按实际班次重排。
-      id: day-02-slot-09
-      step: d2-otagi
-    - end: 12:30
-      type: visit
-      label: 爱宕念佛寺
-      place: otagi
-      note: ""
-      id: day-02-slot-10
-      step: d2-otagi
-    - end: 12:50
-      type: travel
-      label: 下行至鸟居本
-      place: toriimoto
-      note: ""
-      id: day-02-slot-11
-      step: d2-toriimoto
-    - end: 13:50
-      type: meal
-      label: 老街午饭
-      place: toriimoto
-      note: ""
-      id: day-02-slot-12
-      step: d2-toriimoto
-    - end: 14:15
-      type: visit
-      label: 鸟居本短逛
-      place: toriimoto
-      note: ""
-      id: day-02-slot-13
-      step: d2-toriimoto
-    - end: 14:40
-      type: travel
-      label: 步行至落柿舍
-      place: rakushisha
-      note: ""
-      id: day-02-slot-14
-      step: d2-rakushisha
-    - end: 15:00
-      type: visit
-      label: 落柿舍周边
-      place: rakushisha
-      note: ""
-      id: day-02-slot-15
-      step: d2-rakushisha
-    - end: 15:15
-      type: travel
-      label: 步行到竹林
-      place: bamboo
-      note: ""
-      id: day-02-slot-16
-      step: d2-bamboo
-    - end: 15:40
-      type: visit
-      label: 竹林小径
-      place: bamboo
-      note: ""
-      id: day-02-slot-17
-      step: d2-bamboo
-    - end: 15:55
-      type: travel
-      label: 步行到渡月桥
-      place: togetsu
-      note: ""
-      id: day-02-slot-18
-      step: d2-togetsu
-    - end: 16:25
-      type: visit
-      label: 渡月桥河畔
-      place: togetsu
-      note: ""
-      id: day-02-slot-19
-      step: d2-togetsu
-    - end: 17:30
-      type: travel
-      label: 步行＋JR回京都
-      place: kyoto
-      note: ""
-      id: day-02-slot-20
-      step: d2-kyoto-2
-    - end: 18:30
-      type: hotel
-      label: 入住、休息
-      place: kyoto
-      note: 保留至少60分钟回房休息。
-      id: day-02-slot-21
-      step: d2-kyoto-2
-    - end: 19:00
-      type: travel
-      label: 市内交通去八坂
-      place: yasaka
-      note: ""
-      id: day-02-slot-22
-      step: d2-yasaka
-    - end: 19:25
-      type: visit
-      label: 八坂神社
-      place: yasaka
-      note: ""
-      id: day-02-slot-23
-      step: d2-yasaka
-    - end: 19:35
-      type: travel
-      label: 前往餐厅
-      place: ""
-      note: ""
-      id: day-02-slot-24
-    - end: 20:35
-      type: meal
-      label: 祇园附近晚饭
-      place: ""
-      note: ""
-      id: day-02-slot-25
-    - end: 20:55
-      type: visit
-      label: 花见小路
-      place: hanami
-      note: ""
-      id: day-02-slot-26
-      step: d2-hanami
-    - end: 21:05
-      type: travel
-      label: 步行到白川
-      place: shirakawa
-      note: ""
-      id: day-02-slot-27
-      step: d2-shirakawa
-    - end: 21:25
-      type: visit
-      label: 祇园白川
-      place: shirakawa
-      note: ""
-      id: day-02-slot-28
-      step: d2-shirakawa
-    - end: 21:35
-      type: travel
-      label: 步行到祇园四条
-      place: gionshijo
-      note: ""
-      id: day-02-slot-29
-      step: d2-gionshijo
-    - end: 22:20
-      type: travel
-      label: 市内交通回酒店
-      place: kyoto
-      note: ""
-      id: day-02-slot-30
-      step: d2-kyoto-3
-    - end: 24:00
-      type: hotel
-      label: 酒店休息
-      place: kyoto
-      note: ""
-      id: day-02-slot-31
-      step: d2-kyoto-3
+  note: 京都住宿及交通已更新，旧分钟表暂停；寄存、实际班次与新地址衔接待核。
+  slots: []
 stops:
   - id: d2-osaka
     place: osaka
@@ -2379,13 +2138,15 @@ stops:
     connection: ""
     duration: ""
     note: 退房，带走全部行李。
-  - id: d2-kyoto
-    place: kyoto
-    time: 上午
+  - id: d2-crosskeys-storage
+    place: cross-keys
+    time: 按新住宿衔接，时刻待核
     mode: rail
-    connection: 地铁＋JR，到酒店留75–100分钟
+    connection: 按Cross Keys新地址衔接
     duration: ""
-    note: 先寄存，不等拿到房间。
+    note: Cross Keys 已预订10/2–10/4两晚。住宿查询口径4位成人、2间房；实际订单房间与寝具、房费未提供。16:00–21:00到对面the
+      kind
+      cafe办理入住，最迟10/1告知预计到达时间；10/4须10:00前退房。入住前及退房后可寄存，交接点已确认在Cross Keys民宿，可用时段另核。住宿税现金另付，金额待房东告知。电话+81-90-3710-5869。
   - id: d2-umahori
     place: umahori
     time: 上午
@@ -2451,13 +2212,21 @@ stops:
     mode: walk
     connection: 主干全段约3.4公里，寺内和支线另计
     note: 河畔与渡月桥，累了就结束岚山段。
-  - id: d2-kyoto-2
-    place: kyoto
-    time: 休息约60分钟
+  - id: d2-kind-checkin
+    place: kind-cafe
+    mode: walk
+    time: 16:00–21:00
+    connection: 岚山返程后先到咖啡厅办理入住
+    note: 21:00前办好入住，再到对面Cross Keys休息；不可先夜游再回来办理。
+  - id: d2-kyoto-2-crosskeys
+    place: cross-keys
+    time: 按新住宿衔接，时刻待核
     mode: rail
-    connection: 步行至JR嵯峨岚山，JR回京都站
+    connection: 按Cross Keys新地址衔接
     duration: ""
-    note: 回酒店入住，坐下休息后再出门。
+    note: Cross Keys 已预订10/2–10/4两晚。住宿查询口径4位成人、2间房；实际订单房间与寝具、房费未提供。16:00–21:00到对面the
+      kind
+      cafe办理入住，最迟10/1告知预计到达时间；10/4须10:00前退房。入住前及退房后可寄存，交接点已确认在Cross Keys民宿，可用时段另核。住宿税现金另付，金额待房东告知。电话+81-90-3710-5869。
   - id: d2-yasaka
     place: yasaka
     time: 晚饭前后
@@ -2483,13 +2252,15 @@ stops:
     connection: 步行至祇园四条
     duration: ""
     note: 在车站附近收束夜游。
-  - id: d2-kyoto-3
-    place: kyoto
-    time: 晚上
+  - id: d2-kyoto-3-crosskeys
+    place: cross-keys
+    time: 按新住宿衔接，时刻待核
     mode: rail
-    connection: 铁路换乘或市内巴士，按当时班次选择
+    connection: 按Cross Keys新地址衔接
     duration: ""
-    note: 回同一酒店。
+    note: Cross Keys 已预订10/2–10/4两晚。住宿查询口径4位成人、2间房；实际订单房间与寝具、房费未提供。16:00–21:00到对面the
+      kind
+      cafe办理入住，最迟10/1告知预计到达时间；10/4须10:00前退房。入住前及退房后可寄存，交接点已确认在Cross Keys民宿，可用时段另核。住宿税现金另付，金额待房东告知。电话+81-90-3710-5869。
 distanceKm:
   - 8
   - 11
@@ -2530,17 +2301,21 @@ city: 京都 · 贵船
 title: 哲学小道与贵船灯笼
 subtitle: 沿水渠慢走，午间充分休息，再乘叡电去山谷。诗仙堂已移除。
 intensity: 适中
-hotel: kyoto
+hotel: cross-keys
 focus:
   - nyakuoji
   - ginkaku
   - demachi
   - kibuneguchi
   - kifune
-luggage: 行李全天留京都酒店；只带当天小包。
+luggage: 入住前和退房后的行李均在Cross Keys民宿交接；咖啡厅仅用于办理入住，寄存可用时段另核。
 next: 明早退房先寄存，伏见稻荷短游后回酒店取件，再乘JR去宇治。
 rest: 午饭、咖啡与坐下休息留90–120分钟；贵船以本宫和近处溪边为主。
 notes:
+  - Cross Keys 已预订10/2–10/4两晚。住宿查询口径4位成人、2间房；实际订单房间与寝具、房费未提供。16:00–21:00到对面the
+    kind
+    cafe办理入住，最迟10/1告知预计到达时间；10/4须10:00前退房。入住前及退房后可寄存，交接点已确认在Cross Keys民宿，可用时段另核。住宿税现金另付，金额待房东告知。电话+81-90-3710-5869。
+  - 原京都站前酒店的交通时长与住宿预算已失效；餐饮营业时间不等于民宿接待时间。
   - 不走鞍马山徒步；奥宫是可缩短的支线。
   - 贵船神社本宫开放至20:00不等于巴士运营到20:00。先核33路末段班次，再决定离开时间。
 links:
@@ -2552,17 +2327,8 @@ optional:
     id: day-03-optional-01
 overview: []
 budget:
-  summary: 哲学小道慢走后，用午饭与咖啡恢复体力。下午乘车进贵船，灯笼和返程巴士共同决定离开时间。
+  summary: 新住宿相关交通、税费及订单金额待确认，仅保留其他已知费用。
   items:
-    - name: 交通
-      min: 2200
-      max: 3300
-      note: 京都市内交通、叡山电铁往返与贵船33路往返的预算。
-      source: null
-      confirmed: false
-      kind: daily
-      id: day-03-cost-01
-      currency: JPY
     - name: 门票／体验
       min: 0
       max: 0
@@ -2572,162 +2338,22 @@ budget:
       kind: daily
       id: day-03-cost-02
       currency: JPY
-    - name: 当晚住宿
-      min: 9000
-      max: 16000
-      note: 京都站前酒店第二晚，每人分摊占位，按不含餐估算。
-      source: null
-      confirmed: false
-      kind: lodging
-      id: day-03-cost-04
-      currency: JPY
-    - name: 税费／杂项预留
-      min: 500
-      max: 1500
-      note: 住宿相关税费和小额必需支出预留。
-      source: null
-      confirmed: false
-      kind: daily
-      id: day-03-cost-05
-      currency: JPY
   notes:
     - 贵船奥宫为可选支线，建议另加30–45分钟；不加入鞍马山徒步。
     - 目前没有已确认预订的餐厅。餐饮未纳入本日统计合计，临时用餐另计；时间轴中的吃饭与休息安排仍保留。
 schedule:
-  start: 08:00
-  note: 贵船16:00–18:00是目标停留段；返程33路末班未核，实际需要按末班提前收束。奥宫支线未计入主线。
-  slots:
-    - end: 08:45
-      type: meal
-      label: 早餐
-      place: ""
-      note: ""
-      id: day-03-slot-01
-    - end: 09:15
-      type: hotel
-      label: 晨间收拾
-      place: kyoto
-      note: ""
-      id: day-03-slot-02
-      step: d3-kyoto
-    - end: 10:15
-      type: travel
-      label: 去哲学小道南端
-      place: nyakuoji
-      note: ""
-      id: day-03-slot-03
-      step: d3-nyakuoji
-    - end: 11:45
-      type: visit
-      label: 哲学小道慢走
-      place: nyakuoji
-      note: 从若王子桥至银阁寺桥附近，含沿途停留，不进入沿线寺院。
-      id: day-03-slot-04
-      step: d3-nyakuoji
-    - end: 12:45
-      type: meal
-      label: 小道北端午饭
-      place: ginkaku
-      note: ""
-      id: day-03-slot-05
-      step: d3-ginkaku
-    - end: 13:45
-      type: free
-      label: 咖啡、坐下休息
-      place: ginkaku
-      note: ""
-      id: day-03-slot-06
-      step: d3-ginkaku
-    - end: 14:15
-      type: travel
-      label: 市内交通到出町柳
-      place: demachi
-      note: ""
-      id: day-03-slot-07
-      step: d3-demachi
-    - end: 14:30
-      type: travel
-      label: 换乘、候车
-      place: demachi
-      note: ""
-      id: day-03-slot-08
-      step: d3-demachi
-    - end: 15:15
-      type: travel
-      label: 叡电到贵船口
-      place: kibuneguchi
-      note: ""
-      id: day-03-slot-09
-      step: d3-kibuneguchi
-    - end: 16:00
-      type: travel
-      label: 候车＋33路进山
-      place: kifune
-      note: ""
-      id: day-03-slot-10
-      step: d3-kifune
-    - end: 17:30
-      type: visit
-      label: 贵船本宫、溪边
-      place: kifune
-      note: ""
-      id: day-03-slot-11
-      step: d3-kifune
-    - end: 18:00
-      type: free
-      label: 休息、等灯笼
-      place: kifune
-      note: 等日落的弹性时间；需服从返程巴士班次。
-      id: day-03-slot-12
-      step: d3-kifune
-    - end: 18:30
-      type: travel
-      label: 33路下山
-      place: kibuneguchi
-      note: 此处仅分配30分钟，未确认18:00仍有巴士。
-      id: day-03-slot-13
-      step: d3-kibuneguchi-2
-    - end: 19:15
-      type: travel
-      label: 叡电回出町柳
-      place: demachi
-      note: ""
-      id: day-03-slot-14
-      step: d3-demachi-2
-    - end: 19:45
-      type: travel
-      label: 去市区餐厅
-      place: ""
-      note: ""
-      id: day-03-slot-15
-    - end: 20:45
-      type: meal
-      label: 京都晚饭
-      place: ""
-      note: ""
-      id: day-03-slot-16
-    - end: 21:15
-      type: travel
-      label: 返回酒店
-      place: kyoto
-      note: ""
-      id: day-03-slot-17
-      step: d3-kyoto-2
-    - end: 24:00
-      type: hotel
-      label: 酒店休息
-      place: kyoto
-      note: ""
-      id: day-03-slot-18
-      step: d3-kyoto-2
+  note: 京都住宿及交通已更新，旧分钟表暂停；寄存、实际班次与新地址衔接待核。
+  slots: []
 stops:
-  - id: d3-kyoto
-    place: kyoto
-    time: 上午
+  - id: d3-kyoto-crosskeys
+    place: cross-keys
+    time: 按新住宿衔接，时刻待核
     mode: walk
-    connection: ""
+    connection: 按Cross Keys新地址衔接
     duration: ""
-    note: 早餐后轻装出发。
+    note: Cross Keys 已预订10/2–10/4两晚。住宿查询口径4位成人、2间房；实际订单房间与寝具、房费未提供。16:00–21:00到对面the
+      kind
+      cafe办理入住，最迟10/1告知预计到达时间；10/4须10:00前退房。入住前及退房后可寄存，交接点已确认在Cross Keys民宿，可用时段另核。住宿税现金另付，金额待房东告知。电话+81-90-3710-5869。
   - id: d3-nyakuoji
     place: nyakuoji
     time: 上午
@@ -2778,13 +2404,15 @@ stops:
     connection: 叡山电铁
     duration: ""
     note: 乘叡电返回市区。
-  - id: d3-kyoto-2
-    place: kyoto
-    time: 晚饭／返房
+  - id: d3-kyoto-2-crosskeys
+    place: cross-keys
+    time: 按新住宿衔接，时刻待核
     mode: bus
-    connection: 市内交通，餐厅未定
+    connection: 按Cross Keys新地址衔接
     duration: ""
-    note: 回京都市区正常吃晚饭，回房休息。
+    note: Cross Keys 已预订10/2–10/4两晚。住宿查询口径4位成人、2间房；实际订单房间与寝具、房费未提供。16:00–21:00到对面the
+      kind
+      cafe办理入住，最迟10/1告知预计到达时间；10/4须10:00前退房。入住前及退房后可寄存，交接点已确认在Cross Keys民宿，可用时段另核。住宿税现金另付，金额待房东告知。电话+81-90-3710-5869。
 distanceKm:
   - 5
   - 7
@@ -2811,10 +2439,14 @@ focus:
   - ujibridge
   - nagaike
   - fireworks
-luggage: 京都酒店退房寄存 → 稻荷短游 → 回酒店取件 → 宇治酒店寄存、入住。
+luggage: Cross Keys于10:00前退房并按约定寄存 → 京阪往返伏见稻荷 → 返回取件（交接点已确认在Cross Keys民宿） → 清水五条经东福寺换JR至宇治。
 next: 花火散场回JR宇治，步行回酒店。明天带行李去JR奈良。
 rest: 15:00后回房至少休息60分钟。先吃晚饭，再轻装去会场。
 notes:
+  - Cross Keys 已预订10/2–10/4两晚。住宿查询口径4位成人、2间房；实际订单房间与寝具、房费未提供。16:00–21:00到对面the
+    kind
+    cafe办理入住，最迟10/1告知预计到达时间；10/4须10:00前退房。入住前及退房后可寄存，交接点已确认在Cross Keys民宿，可用时段另核。住宿税现金另付，金额待房东告知。电话+81-90-3710-5869。
+  - 原京都站前酒店的交通时长与住宿预算已失效；餐饮营业时间不等于民宿接待时间。
   - 花火19:00起约40分钟，仅售前卖票，尚未购票。
   - 会场地图点为公园位置；实际检票入口待官方会场图。散场排队另留时间。
   - 茶体验候选未预约，店家与预约时段确定后再细调。
@@ -2829,17 +2461,8 @@ optional: []
 overview:
   - d4-uji
 budget:
-  summary: 上午稻荷短线，下午宇治茶文化，晚上花火。先入住和休息，给茶体验与花火留出完整时间。
+  summary: 新住宿相关交通、税费及订单金额待确认，仅保留其他已知费用。
   items:
-    - name: 交通
-      min: 1300
-      max: 2000
-      note: 京都往返稻荷、转宇治及宇治往返长池的JR预算。
-      source: null
-      confirmed: false
-      kind: daily
-      id: day-04-cost-01
-      currency: JPY
     - id: day-04-cost-02
       name: 体验 · 对凤庵薄茶
       kind: daily
@@ -2859,24 +2482,6 @@ budget:
       quantity: 1
       step: d4-fireworks
       note: 按一位成人计费，票价与景点卡片引用同一记录。
-    - name: 当晚住宿
-      min: 7000
-      max: 12000
-      note: 宇治酒店每人分摊占位，花火日房价可能超出此预算，按不含餐估算。
-      source: null
-      confirmed: false
-      kind: lodging
-      id: day-04-cost-04
-      currency: JPY
-    - name: 税费／杂项预留
-      min: 300
-      max: 1000
-      note: 税费及可能的票务附加费预留；尚非实际收费。
-      source: null
-      confirmed: false
-      kind: daily
-      id: day-04-cost-05
-      currency: JPY
   notes:
     - 茶体验暂以薄茶1500日元、20–30分钟为基准。若改抹茶点前体验3600日元，另加2100日元／人，体验约40分钟（报到另计）。
     - 未把平等院内部参观加入当前路线或总额。
@@ -2885,189 +2490,33 @@ budget:
     - - 对凤庵官方价格与时长
       - https://www.kyoto-uji-kankou.or.jp/taihoan-en.html
 schedule:
-  start: 07:30
-  note: 19:00花火是官方活动时刻；其他为暂定排程。对凤庵场次未预约，花火未购票，入场及散场等待均已预留。
-  slots:
-    - end: 08:00
-      type: meal
-      label: 早餐
-      place: ""
-      note: ""
-      id: day-04-slot-01
-    - end: 08:15
-      type: hotel
-      label: 退房、寄存
-      place: kyoto
-      note: ""
-      id: day-04-slot-02
-      step: d4-kyoto
-    - end: 08:40
-      type: travel
-      label: JR去稻荷
-      place: inari
-      note: ""
-      id: day-04-slot-03
-      step: d4-inari
-    - end: 09:50
-      type: visit
-      label: 伏见稻荷短线
-      place: inari
-      note: ""
-      id: day-04-slot-04
-      step: d4-inari
-    - end: 10:10
-      type: travel
-      label: JR返回京都
-      place: kyoto
-      note: ""
-      id: day-04-slot-05
-      step: d4-kyoto-2
-    - end: 10:20
-      type: hotel
-      label: 取回行李
-      place: kyoto
-      note: ""
-      id: day-04-slot-06
-      step: d4-kyoto-2
-    - end: 11:10
-      type: travel
-      label: 带行李去宇治
-      place: uji
-      note: ""
-      id: day-04-slot-07
-      step: d4-uji
-    - end: 11:20
-      type: hotel
-      label: 酒店寄存
-      place: uji
-      note: ""
-      id: day-04-slot-08
-      step: d4-uji
-    - end: 11:30
-      type: travel
-      label: 步行去表参道
-      place: omotesando
-      note: ""
-      id: day-04-slot-09
-      step: d4-omotesando
-    - end: 12:30
-      type: meal
-      label: 宇治特色午饭
-      place: omotesando
-      note: ""
-      id: day-04-slot-10
-      step: d4-omotesando
-    - end: 13:30
-      type: visit
-      label: 表参道茶店
-      place: omotesando
-      note: ""
-      id: day-04-slot-11
-      step: d4-omotesando
-    - end: 13:40
-      type: travel
-      label: 步行去对凤庵
-      place: taihoan
-      note: ""
-      id: day-04-slot-12
-      step: d4-taihoan
-    - end: 14:20
-      type: visit
-      label: 对凤庵茶体验
-      place: taihoan
-      note: 含提前10分钟换票、报到和20–30分钟薄茶体验；13:40为占位，未预约。
-      id: day-04-slot-13
-      step: d4-taihoan
-    - end: 14:50
-      type: visit
-      label: 宇治桥、河畔
-      place: ujibridge
-      note: 包括从茶室向河畔移动的短走；全部按30分钟预留。
-      id: day-04-slot-14
-      step: d4-ujibridge
-    - end: 15:00
-      type: travel
-      label: 步行回酒店
-      place: uji
-      note: ""
-      id: day-04-slot-15
-      step: d4-uji-2
-    - end: 16:30
-      type: hotel
-      label: 入住、午后休息
-      place: uji
-      note: 入住手续约15分钟，其余至少一小时回房休息。
-      id: day-04-slot-16
-      step: d4-uji-2
-    - end: 17:30
-      type: meal
-      label: 提前吃晚饭
-      place: ""
-      note: ""
-      id: day-04-slot-17
-    - end: 18:15
-      type: travel
-      label: JR＋步行去花火
-      place: fireworks
-      note: 含酒店出发、候车及长池站至入场口。
-      id: day-04-slot-18
-      step: d4-fireworks
-    - end: 19:00
-      type: free
-      label: 入場排队、候场
-      place: fireworks
-      note: 活动等待缓冲，不能全部挪给别的景点。
-      id: day-04-slot-19
-      step: d4-fireworks
-    - end: 19:40
-      type: visit
-      label: 城阳花火
-      place: fireworks
-      note: 官方19:00开始，约40分钟；仍以主办方当天安排为准。
-      id: day-04-slot-20
-      step: d4-fireworks
-    - end: 20:25
-      type: travel
-      label: 散场、走回长池
-      place: nagaike
-      note: 45分钟仅是人流预留，拥挤可能延长。
-      id: day-04-slot-21
-      step: d4-nagaike-2
-    - end: 21:10
-      type: travel
-      label: JR＋步行回宇治
-      place: uji
-      note: ""
-      id: day-04-slot-22
-      step: d4-uji-3
-    - end: 24:00
-      type: hotel
-      label: 酒店休息
-      place: uji
-      note: ""
-      id: day-04-slot-23
-      step: d4-uji-3
+  note: 京都住宿及交通已更新，旧分钟表暂停；寄存、实际班次与新地址衔接待核。
+  slots: []
 stops:
-  - id: d4-kyoto
-    place: kyoto
-    time: 早上
+  - id: d4-kyoto-crosskeys
+    place: cross-keys
+    time: 按新住宿衔接，时刻待核
     mode: walk
-    connection: ""
+    connection: 按Cross Keys新地址衔接
     duration: ""
-    note: 退房先寄存，不带五人的箱子去稻荷。
+    note: Cross Keys 已预订10/2–10/4两晚。住宿查询口径4位成人、2间房；实际订单房间与寝具、房费未提供。16:00–21:00到对面the
+      kind
+      cafe办理入住，最迟10/1告知预计到达时间；10/4须10:00前退房。入住前及退房后可寄存，交接点已确认在Cross Keys民宿，可用时段另核。住宿税现金另付，金额待房东告知。电话+81-90-3710-5869。
   - id: d4-inari
     place: inari
     time: 早上短线
     mode: rail
     connection: JR京都至稻荷
     note: 本殿、千本鸟居与奥社附近折返，不登顶。
-  - id: d4-kyoto-2
-    place: kyoto
-    time: 上午
+  - id: d4-kyoto-2-crosskeys
+    place: cross-keys
+    time: 按新住宿衔接，时刻待核
     mode: rail
-    connection: JR回京都站
+    connection: 按Cross Keys新地址衔接
     duration: ""
-    note: 回酒店取行李。为可靠寄存保留这次折返。
+    note: Cross Keys 已预订10/2–10/4两晚。住宿查询口径4位成人、2间房；实际订单房间与寝具、房费未提供。16:00–21:00到对面the
+      kind
+      cafe办理入住，最迟10/1告知预计到达时间；10/4须10:00前退房。入住前及退房后可寄存，交接点已确认在Cross Keys民宿，可用时段另核。住宿税现金另付，金额待房东告知。电话+81-90-3710-5869。
   - id: d4-uji
     place: uji
     time: 午前／午间
@@ -4425,4 +3874,117 @@ hours:
     - - 官方JR交通指引
       - https://www.hozugawakudari.jp/blog/保津川下り・・・
   status: 2026-09-15核查；实际班次待确认
+```
+
+## 地点 · Cross Keys
+
+```yaml journey:place
+id: cross-keys
+name: Cross Keys
+mapQuery: 89 Honmachi 2-chome Higashiyama-ku Kyoto 605-0981 Japan
+mapUrl: https://www.google.com/maps/search/?api=1&query=89+Honmachi+2-chome+Higashiyama-ku+Kyoto+605-0981+Japan
+coordinateNote: 房东提供的民宿地址，门口精确坐标待核；不是对面咖啡厅。
+hotel:
+  name: Cross Keys（Airbnb）
+  area: 京都 · 东山区本町2丁目89 · 10/2–10/4两晚
+  status: 已预订 · 订单金额待补充
+  note: Cross Keys 已预订10/2–10/4两晚。住宿查询口径4位成人、2间房；实际订单房间与寝具、房费未提供。16:00–21:00到对面the
+    kind
+    cafe办理入住，最迟10/1告知预计到达时间；10/4须10:00前退房。入住前及退房后可寄存，交接点已确认在Cross Keys民宿，可用时段另核。住宿税现金另付，金额待房东告知。电话+81-90-3710-5869。
+hours:
+  scope: 房东确认的入住与退房（JST）
+  open: 入住16:00–21:00，先到the kind cafe
+  last: 最迟10月1日告知预计入住时间
+  close: 10月4日10:00前退房
+  note: Cross Keys 已预订10/2–10/4两晚。住宿查询口径4位成人、2间房；实际订单房间与寝具、房费未提供。16:00–21:00到对面the
+    kind
+    cafe办理入住，最迟10/1告知预计到达时间；10/4须10:00前退房。入住前及退房后可寄存，交接点已确认在Cross Keys民宿，可用时段另核。住宿税现金另付，金额待房东告知。电话+81-90-3710-5869。
+    官网／Airbnb订单链接尚未提供，早餐是否包含待确认。
+  sources: []
+  status: 2026-09-19按用户提供的房东信息
+```
+
+## 地点 · the kind cafe
+
+```yaml journey:place
+id: kind-cafe
+name: the kind cafe
+lat: 34.9937865
+lng: 135.7698649
+mapQuery: Breakfast the kind 2-84-2 Honmachi Kyoto
+mapUrl: https://maps.app.goo.gl/FL4xS4HgDQhL79P18
+hours:
+  scope: Cross Keys入住办理处（行李在民宿交接）
+  open: 入住接待16:00–21:00；寄存时段须预约
+  last: 入住前至少一天告知预计到达时间
+  close: 21:00入住截止；不是咖啡厅餐饮闭店时间
+  note: 地址京都市東山区本町2丁目84-2；民宿在对面89号。先到咖啡厅办理，再由房东指引前往客房。入住前／退房后寄存的交接点已确认在Cross Keys民宿，可用时段另核。
+  sources:
+    - - 房东指定地图
+      - https://maps.app.goo.gl/FL4xS4HgDQhL79P18
+  status: 2026-09-19按房东信息及指定地图
+```
+
+## 地点 · 清水五条站
+
+```yaml journey:place
+id: kiyomizu-gojo
+lat: 34.9959035
+lng: 135.76856809999998
+mapUrl: https://maps.google.com/?cid=8199630476856242200
+coordinateNote: 2026-09-19核对Google车站地点坐标，电梯出口与换乘通道另核。
+name: 清水五条站
+mapQuery: 清水五条駅 京阪
+hours:
+  scope: 铁路衔接
+  open: 以当日列车时刻为准
+  last: 实际班次待核
+  close: 不适用景区门禁
+  note: 按车站指示选择停靠本站的列车，电梯出口及带箱步行待核。
+  sources:
+    - - 京阪官方车站资料
+      - https://www.keihan.co.jp/traffic/station/161/info.html
+  status: 按最新路线图规划，班次待核
+```
+
+## 地点 · 京阪伏见稻荷站
+
+```yaml journey:place
+id: keihan-inari
+lat: 34.9687187
+lng: 135.7693455
+mapUrl: https://maps.google.com/?cid=4052349761068891854
+coordinateNote: 2026-09-19核对Google车站地点坐标，电梯出口与换乘通道另核。
+name: 京阪伏见稻荷站
+mapQuery: 伏見稲荷駅 京阪
+hours:
+  scope: 铁路衔接
+  open: 以当日列车时刻为准
+  last: 实际班次待核
+  close: 不适用景区门禁
+  note: 按车站指示选择停靠本站的列车，电梯出口及带箱步行待核。
+  sources: []
+  status: 按最新路线图规划，班次待核
+```
+
+## 地点 · 东福寺站
+
+```yaml journey:place
+id: tofukuji
+lat: 34.9813652
+lng: 135.769927
+mapUrl: https://maps.google.com/?cid=9574032542439507878
+coordinateNote: 2026-09-19核对Google车站地点坐标，电梯出口与换乘通道另核。
+name: 东福寺站
+mapQuery: 東福寺駅 京阪 JR
+hours:
+  scope: 铁路衔接
+  open: 以当日列车时刻为准
+  last: 实际班次待核
+  close: 不适用景区门禁
+  note: 从京阪出站换JR奈良线往宇治，预留行李换乘时间；核对停靠宇治的列车。
+  sources:
+    - - 京阪官方车站资料
+      - https://www.keihan.co.jp/traffic/station/153/info.html
+  status: 按最新路线图规划，班次待核
 ```

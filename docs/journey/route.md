@@ -1,14 +1,24 @@
 # 关西七日行程｜路线图
 
+**住宿全局设定（2026-09-19 更新）：4 位成人、2 间房，默认每间 2 位成人。** 后续所有酒店／温泉住宿查询采用此条件，覆盖此前订房人数口径；房型、预算及历史报价说明见[《酒店选择》](酒店选择.md)。
+
+**京都住宿已预订：Cross Keys（Airbnb），按本行程为 10 月 2 日入住、10 月 4 日退房，共两晚。** 民宿地址：〒605-0981 京都市東山区本町2丁目89（89 Honmachi 2-chome, Higashiyama-ku, Kyoto）；[民宿地址导航](https://www.google.com/maps/search/?api=1&query=89+Honmachi+2-chome+Higashiyama-ku+Kyoto+605-0981+Japan)。**办理入住先去对面的 [Breakfast “the kind” 咖啡厅](https://maps.app.goo.gl/FL4xS4HgDQhL79P18)**（本町2丁目84-2），不要把两处地址混用。联系电话：+81-90-3710-5869。
+
+入住 **16:00–21:00**，退房 **10:00 前**，均为日本当地时间；按房东要求，**最迟 10 月 1 日告知预计入住时间**。入住前、退房后可寄存，行李交接点已确认就在Cross Keys民宿，早晚可用时段另核；住宿税另以现金支付，金额待房东告知。订单的实际房间／寝具配置及金额未提供。完整说明见[酒店选择文档](酒店选择.md)。
+
+**京都段调整：** 第 2 天先到Cross Keys民宿寄存行李，岚山后在 21:00 前回咖啡厅办理入住，再到 Cross Keys 休息；第 3 天从 Cross Keys 出发并返回；第 4 天出游前先退房寄存，去伏见稻荷后取件，再赴 JR 宇治。住址变更后，旧版Cross Keys的接驳时长／费用失效，需重算。第 4 天改用清水五条—京阪伏见稻荷往返，取件后经东福寺换 JR 奈良线；[清水五条官方车站资料](https://www.keihan.co.jp/traffic/station/161/info.html)／[东福寺 JR 换乘说明](https://www.keihan.co.jp/traffic/station/153/info.html)。图中不增加交通方式平行分支，景点与游览顺序保留。
+
 2026 年 10 月 1 日—7 日。实线表示既有路线，虚线表示改变游览内容的可选或有条件路线；箭头上的 Plan A／Plan B 表示二选一。
 
 Plan A：第五天下午从奈良前往有马温泉，住宿首选为御幸荘 花結び（一泊二食）；第六天在有马小镇午餐后进入神户市区，傍晚去须磨，第六晚住神户。Plan B：第五晚住奈良，第六天去加太，酒店二选一，次日在加太站合并。各方案第七天在关西国际机场汇合。
+
+第二天入住前寄存的最早时间尚未确认，旧版“08:00–08:15 寄存后赶 10:00 船”的倒排不作为可执行承诺。
 
 第二天完整保津川游船路线命名为“高精力版本”，为全队可选支线：选择后从京都站乘JR至龟冈站，北口步行至乘船场，不乘小火车；游船回岚山，下船后徒步向北至爱宕念佛寺，首选打车下山；两条路线在返程JR嵯峨岚山站合并。
 
 第二天另设“究极懒人”支线：若在大阪睡醒较晚，抵达京都酒店寄存后直接打车到爱宕念佛寺，跳过小火车和游船，在寺院接回鸟居本→落柿舍→竹林→渡月桥的下行路线。
 
-节点仅列地点名；交通方式与时段写入资料文件，不为不同交通方式增加分支。东大寺及南大门仅为备选。酒店及餐厅尚未预订。编辑时遵循[《行程路线图维护规则》](行程路线图维护规则.md)。
+节点仅列地点名；交通方式与时段写入资料文件，不为不同交通方式增加分支。东大寺及南大门仅为备选。京都 Cross Keys 已预订；其他酒店及餐厅按各自记录，未新增预订确认。编辑时遵循[《行程路线图维护规则》](行程路线图维护规则.md)。
 
 ```mermaid
 flowchart TD
@@ -34,7 +44,7 @@ flowchart TD
         d2_01["Cross Hotel Osaka"]
         d2_osakast["大阪站"]
         d2_kyotost_in["京都站"]
-        d2_02["京都站前酒店"]
+        d2_02["Cross Keys"]
         d2_kyotost_out["京都站"]
         d2_03["JR马堀站"]
         d2_04["小火车龟冈站"]
@@ -48,13 +58,14 @@ flowchart TD
         d2_10["渡月桥"]
         d2_sagajr["JR嵯峨岚山站"]
         d2_kyotost_back["京都站"]
-        d2_11["京都站前酒店"]
+        d2_checkin["the kind cafe"]
+        d2_11["Cross Keys"]
         d2_kamo["鸭川"]
         d2_12["八坂神社"]
         d2_13["花见小路"]
         d2_14["祇园白川"]
         d2_15["祇园四条站"]
-        d2_16["京都站前酒店"]
+        d2_16["Cross Keys"]
         d2_03 --> d2_04
         d2_04 --> d2_05
         d2_06 --> d2_07
@@ -77,7 +88,8 @@ flowchart TD
         d2_otagibus --> d2_06
         d2_10 --> d2_sagajr
         d2_sagajr --> d2_kyotost_back
-        d2_kyotost_back --> d2_11
+        d2_kyotost_back --> d2_checkin
+        d2_checkin --> d2_11
         d2h_jrkameoka["龜岡車站"]
         d2h_board["保津川漂流（保津川游船）"]
         d2h_land["保津川游船岚山下船场"]
@@ -101,7 +113,7 @@ flowchart TD
 
     subgraph day3["第 3 天｜10 月 3 日"]
         direction TB
-        d3_01["京都站前酒店"]
+        d3_01["Cross Keys"]
         d3_02["若王子桥"]
         d3_03["哲学小道"]
         d3_04["银阁寺桥"]
@@ -112,7 +124,7 @@ flowchart TD
         d3_kifune_return["贵船神社本宫"]
         d3_08["贵船口站"]
         d3_09["出町柳站"]
-        d3_10["京都站前酒店"]
+        d3_10["Cross Keys"]
         d3_01 --> d3_02
         d3_02 --> d3_03
         d3_03 --> d3_04
@@ -129,18 +141,19 @@ flowchart TD
 
     subgraph day4["第 4 天｜10 月 4 日"]
         direction TB
-        d4_01["京都站前酒店"]
-        d4_kyotost_out["京都站"]
-        d4_inarist_out["JR稻荷站"]
+        d4_01["Cross Keys"]
+        d4_kiyomizu_out["清水五条站"]
+        d4_keihan_inari_out["京阪伏见稻荷站"]
         d4_02["伏见稻荷大社"]
         d4_senbon_out["千本鸟居"]
         d4_okusha["奥社"]
         d4_senbon_back["千本鸟居"]
         d4_inari_return["伏见稻荷大社"]
-        d4_inarist_back["JR稻荷站"]
-        d4_kyotost_back["京都站"]
-        d4_03["京都站前酒店"]
-        d4_kyotost_uji["京都站"]
+        d4_keihan_inari_back["京阪伏见稻荷站"]
+        d4_kiyomizu_back["清水五条站"]
+        d4_03["Cross Keys"]
+        d4_kiyomizu_uji["清水五条站"]
+        d4_tofukuji_uji["东福寺站"]
         d4_ujist_arrive["JR宇治站"]
         d4_04["Hotel Trend JR Uji Ekimae"]
         d4_05["平等院表参道"]
@@ -159,18 +172,19 @@ flowchart TD
         d4_07 --> d4_08
         d4_09 --> d4_10
         d4_10 --> d4_11
-        d4_01 --> d4_kyotost_out
-        d4_kyotost_out --> d4_inarist_out
-        d4_inarist_out --> d4_02
+        d4_01 --> d4_kiyomizu_out
+        d4_kiyomizu_out --> d4_keihan_inari_out
+        d4_keihan_inari_out --> d4_02
         d4_02 --> d4_senbon_out
         d4_senbon_out --> d4_okusha
         d4_okusha --> d4_senbon_back
         d4_senbon_back --> d4_inari_return
-        d4_inari_return --> d4_inarist_back
-        d4_inarist_back --> d4_kyotost_back
-        d4_kyotost_back --> d4_03
-        d4_03 --> d4_kyotost_uji
-        d4_kyotost_uji --> d4_ujist_arrive
+        d4_inari_return --> d4_keihan_inari_back
+        d4_keihan_inari_back --> d4_kiyomizu_back
+        d4_kiyomizu_back --> d4_03
+        d4_03 --> d4_kiyomizu_uji
+        d4_kiyomizu_uji --> d4_tofukuji_uji
+        d4_tofukuji_uji --> d4_ujist_arrive
         d4_ujist_arrive --> d4_04
         d4_06 --> d4_ujiriver
         d4_ujiriver --> d4_07

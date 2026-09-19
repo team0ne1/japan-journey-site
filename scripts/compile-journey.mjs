@@ -64,6 +64,32 @@ export async function compileJourney(){
      original={...original,time:id==='d2_01'?'10:00起床后退房（暂定）':id==='d2_osakast'?'目标10:30出发，视酒店衔接调整':id==='d2_02'?'抵达京都后寄存、午餐':id==='d2_06'?'午餐后上山，争取15:00前到寺':id==='d2_11'?'回酒店休息约60分钟':'按当日进度从容衔接'};
      if(id==='d2_06'){mode='taxi';connection=lazyBranch.stops[0].connection;original.note=lazyBranch.stops[0].note+' '+lazyBranch.scheduleNote;}
     }
+    const kyotoLegs={
+     d2_02:['taxi','京都站至Cross Keys民宿寄存行李；拖箱交通及接收时段待核'],
+     d2_kyotost_out:['taxi','从Cross Keys民宿返回京都站乘JR；时间与费用按新地址重算'],
+     d2_checkin:['taxi','京都站返回the kind cafe，在16:00–21:00办理入住'],
+     d2_11:['walk','咖啡厅办妥入住后前往对面Cross Keys（本町2丁目89）'],
+     d2_16:['walk','祇园四条返回Cross Keys；按体力选择京阪至清水五条再步行，路线待核'],
+     d3_02:['taxi','Cross Keys出发前往若王子桥；交通时长费用按新地址待核'],
+     d3_10:['rail','出町柳乘京阪至清水五条，再步行返回Cross Keys'],
+     d4_kiyomizu_out:['walk','先退房并按约定寄存，再步行到清水五条站'],
+     d4_keihan_inari_out:['rail','京阪清水五条至伏见稻荷，选择停靠本站的列车'],
+     d4_02:['walk','京阪伏见稻荷站步行到伏见稻荷大社，非JR稻荷站出发'],
+     d4_keihan_inari_back:['walk','参拜后步行返回京阪伏见稻荷站'],
+     d4_kiyomizu_back:['rail','京阪返回清水五条站'],
+     d4_03:['walk','返回Cross Keys民宿取寄存行李'],
+     d4_kiyomizu_uji:['walk','取件后步行至清水五条站，预留拖箱时间'],
+     d4_tofukuji_uji:['rail','京阪清水五条至东福寺，下车换JR奈良线'],
+     d4_ujist_arrive:['rail','东福寺乘JR奈良线前往JR宇治，核对停靠站']
+    };
+    if(day>=2&&day<=4){
+     if(kyotoLegs[id]){[mode,connection]=kyotoLegs[id];}
+     original={...original,time:'按新住宿衔接 · 时刻待确认'};
+     if(id==='d2_02')original.note='先到Cross Keys民宿寄存；最早接收时段尚未确认，不能默认08:00可寄存。高精力版本须先确认寄存再预约早班船。';
+     if(id==='d2_checkin'){original.time='16:00–21:00（JST）';original.note='最迟10/1告知房东预计入住时间。先到84-2号咖啡厅办理入住，再去对面89号民宿；21:00前完成，夜游安排在入住后。';}
+     if(id==='d4_01'){original.time='出游前退房 · 10:00前（JST）';original.note='先退房并按约定寄存，再去伏见稻荷；回来仅取行李，不能保留客房至中午。';}
+     if(id==='d4_03')original.note='仅取行李，在Cross Keys民宿交接，可用时段另核。取件后清水五条→东福寺换JR→宇治。';
+    }
     return {id:node.place,commentId:cid,graphId:id,time:original?.time||'衔接时段 · 待确认',note:original?.note||places[node.place].duration||'途经点；预留步行、换乘与等候时间。',mode,connection,duration:original?.duration,deadline:original?.deadline};
    });
    if(day===5&&p==='A'&&stops.some(s=>s.id==='nara'))throw Error('Plan A must not use Nara hotel storage');
@@ -89,6 +115,15 @@ export async function compileJourney(){
     d.notes=[lazyBranch.note,lazyBranch.stops[0].note,lazyBranch.scheduleNote,'10:00起床、10:30大阪站出发仅作目标，酒店至大阪站的退房与交通需另留时间。京都寄存后可先用午餐再乘车上山。','寺内及下行仍需步行；累了随时收束。回酒店休息约60分钟，祇园夜游按体力决定。'];
     d.budget={summary:lazyBranch.budgetNote,items:[{name:'爱宕念佛寺成人门票',min:1000,max:1000,note:'只计一次，实际进入寺院时发生。',source:'https://www.otagiji.com/visit-en',confirmed:true}],notes:[lazyBranch.budgetNote,'JR往返、京都酒店直达寺院出租车、住宿及税费尚待核算；未预订餐饮不计入。']};
     d.budgetPending='究极懒人版总额待复核，不套用原路线交通预算。';
+   }
+   if(day>=2&&day<=4){
+    d.distance='待复核';d.calories='待复核';
+    d.schedulePending='京都住宿改为Cross Keys；寄存可用时段与新地址交通待核，旧分钟表暂停。'+(hozu?'高精力版本原08:00寄存、10:00船暂不能保证，确认房东接收时间后重排。':'');
+    d.notes=d.notes.filter(n=>!n.includes('08:00–08:15')&&!n.includes('06:00–06:30')).concat(base.notes.filter(n=>n.includes('Cross Keys')||n.includes('京都站前')));
+    d.budget={...d.budget,items:(d.budget?.items||[]).filter(i=>!['交通','住宿','税'].some(k=>i.name.includes(k)))};
+    d.budgetPending='新住宿衔接交通、住宿订单金额及税费待确认；仅列已知项目，不代表全天总额。';
+    d.budget.notes=[...(d.budget.notes||[]),'京都住宿已预订，订单金额及现金住宿税未提供。住宿查询采用4位成人、2间房，实际订单寝具配置待补充；不把历史占位价当成已付费用。'];
+    if(lazy)d.subtitle='Cross Keys民宿寄存、午餐后直接打车上山，再经鸟居本、落柿舍、竹林至渡月桥。';
    }
    list.push(d);
   }
