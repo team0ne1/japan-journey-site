@@ -44,3 +44,30 @@ test('empty route data remains explicitly missing, never a claimed real route',(
   const data=validate({version:1,segments:[]},places);
   assert.equal(find(data,2,'A',previous,next).reason,'missing');
 });
+
+test('Cross Keys marker and every Kyoto handoff use the residence, not the check-in cafe',async()=>{
+ const read=p=>readFile(new URL('../'+p,import.meta.url),'utf8');
+ const source=await read('dist/data.js')+await read('dist/journey-model.js');
+ const app=(await read('dist/app.js')).split('\nlet day=')[0];
+ const {model,places,link}=runInNewContext(source+app+';({model:JOURNEY_MODEL,places:PLACES,link:routeLink})',{URLSearchParams});
+ const residence='ChIJLSyMi7cIAWARPlYqhGaEXw4',cafe='ChIJ9bp4TbsJAWARM2iWhP2KRqA';
+ assert.equal(places['cross-keys'][1],34.9937824);assert.equal(places['cross-keys'][2],135.769695);
+ assert.notEqual(places['cross-keys'][2],places['kind-cafe'][2]);
+ assert.equal(model.places['cross-keys'].mapUrl,'https://maps.app.goo.gl/mKWuRX7oUZYGHuEw6');
+ let checked=0;
+ for(const day of [2,3,4])for(const variant of model.variants.A[day])for(let i=1;i<variant.stops.length;i++){
+  const from=variant.stops[i-1].id,to=variant.stops[i].id,mode=variant.stops[i].mode;
+  if(![from,to].some(id=>['cross-keys','kind-cafe'].includes(id)))continue;
+  const p=new URL(link(from,to,mode)).searchParams;
+  for(const [key,id] of [['origin',from],['destination',to]])if(['cross-keys','kind-cafe'].includes(id)){
+   assert.equal(p.get(key+'_place_id'),id==='cross-keys'?residence:cafe);
+   assert.equal(p.get(key),places[id][3]);checked++;
+  }
+ }
+ assert.ok(checked>10);
+ const walk=new URL(link('kind-cafe','cross-keys','walk')).searchParams;
+ assert.equal(walk.get('origin_place_id'),cafe);assert.equal(walk.get('destination_place_id'),residence);assert.equal(walk.get('travelmode'),'walking');
+ assert.equal(new URL(link('cross-keys','otagi','taxi')).searchParams.get('travelmode'),'driving');
+ assert.equal(new URL(link('cross-keys','inari','rail')).searchParams.get('travelmode'),'transit');
+ assert.equal(link('hozu-board','hozu-land','boat'),'https://www.hozugawakudari.jp/access');
+});

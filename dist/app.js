@@ -9,7 +9,16 @@ const external=(url,label)=>`<a href="${escapeHtml(url)}" target="_blank" rel="n
 const placeLink=id=>(typeof JOURNEY_MODEL!=='undefined'&&JOURNEY_MODEL.places[id]?.mapUrl)||'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(PLACES[id][3]);
 // Match the supplied Xiaohongshu URL: preserve the place name and percent-encode it twice.
 const xiaohongshuLink=id=>'https://www.xiaohongshu.com/search_result_ai?keyword='+encodeURIComponent(encodeURIComponent(HOTELS[id]?.name||PLACES[id][0]));
-const routeLink=(from,to,mode)=>mode==='boat'?'https://www.hozugawakudari.jp/access':'https://www.google.com/maps/dir/?api=1&origin='+encodeURIComponent(PLACES[from][3])+'&destination='+encodeURIComponent(PLACES[to][3])+'&travelmode='+(mode==='walk'?'walking':mode==='taxi'?'driving':'transit');
+function routeLink(from,to,mode){
+ if(mode==='boat')return 'https://www.hozugawakudari.jp/access';
+ const params=new URLSearchParams({api:'1',origin:PLACES[from][3],destination:PLACES[to][3],travelmode:mode==='walk'?'walking':mode==='taxi'?'driving':'transit'});
+ // Bind verified endpoints to their own Google places; keep addresses as readable fallbacks.
+ for(const [key,id] of [['origin',from],['destination',to]]){
+  const placeId=typeof JOURNEY_MODEL!=='undefined'&&JOURNEY_MODEL.places[id]?.googlePlaceId;
+  if(placeId)params.set(key+'_place_id',placeId);
+ }
+ return 'https://www.google.com/maps/dir/?'+params;
+}
 let day=1,plan='A',map=null,current=null,focusMode=true;
 function readHash(){const p=new URLSearchParams(location.hash.slice(1));day=Math.min(7,Math.max(0,Math.floor(Number(p.get('day')??1)||0)));plan=p.get('plan')==='B'&&JOURNEY_MODEL.variants.B[5]?.length?'B':'A';}
 function change(d=day,p=plan){const params=new URLSearchParams(location.hash.slice(1));params.delete('view');params.set('day',d);params.set('plan',p);location.hash=params.toString();}
