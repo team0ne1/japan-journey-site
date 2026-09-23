@@ -2,74 +2,62 @@ import test from 'node:test';import assert from 'node:assert/strict';import fs f
 const read=p=>fs.readFileSync(p,'utf8');
 const model=vm.runInNewContext(read('dist/data.js')+read('dist/journey-model.js')+';JOURNEY_MODEL');
 const route=read('docs/journey/route.md');
-test('all route nodes are represented and branches retain source edges',()=>{
- const covered=new Set();for(const days of Object.values(model.variants))for(const list of Object.values(days))for(const day of list){const ids=day.stops.map(s=>s.graphId);ids.forEach(id=>covered.add(id));for(let i=1;i<ids.length;i++)assert.ok(model.edges.some(e=>e.from===ids[i-1]&&e.to===ids[i]));assert.equal(new Set(day.stops.map(s=>s.commentId)).size,day.stops.length);}
+test('all source nodes and every consecutive route edge survive compilation',()=>{
+ const covered=new Set();for(const days of Object.values(model.variants))for(const list of Object.values(days))for(const d of list){const ids=d.stops.map(s=>s.graphId);ids.forEach(id=>covered.add(id));for(let i=1;i<ids.length;i++)assert.ok(model.edges.some(e=>e.from===ids[i-1]&&e.to===ids[i]));assert.equal(new Set(d.stops.map(s=>s.commentId)).size,d.stops.length);}
  assert.equal(covered.size,Object.keys(model.nodes).length);
 });
-test('Plan A storage and hotel handoffs never mix with Plan B',()=>{
- for(const d of model.variants.A[5]){assert.ok(!d.stops.some(s=>s.id==='nara'));assert.equal(d.hotel,'hanamusubi');assert.equal(d.stops.at(-1).id,'hanamusubi');}
- for(const p of ['B','B2'])for(const d of model.variants[p][5]){assert.ok(!d.stops.some(s=>s.id==='nara-jr-storage'));assert.equal(d.hotel,'nara');}
- for(const p of ['A','B','B2'])for(let day=5;day<7;day++)assert.equal(model.variants[p][day][0].stops.at(-1).id,model.variants[p][day+1][0].stops[0].id);
+test('booked hotels connect across nights and retired plans are absent',()=>{
+ assert.equal(model.variants.A[1][0].hotel,'sugata-osaka');assert.equal(model.variants.A[5][0].hotel,'choraku');
+ assert.equal(Object.keys(model.variants.B).length,0);assert.equal(Object.keys(model.variants.B2).length,0);
+ for(let day=1;day<7;day++)for(const d of model.variants.A[day])assert.equal(d.stops.at(-1).id,model.variants.A[day+1][0].stops[0].id);
+ const data=vm.runInNewContext(read('dist/data.js')+read('dist/journey-model.js')+';PLAN_B');assert.equal(Object.keys(data).length,0);
 });
-test('optional visits stay out of the main route and hotel alternatives are exclusive',()=>{
- for(const p of ['A','B','B2'])assert.ok(!model.variants[p][5][0].stops.some(s=>['todaiji','nandaimon'].includes(s.id)));
- assert.ok(!model.variants.A[6][0].stops.some(s=>['venus','hakutsuru','arima'].includes(s.id)));
+test('only luggage stations remain as cards while train details remain in connections',()=>{
+ for(const list of Object.values(model.variants.A))for(const d of list)for(const s of d.stops)assert.ok(!/站$/.test(model.places[s.id].name),s.id);
+ for(const d of model.variants.A[5]){assert.equal(d.stops.filter(s=>s.id==='nara-kintetsu-storage').length,2);assert.match(d.stops.at(-1).connection,/直通快速急行.*三宫.*谷上.*有马口.*兆乐/);}
+});
+test('Day1 is a flexible list with no fabricated minute schedule',()=>{
+ const d=model.variants.A[1][0];assert.ok(d.flexible&&d.schedulePending);assert.equal(d.calories,'按实际选择');assert.equal(d.budget.items[0].min,0);assert.equal(d.budget.items[0].max,2000);
+ assert.deepEqual(Array.from(d.stops.map(s=>s.id)),['kix','sugata-osaka','tsutenkaku','nippombashi-denden','namba-yasaka','kuromon-market','dotonbori','hozenji','shinsaibashi','nakazakicho','umeda-shopping','umeda-sky','sugata-osaka']);
+});
+test('optional temple and night walk do not leak into the baseline',()=>{
+ assert.ok(!model.variants.A[5][0].stops.some(s=>['todaiji','nandaimon'].includes(s.id)));
+ assert.ok(!model.variants.A[6][0].stops.some(s=>s.id==='venus'));
  assert.ok(model.variants.A[6].some(d=>d.stops.some(s=>s.id==='venus')));
- assert.equal(model.variants.B2[6][0].hotel,'kyukamura-kishu-kada');
- assert.ok(!model.variants.B2[6][0].stops.some(s=>s.id==='kaigetsu'));
+ const temple=model.variants.A[5].find(d=>d.choices.includes('东大寺＋南大门'));assert.equal(temple.budget.items.filter(i=>i.name.includes('东大寺')).length,1);
 });
-test('unknown hotel coordinates are absent and updated fireworks coordinates survive',()=>{assert.equal(model.places['kobe-hotel'].lat,undefined);assert.equal(model.places.fireworks.lat,34.846066);});
-test('declaration order does not determine the itinerary and malformed routes fail',()=>{
- const original=parseGraph(route);let lines=route.split('\n');let indices=lines.map((l,i)=>/^\s+d2_\w+\["/.test(l)?i:-1).filter(i=>i>=0);const reversed=indices.map(i=>lines[i]).reverse();indices.forEach((n,i)=>lines[n]=reversed[i]);assert.deepEqual(parseGraph(lines.join('\n')).paths,original.paths);
- assert.throws(()=>parseGraph(route.replace('d1_01 --> d1_02','d1_01 --> nonexistent')));
- assert.throws(()=>parseGraph(route.replace('d1_01 --> d1_02','d1_01 --> d1_01')));
+test('new temples have prices, separate last-entry times and distinct map points',()=>{
+ const d=model.variants.A[3][0];assert.ok(d.stops.some(s=>s.id==='eikando'));assert.ok(d.stops.some(s=>s.id==='ginkakuji-temple'));assert.equal(d.budget.items.reduce((n,x)=>n+x.min,0),2000);
+ assert.match(model.places.eikando.hours.last,/16:00/);assert.match(model.places['ginkakuji-temple'].hours.last,/17:00/);assert.notEqual(model.places['ginkakuji-temple'].lat,model.places.ginkaku.lat);
 });
-test('every selectable route has safe budget and schedule rendering data',()=>{
+test('old hotel dinner deadline and comment IDs are not assigned to replacements',()=>{
+ const old=['d1-osaka','d1-osaka-2','d2-osaka','d5a-hotel','d6-arima-hotel','d6-arima-pickup'];
+ for(const list of Object.values(model.variants.A))for(const d of list)for(const s of d.stops)if(['sugata-osaka','choraku'].includes(s.id))assert.ok(!old.includes(s.commentId));
+ for(const d of model.variants.A[5]){const deadline=d.stops.find(s=>s.commentId==='d5a-down').deadline;assert.match(deadline.title,/兆乐/);assert.match(deadline.transit,/待重新倒排/);assert.equal(deadline.source,'https://choraku.com/access/');}
+});
+test('Hozu and lazy branches remain exclusive after removing transit nodes',()=>{
+ const days=model.variants.A[2];assert.equal(days.length,6);assert.ok(days[0].stops.some(s=>s.id==='sagano-ride'));
+ for(const d of days.filter(d=>d.choices.includes('保津川游船'))){assert.ok(!d.stops.some(s=>s.id==='sagano-ride'));assert.match(d.stops.find(s=>s.id==='hozu-board').connection,/JR山阴.*龟冈站北口/);assert.equal(d.stops.find(s=>s.id==='hozu-land').mode,'boat');assert.equal(d.stops.find(s=>s.id==='kind-cafe').mode,'taxi');assert.equal(d.budget.items.find(i=>i.name.includes('船票')).min,6000);}
+ for(const d of days.filter(d=>d.choices.includes('究极懒人'))){const i=d.stops.findIndex(s=>s.id==='otagi');assert.equal(d.stops[i-1].id,'cross-keys');assert.equal(d.stops[i].mode,'taxi');assert.ok(!d.stops.some(s=>['hozu-board','sagano-ride'].includes(s.id)));}
+});
+test('booked Kyoto and Uji information and luggage loop remain intact',()=>{
+ for(const d of model.variants.A[2]){const i=d.stops.findIndex(s=>s.id==='kind-cafe');assert.equal(d.stops[i+1].id,'cross-keys');assert.match(d.stops[i].time,/21:00/);}
+ for(const d of model.variants.A[4]){assert.match(d.stops.find(s=>s.graphId==='d4_03').connection,/京阪伏见稻荷.*清水五条.*取件/);assert.match(d.stops.find(s=>s.graphId==='d4_04').connection,/东福寺.*宇治/);}
+ assert.match(model.places['cross-keys'].hotel.note,/3,349.99 CNY/);assert.match(model.places.uji.hotel.note,/37,400 JPY/);assert.equal(model.places.fireworks.lat,34.846066);
+ const skip=model.variants.A[4].find(d=>d.choices.includes('跳过茶体验'));assert.ok(skip.budget.items.every(i=>!i.name.includes('对凤庵')));
+});
+test('all selectable budgets are numeric and unknown totals stay pending',()=>{
  const ctx={structuredClone};vm.createContext(ctx);vm.runInContext(read('dist/data.js')+read('dist/estimates.js')+read('dist/schedule.js')+read('dist/journey-model.js'),ctx);
- vm.runInContext(`for(const [p,days] of Object.entries(JOURNEY_MODEL.variants))for(const list of Object.values(days))for(const d of list){const b=budgetFor(d,p==='A'?'A':'B');if(!b||!Array.isArray(b.items))throw Error('Missing budget');if(d.budgetPending&&!b.pending)throw Error('Unknown costs shown as zero');const s=scheduleFor(d,p);if(s&&s.slots.some(x=>!Number.isFinite(x.duration)||x.duration<=0))throw Error('Invalid schedule');}`,ctx);
+ vm.runInContext(`for(const list of Object.values(JOURNEY_MODEL.variants.A))for(const d of list){const b=budgetFor(d,'A');if(d.budgetPending&&!b.pending)throw Error('Missing pending state');for(const i of b.items)if(!Number.isFinite(i.min)||!Number.isFinite(i.max))throw Error('Invalid amount');if(d.schedulePending&&scheduleFor(d,'A')!==null)throw Error('Stale minute schedule');}`,ctx);
+});
+test('graph ordering is driven by edges and malformed graphs fail',()=>{
+ const original=parseGraph(route);const lines=route.split('\n'),indices=lines.map((l,i)=>/^\s+d2_\w+\["/.test(l)?i:-1).filter(i=>i>=0),reversed=indices.map(i=>lines[i]).reverse();indices.forEach((n,i)=>lines[n]=reversed[i]);assert.deepEqual(parseGraph(lines.join('\n')).paths,original.paths);
+ assert.throws(()=>parseGraph(route.replace('d1_01 --> d1_03','d1_01 --> nonexistent')));assert.throws(()=>parseGraph(route.replace('d1_01 --> d1_03','d1_01 --> d1_01')));
 });
 
-test('Day5 A uses Kintetsu storage and through train with conservative deadline',()=>{
- for(const d of model.variants.A[5]){
-  assert.equal(d.stops.filter(s=>s.id==='nara-kintetsu-storage').length,2);
-  assert.ok(!d.stops.some(s=>s.id==='nara-jr-storage'||s.id==='osakast'));
-  const train=d.stops.find(s=>s.graphId==='d5a_sannomiya');assert.match(train.connection,/直通快速急行/);
-  const deadline=d.stops.find(s=>s.commentId==='d5a-down').deadline;assert.match(deadline.taxi,/13:45/);assert.match(deadline.transit,/13:20/);
- }
- for(const p of ['B','B2'])for(const d of model.variants[p][5])assert.ok(d.stops.every(s=>s.id!=='nara-kintetsu-storage'&&!s.deadline));
-});
 
-test('Hozu branch uses JR Kameoka without sightseeing train and returns by taxi',()=>{
- for(const plan of ['A','B','B2']){
-  const days=model.variants[plan][2];assert.equal(days.length,6);assert.ok(!days[0].stops.some(s=>s.id==='hozu-board'));
-  for(const d of days.filter(d=>d.choices.includes('保津川游船'))){
-   const places=d.stops.map(s=>s.id);assert.ok(places.includes('jr-kameoka'));
-   assert.ok(!places.includes('kameoka')&&!places.includes('saga'));assert.ok(!places.includes('umahori'));
-   assert.equal(d.stops.find(s=>s.id==='hozu-land').mode,'boat');
-   assert.equal(d.stops.find(s=>s.graphId==='d2_sagajr').mode,'taxi');
-   assert.match(d.stops.find(s=>s.graphId==='d2h_jrkameoka').connection,/JR山阴/);assert.equal(d.stops.find(s=>s.id==='hozu-board').mode,'walk');
-   assert.ok(d.budgetPending);assert.ok(d.schedulePending);assert.equal(d.calories,'待复核');
-   assert.equal(d.budget.items.filter(i=>i.name.includes('船票')).length,1);
-   assert.equal(d.budget.items.find(i=>i.name.includes('船票')).min,6000);
-  }
- }
-});
-
-test('lazy route taxis directly from Kyoto hotel and excludes boat and sightseeing train',()=>{
- for(const p of ['A','B','B2'])for(const d of model.variants[p][2].filter(d=>d.choices.includes('究极懒人'))){
-  const i=d.stops.findIndex(s=>s.id==='otagi');assert.equal(d.stops[i-1].id,'cross-keys');assert.equal(d.stops[i].mode,'taxi');
-  assert.ok(d.stops.every(s=>!['saga','kameoka','hozu-board','hozu-land','umahori'].includes(s.id)));
-  assert.ok(d.budgetPending&&d.schedulePending);assert.equal(d.calories,'待复核');assert.equal(d.budget.items.length,1);
- }
- assert.ok(model.variants.A[2].some(d=>d.label==='高精力版本'));
- assert.ok(model.variants.A[2].some(d=>d.label==='究极懒人'));
-});
-
-test('booked Kyoto stay uses cafe check-in and Keihan luggage loop',()=>{
- for(const plan of ['A','B','B2']){
-  for(const day of [2,3])for(const d of model.variants[plan][day]){assert.equal(d.hotel,'cross-keys');assert.ok(d.schedulePending&&d.budgetPending);assert.ok(!d.stops.some(s=>s.id==='kyoto'));}
-  for(const d of model.variants[plan][2]){assert.equal(d.stops.find(s=>s.graphId==='d2_02').id,'cross-keys');const check=d.stops.findIndex(s=>s.graphId==='d2_checkin');assert.equal(d.stops[check].id,'kind-cafe');assert.equal(d.stops[check+1].id,'cross-keys');assert.match(d.stops[check].time,/21:00/);}
-  for(const d of model.variants[plan][4]){const ids=d.stops.map(s=>s.id);assert.ok(!ids.includes('kyotost'));assert.equal(ids.filter(id=>id==='kiyomizu-gojo').length,3);assert.ok(ids.includes('keihan-inari'));assert.ok(ids.indexOf('tofukuji')<ids.indexOf('ujist'));}
- }
- assert.match(model.places['cross-keys'].hotel.status,/已预订/);assert.notEqual(model.places['cross-keys'].mapQuery,model.places['kind-cafe'].mapQuery);
+test('all active place information renders even when no source list exists',()=>{
+ const ctx={structuredClone,escapeHtml:s=>String(s),external:(url,label)=>label};vm.createContext(ctx);
+ vm.runInContext(read('dist/data.js')+read('dist/hours.js')+read('dist/journey-model.js')+read('dist/tickets.js'),ctx);
+ vm.runInContext(`for(const list of Object.values(JOURNEY_MODEL.variants.A))for(const d of list)for(const s of d.stops){renderAccessHours(s.id);renderTicket(s.id);}`,ctx);
 });

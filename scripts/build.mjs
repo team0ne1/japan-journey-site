@@ -18,6 +18,11 @@ for (const segment of routes.segments) {
 }
 // Every itinerary location and the optional Kamo area must ship with its photo.
 const photos = runInNewContext(`${await readFile('dist/place-images.js', 'utf8')}; PLACE_IMAGES`);
+// Every selectable route needs a local photo, including explicitly labeled area references.
+for (const days of Object.values(itinerary.JOURNEY_MODEL.variants))
+ for (const variants of Object.values(days)) for (const day of variants) for (const stop of day.stops)
+  if (!photos[stop.id]) throw new Error('Missing active itinerary photo: ' + stop.id);
+
 for (const id of new Set([...Object.keys(itinerary.PLACES), 'kamo'])) {
   const photo = photos[id];
   if (!photo && itinerary.JOURNEY_MODEL.places[id]) continue; // Missing photos use an explicit placeholder, never another place's image.

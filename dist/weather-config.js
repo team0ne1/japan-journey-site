@@ -9,12 +9,8 @@ const WEATHER_AREAS = {
   2: [['togetsu','岚山'],['yasaka','祇园'],['osaka','大阪']],
   3: [['nyakuoji','哲学小道'],['kifune','贵船']],
   4: [['uji','宇治'],['inari','伏见稻荷'],['fireworks','城阳花火会场']],
-  5: [['nara','奈良'],['hanamusubi','有马温泉']],
-  6: [['sannomiya','神户'],['beach','须磨海边'],['hanamusubi','有马温泉']],
+  5: [['nara','奈良'],['choraku','有马温泉']],
+  6: [['sannomiya','神户'],['beach','须磨海边'],['choraku','有马温泉']],
   7: [['kix','关西机场'],['sannomiya','神户']]
 };
-const WEATHER_AREAS_B = {
-  5: [['nara','奈良']],
-  6: [['kaigetsu','加太地区'],['nara','奈良']],
-  7: [['kix','关西机场'],['kaigetsu','加太地区']]
-};
+const WEATHER_AREAS_B = {}; // Retired hotel alternatives are no longer selectable.

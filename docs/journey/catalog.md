@@ -2,6 +2,8 @@
 
 ## 旅程概况
 
+2026-09-23展示规则：路线图和每日游览列表省略普通中转车站；此文件中既有车站资料和交通步骤保留供路段规划使用，不应直接全部渲染为游览节点。实际站内寄存／取件车站可保留。最新路线以《关西七日行程-路线图.md》为准，本次行李逐日审核仅推进第一天，其余天数留待后续确认。
+
 ```yaml journey:trip
 version: 1.0-draft
 id: kansai-october-2026
@@ -13,7 +15,7 @@ timezone: Asia/Tokyo
 partySize: 5
 weightKg: 70
 currency: JPY
-updated: 2026-09-15
+updated: 2026-09-23
 hoursChecked: 2026-09-11
 status: 规划草案
 intro: 公共交通与步行
@@ -135,7 +137,43 @@ lng: 135.2441
 mapQuery: Kansai International Airport
 ```
 
+## 地点 · Sugata Hotel Osaka
+
+2026-09-23用户确认第一晚已预订。正式名称 Sugata Hotel Osaka Shinsaibashi, Series by Marriott；按本行程10/1入住、10/2退房。地址大阪市中央区南船場2-6-25，电话+81 6-4708-3360。订单房型、房价、餐食和取消条件待补充，不将此前筛选的15㎡双床房当作实际订单。[万豪官网](https://www.marriott.com/en-us/hotels/osass-sugata-hotel-osaka-shinsaibashi-series/overview/)
+
+第一天建议直接到酒店放行李，再乘车去通天阁，依次参考日本桥商圈、难波八阪神社、黑门市场，接回道顿堀游览；不在难波站增加存取件往返。官网入住15:00、退房11:00，前台24小时；[Booking设施资料](https://www.booking.com/hotel/jp/sugata-hotel-osaka-shinsaibashi-series-by-marriott.html)列有行李寄存，但入住前可寄存时段、费用和容量待酒店确认，不能推断免费或全天可寄存。
+
+酒店位于南船场，和Cross Hotel是不同地点。机场到店先沿用《酒店选择》中的交通候选：南海至天下茶屋，转堺筋线到长堀桥，再步行到店；电梯出口、实际班次及门到门用时待核，不沿用Cross Hotel“南海难波步行10分钟”。这些车站只是路段交通信息，不作为行程停留或寄存节点。
+
+```yaml journey:place
+id: sugata-osaka
+name: Sugata Hotel Osaka
+lat: 34.6766358566958
+lng: 135.504816406363
+mapQuery: Sugata Hotel Osaka Shinsaibashi 2-6-25 Minamisenba Osaka
+checked: 2026-09-23
+coordinateNote: 万豪官网地图提供的酒店位置，非已核电梯出口或酒店门口精确点
+hotel:
+  name: Sugata Hotel Osaka Shinsaibashi, Series by Marriott
+  area: 大阪 · 南船场／心斋桥
+  url: https://www.marriott.com/en-us/hotels/osass-sugata-hotel-osaka-shinsaibashi-series/overview/
+  status: 已预订，2026-09-23用户确认；订单明细待补充
+  note: 按本行程10/1入住、10/2退房；15:00入住、11:00退房。第一天优先酒店寄存，具体时段、费用及容量待酒店确认。
+hours:
+  scope: 酒店入住／退房 · 日本当地时间
+  open: 10/1 15:00起入住
+  last: 晚到接待条件以订单或酒店确认为准
+  close: 10/2 11:00前退房
+  note: 提前寄存的时段、费用及容量待确认。地址大阪市中央区南船場2-6-25，电话+81 6-4708-3360。酒店不提供机场接驳。
+  sources:
+    - - 万豪酒店官网
+      - https://www.marriott.com/en-us/hotels/osass-sugata-hotel-osaka-shinsaibashi-series/overview/
+  status: 2026-09-23官网核对
+```
+
 ## 地点 · Cross Hotel Osaka
+
+历史候选资料：2026-09-23用户已确认第一晚预订Sugata Hotel Osaka，本馆不再用于第一天住宿或寄存规划。
 
 ```yaml journey:place
 id: osaka
@@ -159,6 +197,200 @@ name: 南海难波站
 lat: 34.6641
 lng: 135.5019
 mapQuery: Nankai Namba Station
+```
+
+## 地点 · 通天阁
+
+2026-09-23按用户要求加入第一天，在Sugata寄存后前往，再接日本桥商圈。先保留到访与周边闲逛，上塔与否按现场兴致决定；不默认已购票或必须上塔。官网列出的展望台常规营业为09:00–21:45，一般展望台最后入场21:15，特别屋外展望台最后入场21:35；成人套票1,500日元，含一般与特别屋外展望台，入场采用时间预约制。[通天阁官方营业与票价](https://www.tsutenkaku.co.jp/annai/)
+
+```yaml journey:place
+id: tsutenkaku
+name: 通天阁
+mapQuery: 通天閣 大阪市浪速区恵美須東1-18-6
+checked: 2026-09-23
+lat: 34.6524992
+lng: 135.5063058
+coordinateNote: 通天阁官方交通页步行导航目的地；https://www.tsutenkaku.co.jp/access/
+hours:
+  scope: 展望台；周边街区不套用此时段
+  open: 09:00–21:45
+  last: 一般展望台21:15；特别屋外展望台21:35
+  close: 21:45
+  note: 上塔需预约入场时间，未购票；是否上塔由当天兴致决定，临时调整以官方公告为准。
+  sources:
+    - - 通天阁官方营业与票价
+      - https://www.tsutenkaku.co.jp/annai/
+  status: 2026-09-23核查
+tickets:
+  - id: tsutenkaku-adult
+    name: 通天阁一般＋特别屋外展望台成人套票
+    category: admission
+    audience: adult
+    currency: JPY
+    amount: 1500
+    priceStatus: verified
+    checked: 2026-09-23
+    source: https://www.tsutenkaku.co.jp/annai/
+    note: 15岁及以上，一位成人计；仅上塔时发生，未购票，不含滑梯等其他项目。
+```
+
+## 地点 · でんでんタウン／日本橋筋商店街
+
+2026-09-23按用户要求加入第一天通天阁之后。でんでんタウン为日本桥电器、动漫商圈称呼，日本橋筋商店街属于其中，按同一段逛街处理、保留两个名称，不重复安排两次停留。先按喜欢的店随兴逛，具体店铺和各店营业时间待选；公共街道可通行不代表商铺营业。[商店街官方地图](https://www.nippombashi.jp/shopmap.php)；[大阪市街区介绍](https://www.city.osaka.lg.jp/toshikeikaku/page/0000390675.html)
+
+```yaml journey:place
+id: nippombashi-denden
+name: でんでんタウン／日本橋筋商店街
+mapQuery: 日本橋筋商店街 でんでんタウン 大阪
+checked: 2026-09-23
+lat: 34.6549385
+lng: 135.5055773
+coordinateNote: 大阪观光局商圈地图代表点，非指定店铺入口；https://osaka-info.jp/experience/ja/osaka/spot/229
+hours:
+  scope: 日本桥商圈店铺
+  open: 各店独立营业
+  last: 待选店后核实
+  close: 各店独立
+  note: 两个名称合并为一次街区游览；不预设全部店铺营业或固定停留时长。
+  sources:
+    - - 商店街官方地图
+      - https://www.nippombashi.jp/shopmap.php
+  status: 街区已核实，店铺待选
+```
+
+## 地点 · 难波八阪神社
+
+2026-09-23按用户要求加入第一天日本桥商圈之后、黑门市场之前。地址大阪市浪速区元町2-9-19，以境内参拜、观赏狮子殿为主；与京都八坂神社为不同地点。大阪观光局列境内开门06:00–17:00，另列营业09:00–16:50；到得晚就按现场情况取舍，不为闭门赶路。[神社官网](https://nambayasaka.jp/)；[大阪观光局开放时间](https://osaka-info.jp/special/dc/event/detail12/)
+
+```yaml journey:place
+id: namba-yasaka
+name: 难波八阪神社
+mapQuery: 難波八阪神社 大阪市浪速区元町2-9-19
+checked: 2026-09-23
+coordinateNote: 暂使用神社名称及官方地址查询，入口精确坐标待核
+hours:
+  scope: 境内开门时间
+  open: 06:00–17:00
+  last: 未公布独立最晚进入时间，避免临近闭门才抵达
+  close: 17:00
+  note: 大阪观光局另列营业09:00–16:50，不能把境内开门时段当作所有服务时间。
+  sources:
+    - - 大阪观光局难波八阪神社
+      - https://osaka-info.jp/special/dc/event/detail12/
+    - - 神社官网
+      - https://nambayasaka.jp/
+  status: 2026-09-23核查
+```
+
+## 地点 · 黑门市场
+
+2026-09-23按用户要求加入第一天难波八阪神社之后，再衔接道顿堀。以市场闲逛和按兴趣选小吃为主，晚餐仍在梅田。官网逐店列营业与休息日，市场没有适用于所有店铺的统一营业时间；选店后再核实，优先白天到访，不承诺晚到仍能逛齐。[黑门市场官网与店铺目录](https://kuromon.com/jp/)
+
+```yaml journey:place
+id: kuromon-market
+name: 黑门市场
+mapQuery: 黒門市場 大阪 日本橋
+checked: 2026-09-23
+lat: 34.664796
+lng: 135.506985
+coordinateNote: 大阪观光局市场地图代表点，非指定店铺入口；https://osaka-info.jp/spot/gastronomy-kuromon/
+hours:
+  scope: 市场各商铺
+  open: 各店独立营业
+  last: 各店售罄与点餐截止分别确认
+  close: 各店独立，不能统一视为夜市
+  note: 优先白天随兴逛吃；餐饮、购物按实际选择另计，未预订。
+  sources:
+    - - 黑门市场官方店铺目录
+      - https://kuromon.com/jp/
+  status: 2026-09-23核查，具体店铺待选
+```
+
+## 地点 · 中崎町
+
+2026-09-23按用户要求加入第一天下午。大阪观光局介绍这里为梅田附近的咖啡、杂货、古着街区；本行程走公共街巷、挑喜欢的店短逛，建议45–60分钟，咖啡休息可包含在此段。各店营业日和时间独立，尚未指定店铺，不把街区可通行等同于店铺全天开门。[大阪观光局介绍](https://osaka-info.jp/experience/ja/osaka/spot/203)
+
+```yaml journey:place
+id: nakazakicho
+name: 中崎町
+lat: 34.7069399
+lng: 135.5053825
+mapQuery: 中崎町 大阪 カフェ 雑貨
+duration: 建议45–60分钟，按兴趣短逛并休息
+checked: 2026-09-23
+coordinateNote: 大阪观光局街区地图参考中心；具体店铺尚未确定
+hours:
+  scope: 街区公共道路与沿街商铺
+  open: 街区无统一营业时段
+  last: 各店独立，待选店后核实
+  close: 各店独立
+  note: 优先安排下午，不能承诺晚间仍有店可逛。
+  sources:
+    - - 大阪观光局中崎町介绍
+      - https://osaka-info.jp/experience/ja/osaka/spot/203
+  status: 2026-09-23核查；具体店铺未定
+```
+
+## 地点 · 梅田商圈
+
+2026-09-23按用户要求加入第一天，与中崎町合并为北部逛街段。按60–90分钟短逛规划，先围绕茶屋町一带挑感兴趣的商店，不默认逛完所有商场；梅田晚饭后可按兴致前往空中庭园展望台，另列观景地点。商场和店铺分别营业，餐饮、购物费用另计。[大阪观光局梅田周边散步介绍](https://osaka-info.jp/modelcourse/course-kimono-walk/)
+
+```yaml journey:place
+id: umeda-shopping
+name: 梅田商圈
+lat: 34.706844
+lng: 135.499551
+mapQuery: 梅田 茶屋町 大阪 ショッピング
+duration: 建议60–90分钟，只挑感兴趣的商店
+checked: 2026-09-23
+coordinateNote: 以大阪观光局茶屋町地图作为梅田商圈参考点，不是寄存站点
+hours:
+  scope: 梅田商圈商铺
+  open: 各商场及店铺独立营业
+  last: 待选店后核实
+  close: 不设统一闭店时间
+  note: 不将餐厅营业时段套用到商场零售店。
+  status: 店铺尚未确定
+```
+
+## 地点 · 梅田蓝天大厦・空中庭园展望台
+
+2026-09-23按用户更正，作为第一天梅田晚饭后的观景地点。常规09:30–22:30、22:00最后入场；包含39楼、40楼及露天屋顶，须从展望台专用入口进入，按指示前往3楼出发层，不能使用办公楼电梯。观景可参考60–90分钟，找入口、排队和上楼另计；按当日体力与兴致决定，不设日落／蓝调或固定入场目标。[官方中文营业及票价](https://www.skybldg.co.jp/tw/)；[官方展望台及入口说明](https://www.skybldg.co.jp/observatory/)
+
+普通成人票2,000日元／人，未购票；特别活动与临时营业调整以当天公告为准。梅田晚餐餐厅尚未确定，饭后步行距离与耗时待选店后核实，疲劳时可打车；游览结束乘市内交通或打车返回Sugata。
+
+```yaml journey:place
+id: umeda-sky
+name: 梅田蓝天大厦・空中庭园展望台
+mapQuery: 梅田スカイビル 空中庭園展望台 大阪
+lat: 34.7050738
+lng: 135.4902845
+duration: 建议观景60–90分钟，排队和上楼另计
+checked: 2026-09-23
+coordinateNote: 官方中文交通页链接的步行导航终点参考坐标；现场按展望台专用入口指示进入
+hours:
+  scope: 空中庭园展望台普通营业
+  open: 09:30–22:30
+  last: 22:00最后入场
+  close: 22:30
+  note: 常规时段，特别活动、临时营业调整与露天屋顶开放情况以当日公告为准。
+  sources:
+    - - 梅田蓝天大厦官方中文营业说明
+      - https://www.skybldg.co.jp/tw/
+    - - 官方展望台及入口说明
+      - https://www.skybldg.co.jp/observatory/
+  status: 2026-09-23核查
+tickets:
+  - id: umeda-sky-adult
+    name: 空中庭园展望台成人普通票
+    category: admission
+    audience: adult
+    currency: JPY
+    amount: 2000
+    priceStatus: verified
+    checked: 2026-09-23
+    source: https://www.skybldg.co.jp/tw/
+    note: 按一位成人计，未购票；不含其他体验或餐食。
 ```
 
 ## 地点 · 心斋桥筋
@@ -593,6 +825,82 @@ lng: 135.7723
 mapQuery: Gion Shijo Station
 ```
 
+## 地点 · 永观堂（禅林寺）
+
+2026-09-21补充：第三天上午首站，安排普通入内参观后步行至若王子桥、由南向北走哲学之道。建议参观45–60分钟，是本行程预留；不强求登高或走遍所有院内角落。常规受付09:00–16:00、17:00闭门，成人普通票1,000日元；不套用旧攻略的600日元或秋季夜间特别参观规则。[官方参观说明](https://www.eikando.or.jp/English/haikan_e.html)；[官方普通票价](https://www.eikando.or.jp/pdf/haikanryo.pdf)
+
+```yaml journey:place
+id: eikando
+name: 永观堂（禅林寺）
+mapQuery: 永観堂 禅林寺 京都
+duration: 建议参观45–60分钟
+checked: 2026-09-21
+coordinateNote: 官方活动页Google地点坐标
+photoStatus: 待补充对应地点照片
+hours:
+  scope: 普通日间参观
+  open: 09:00–17:00
+  last: 16:00受付结束
+  close: 17:00闭门
+  note: 法务或活动可能影响部分区域，特别参观另核。
+  sources:
+    - - 永观堂官方参观说明
+      - https://www.eikando.or.jp/English/haikan_e.html
+  status: 2026-09-21核查
+tickets:
+  - id: eikando-adult
+    name: 永观堂普通参观
+    category: admission
+    audience: adult
+    currency: JPY
+    amount: 1000
+    priceStatus: verified
+    checked: 2026-09-21
+    source: https://www.eikando.or.jp/pdf/haikanryo.pdf
+    note: 普通成人单人票，不含特别参观。
+lat: 35.0145812
+lng: 135.7943607
+```
+
+## 地点 · 银阁寺（慈照寺）
+
+2026-09-21补充：第三天正式游览地点，和“银阁寺桥附近・小道北端”分别建档，避免只走到桥便当作已参观寺院。官网普通参观约30分钟，行程留45–60分钟慢游；不自动加入特別拝観。10月受付08:30–17:00，17:20前下山离场；成人普通票1,000日元。展望所等部分区域有台阶，可按体力采用寺院公布的绕行路径。[官方开放及票价](https://www.shokoku-ji.jp/ginkakuji/access/)；[官方FAQ](https://www.shokoku-ji.jp/ginkakuji/faq/)
+
+```yaml journey:place
+id: ginkakuji-temple
+name: 银阁寺（慈照寺）
+mapQuery: 銀閣寺 慈照寺 京都市左京区銀閣寺町2
+duration: 建议参观45–60分钟，官网普通参观参考约30分钟
+checked: 2026-09-21
+coordinateNote: 官方交通页地图中心；具体入寺入口以现场指引为准
+photoStatus: 待补充对应地点照片
+hours:
+  scope: 3月至11月普通参观
+  open: 08:30–17:00
+  last: 17:00最后入场
+  close: 17:20前下山离场
+  note: 本次10/3适用夏期时段；特別拝観不包含在本安排。
+  sources:
+    - - 银阁寺官方参观说明
+      - https://www.shokoku-ji.jp/ginkakuji/access/
+    - - 银阁寺官方FAQ
+      - https://www.shokoku-ji.jp/ginkakuji/faq/
+  status: 2026-09-21核查
+tickets:
+  - id: ginkakuji-adult
+    name: 银阁寺普通参观
+    category: admission
+    audience: adult
+    currency: JPY
+    amount: 1000
+    priceStatus: verified
+    checked: 2026-09-21
+    source: https://www.shokoku-ji.jp/ginkakuji/access/
+    note: 普通成人单人票，不含特別拝観。
+lat: 35.027021298771984
+lng: 135.79765862926578
+```
+
 ## 地点 · 若王子桥・哲学小道南端
 
 ```yaml journey:place
@@ -607,7 +915,7 @@ hours:
   open: 户外散步区域；未查到统一门禁时刻
   last: 不适用统一景区检票；现场限制优先
   close: 官方介绍未列统一闭园时间
-  note: 官方按约2公里散步道介绍，未列营业或门禁时刻；当前不进入若王子神社、银阁寺或其他沿线寺院。
+  note: 官方按约2公里散步道介绍，未列营业或门禁时刻；当前主线在步道前后分别参观永观堂及银阁寺；不自动加入若王子神社或其他沿线寺院。
   sources:
     - - 京都市官方哲学之道介绍
       - https://ja.kyoto.travel/tourism/single01.php?tourism_id=2684
@@ -622,7 +930,7 @@ name: 银阁寺桥附近・小道北端
 lat: 35.027
 lng: 135.793
 mapQuery: Ginkakuji Bridge Kyoto
-duration: 小道结束后午饭＋咖啡休息 90–120分钟
+duration: 银阁寺桥途经约5–10分钟；午餐另安排
 hoursFrom: nyakuoji
 ```
 
@@ -725,15 +1033,22 @@ hours:
 ```yaml journey:place
 id: uji
 name: Hotel Trend JR Uji Ekimae
-lat: 34.8891
-lng: 135.8002
-mapQuery: Hotel Trend JR Uji Ekimae
+lat: 34.8887
+lng: 135.8008166667
+mapQuery: Hotel Trend JR Uji Ekimae 19-2 Uji Ichiban
+hours:
+  scope: 已预订住宿 · 2026/10/4–10/5（日本当地时间）
+  open: 10/4 15:00起办理入住
+  last: 订单入住窗口至24:00；晚到请提前联系酒店
+  close: 10/5 10:00前退房
+  note: 已预订2026/10/4–10/5，4位成人、2间房、1晚。禁烟双床房1间（2张单人床，2人，19,800 JPY）＋禁烟双人房1间（1张双人床，2人，17,600 JPY），均不含餐。4位成人、2间房、1晚：含10%增值税房费总额37,400 JPY（日元）；Booking.com支付／补贴4,080 JPY，扣减后计算金额33,320 JPY。确认信不据此证明旅客已付款或待付金额，付款状态以订单为准；额外服务不包含。入住10/4 15:00–24:00；10/5 10:00前退房（日本当地时间）。建议花火前办妥入住，15:00前寄存须另向酒店确认。地址：〒611-0021 京都府宇治市宇治壱番19-2；电话+81 774 20 3200。取消：入住前1天之前免费，临近1天内取消或未入住收全额；具体截止时刻以订单为准。
+  status: 已核对用户提供的预订确认信
 hotel:
   name: Hotel Trend JR Uji Ekimae
-  area: 宇治 · JR宇治站南口
+  area: 宇治 · JR宇治站南口 · 京都府宇治市宇治壱番19-2
   url: https://hotel-trend.jp/uji/
-  note: 偏实用型住宿。花火前先入住，回程只需从JR宇治走回酒店；不要混淆京阪宇治站。
-  status: 住宿候选 · 尚未预订
+  note: 已预订2026/10/4–10/5，4位成人、2间房、1晚。禁烟双床房1间（2张单人床，2人，19,800 JPY）＋禁烟双人房1间（1张双人床，2人，17,600 JPY），均不含餐。4位成人、2间房、1晚：含10%增值税房费总额37,400 JPY（日元）；Booking.com支付／补贴4,080 JPY，扣减后计算金额33,320 JPY。确认信不据此证明旅客已付款或待付金额，付款状态以订单为准；额外服务不包含。入住10/4 15:00–24:00；10/5 10:00前退房（日本当地时间）。建议花火前办妥入住，15:00前寄存须另向酒店确认。地址：〒611-0021 京都府宇治市宇治壱番19-2；电话+81 774 20 3200。取消：入住前1天之前免费，临近1天内取消或未入住收全额；具体截止时刻以订单为准。
+  status: 已预订 · 10/4–10/5 · 4位成人／2间房／1晚
 ```
 
 ## 地点 · JR宇治站
@@ -1765,229 +2080,158 @@ hours:
 id: day-01
 date: 2026-10-01
 city: 大阪
-title: 落地大阪，慢慢进入假期
-subtitle: 先放好行李，再逛商店、吃美食，最后走一段道顿堀。
-intensity: 轻松
-hotel: osaka
+title: 大阪街区、逛店与高空夜景
+subtitle: 先到Sugata安顿行李；通天阁、日本桥商圈、难波八阪神社、黑门市场接道顿堀，再经法善寺、心斋桥、中崎町至梅田，按体力选择，晚饭后有兴致再去空中庭园展望台。
+intensity: 抵达日 · 随兴休闲
+hotel: sugata-osaka
 focus:
-  - osaka
+  - sugata-osaka
+  - tsutenkaku
+  - nippombashi-denden
+  - namba-yasaka
+  - kuromon-market
+  - nakazakicho
+  - umeda-shopping
+  - umeda-sky
   - shinsaibashi
   - hozenji
   - dotonbori
-luggage: 关西机场带全部行李 → 南海难波 → 酒店寄存或入住。晚上步行回房。
-next: 明早从大阪酒店退房，带行李去京都站前酒店；寄存后再去岚山。
-rest: 酒店休息与商店短逛都可伸缩，不给抵达日增加跨城夜游。
+luggage: 建议关西机场带全部行李直接到当晚大阪酒店，未到入住时间先寄存、可入住则放房间，之后轻装游览。南海难波仅为交通经过点，不安排存取行李；酒店已确定为Sugata；入住前寄存条件待酒店确认。
+next: 明早退房带全部行李赴京都Cross Keys；第二天寄存与路线另行逐日审核，不沿用京都站前酒店假设。
+rest: 北部商圈保留坐下吃饭／喝咖啡的时间，城市跨区乘车；不为追日落赶路。抵达或逛街拖晚时缩短停留，再按体力决定当晚执行范围。
 notes:
+  - 用户明确第一天晚饭在梅田；酒店寄存后新增通天阁、日本桥商圈、难波八阪神社、黑门市场，再接道顿堀并向北逛至梅田。餐厅待选，未预约，继续采用随兴安排。
+  - 2026-09-23用户确认第一天无需严谨安排，随机应变。以下地点及顺序为参考清单，不是全部必去或固定时刻要求；按精神、天气、现场兴致增减停留与调整顺序。
+  - 中崎町安排在梅田之前，争取下午逛小店；空中庭园展望台安排夜景，不设日落或蓝调硬目标。
+  - 2026-09-23第一天审核建议为当晚酒店寄存；用户已确认预订Sugata Hotel Osaka，不新增难波站寄存安排。
+  - でんでんタウン与日本橋筋商店街合并为一个商圈游览节点，两个名称均保留；新增段按用户列举顺序连接，不代表最短步行路线。
+  - 难波八阪神社17:00闭门，黑门市场各店独立营业；只作取舍依据，不倒排赶路时间。通天阁是否上塔现场再定。
   - 暂按上午抵达；航班时间未定，入境、取件时间另留。
-  - 酒店、午晚餐均未预订。
+  - Sugata Hotel Osaka已由用户确认预订；午晚餐尚未预订。
 links: []
 optional: []
 overview:
   - d1-kix
   - d1-osaka
 budget:
-  summary: 抵达日以商店、美食与夜景为主，下午保留回房休息。当前统计交通、住宿与杂项预留；餐厅尚未预订，餐饮未纳入。
+  summary: 地点为弹性清单，费用随实际选择发生；Sugata订单金额与交通待补充，未预订餐饮不计。
   items:
-    - name: 交通
-      min: 1800
-      max: 2600
-      note: 机场铁路与少量市内交通的规划预留，车型未定。
-      source: null
-      confirmed: false
-      kind: daily
-      id: day-01-cost-01
-      currency: JPY
-    - name: 门票／体验
+    - name: 可选门票 · 空中庭园展望台
       min: 0
-      max: 0
-      note: 当前只安排商店街与户外夜景；购物另计。
-      source: null
-      confirmed: false
-      kind: daily
-      id: day-01-cost-02
-      currency: JPY
-    - name: 当晚住宿
-      min: 12000
-      max: 20000
-      note: Cross Hotel每人分摊的预算占位，未查10/1房价；按不含餐估算。
-      source: null
-      confirmed: false
-      kind: lodging
-      id: day-01-cost-04
-      currency: JPY
-    - name: 税费／杂项预留
-      min: 300
-      max: 1000
-      note: 住宿相关税费及小额必需支出预留，订房后按实际替换。
-      source: null
-      confirmed: false
-      kind: daily
-      id: day-01-cost-05
-      currency: JPY
+      max: 2000
+      note: 不去为0 JPY，去则普通成人票2,000 JPY／人；未购票。
+      source: https://www.skybldg.co.jp/tw/
+      confirmed: true
   notes:
-    - 首日早餐与机票未纳入，午晚餐从抵达日本后算起。
-    - 目前没有已确认预订的餐厅。餐饮未纳入本日统计合计，临时用餐另计；时间轴中的吃饭与休息安排仍保留。
+    - 住宿价格待补充，目前没有已预订餐厅。
+    - 通天阁是否上塔尚未决定，成人展望台套票1,500 JPY／人只作备选费用，暂不计入已选项目合计。
 schedule:
-  start: 10:00
-  note: 假设10:00落地，航班未定；入境、车程和入住均为预留。上午可先寄存，能否拿到房间以酒店为准。
-  slots:
-    - end: 11:30
-      type: travel
-      label: 入境、取件
-      place: kix
-      note: 假设10:00抵达；办理入境及领取行李预留90分钟。
-      id: day-01-slot-01
-      step: d1-kix
-    - end: 13:00
-      type: travel
-      label: 机场→难波酒店
-      place: osaka
-      note: 机场铁路、候车及带箱步行一起预留。
-      id: day-01-slot-02
-      step: d1-osaka
-    - end: 13:20
-      type: hotel
-      label: 寄存行李
-      place: osaka
-      note: ""
-      id: day-01-slot-03
-      step: d1-osaka
-    - end: 14:20
-      type: meal
-      label: 难波午饭
-      place: ""
-      note: ""
-      id: day-01-slot-04
-    - end: 15:00
-      type: free
-      label: 咖啡／自由休息
-      place: ""
-      note: ""
-      id: day-01-slot-05
-    - end: 16:00
-      type: hotel
-      label: 入住、回房休息
-      place: osaka
-      note: 15:00仅作入住安排占位，尚未订房。
-      id: day-01-slot-06
-      step: d1-osaka
-    - end: 16:10
-      type: travel
-      label: 步行去商店街
-      place: shinsaibashi
-      note: ""
-      id: day-01-slot-07
-      step: d1-shinsaibashi
-    - end: 17:40
-      type: visit
-      label: 心斋桥逛店
-      place: shinsaibashi
-      note: ""
-      id: day-01-slot-08
-      step: d1-shinsaibashi
-    - end: 18:00
-      type: travel
-      label: 步行去法善寺
-      place: hozenji
-      note: ""
-      id: day-01-slot-09
-      step: d1-hozenji
-    - end: 18:20
-      type: visit
-      label: 法善寺横丁
-      place: hozenji
-      note: ""
-      id: day-01-slot-10
-      step: d1-hozenji
-    - end: 19:35
-      type: meal
-      label: 难波晚饭
-      place: ""
-      note: ""
-      id: day-01-slot-11
-    - end: 19:45
-      type: travel
-      label: 步行到戎桥
-      place: dotonbori
-      note: ""
-      id: day-01-slot-12
-      step: d1-dotonbori
-    - end: 20:25
-      type: visit
-      label: 道顿堀夜景
-      place: dotonbori
-      note: ""
-      id: day-01-slot-13
-      step: d1-dotonbori
-    - end: 20:40
-      type: travel
-      label: 步行回酒店
-      place: osaka
-      note: ""
-      id: day-01-slot-14
-      step: d1-osaka-2
-    - end: 24:00
-      type: hotel
-      label: 回房、自由休息
-      place: osaka
-      note: ""
-      id: day-01-slot-15
-      step: d1-osaka-2
+  note: 用户明确无需严谨时间表，随机应变；先酒店安顿行李，其他地点按当天情况选择，顺序与停留时长均仅供参考，不要求全部完成。营业时间只作可行性边界。
+  slots: []
 stops:
   - id: d1-kix
     place: kix
-    time: 上午 · 待航班
+    time: 按实际航班
     mode: rail
     connection: ""
     duration: ""
     note: 入境、取行李后再出发。
-  - id: d1-namba
-    place: namba
-    time: 抵达市区
-    mode: rail
-    connection: 南海机场线；铁路出发到酒店整体留70–100分钟
-    duration: ""
-    note: 南海难波出站，选有电梯的出口。
   - id: d1-osaka
-    place: osaka
-    time: 午间／下午
-    mode: walk
-    connection: 约10分钟，带箱子适当放宽
+    place: sugata-osaka
+    time: 抵达后安顿／游览后返回
+    mode: rail
+    connection: 机场铁路与市内交通至Sugata；候选经天下茶屋换乘至长堀桥，实际班次、电梯出口及拖箱步行待核
     duration: ""
-    note: 先寄存行李，到入住时间后回房休息。
-  - id: d1-shinsaibashi
-    place: shinsaibashi
-    time: 下午
+    note: 建议先在当晚酒店寄存，到入住时间后回房休息；若已可入住则直接放房间。Sugata已预订，当日提前寄存条件待确认。
+  - id: d1-tsutenkaku
+    place: tsutenkaku
+    time: 看体力与兴致 · 顺序仅供参考
+    mode: rail
+    connection: Sugata寄存后乘市内交通至通天阁一带；候选长堀桥经堺筋线至惠美须町再步行，也可打车，具体班次与耗时待核
+    note: 先保留到访和周边闲逛；上塔与否现场按兴趣决定，未订时段或购票，不默认安排滑梯等项目。
+  - id: d1-nippombashi
+    place: nippombashi-denden
+    time: 看体力与兴致 · 顺序仅供参考
     mode: walk
-    connection: 酒店附近短距离步行
-    note: 逛感兴趣的小店，找地方坐下吃东西。
-  - id: d1-hozenji
-    place: hozenji
-    time: 晚饭前后
+    connection: 通天阁一带步行接日本桥商圈；按选店位置游览，具体步行耗时待核
+    note: でんでんタウン／日本橋筋商店街合并为一次逛街，挑感兴趣的电器、动漫或游戏店。
+  - id: d1-namba-yasaka
+    place: namba-yasaka
+    time: 看体力与兴致 · 顺序仅供参考
     mode: walk
-    connection: 商店与晚餐区域之间步行
-    note: 在难波附近吃晚饭，顺路看看巷子。
+    connection: 日本桥商圈向西赴难波八阪神社，步行或按体力打车；耗时取决于离开的店铺位置，待核
+    note: 看狮子殿与参拜；17:00闭门只作可行性边界，不为补齐地点赶路。
+  - id: d1-kuromon
+    place: kuromon-market
+    time: 看体力与兴致 · 顺序仅供参考
+    mode: walk
+    connection: 难波八阪神社向东赴黑门市场，按体力步行或打车；具体路线与耗时待核
+    note: 按营业情况随兴逛吃，各店时间不同；晚饭仍留在梅田，不要求市场每家都逛。
   - id: d1-dotonbori
     place: dotonbori
-    time: 晚上
+    time: 看体力与兴致 · 顺序仅供参考
     mode: walk
-    connection: 巷子至河畔步行
-    note: 道顿堀与戎桥夜景，不拉长路线。
+    connection: 黑门市场游览后步行衔接道顿堀・戎桥；具体出入口和步行耗时待核
+    note: 由新增南部游览段接回道顿堀与戎桥，不要求等到夜景。
+  - id: d1-hozenji
+    place: hozenji
+    time: 看体力与兴致 · 顺序仅供参考
+    mode: walk
+    connection: 道顿堀附近短步行至法善寺横丁
+    note: 顺路看看巷子；晚饭留给梅田，不在此绑定餐厅。
+  - id: d1-shinsaibashi
+    place: shinsaibashi
+    time: 看体力与兴致 · 顺序仅供参考
+    mode: walk
+    connection: 从法善寺／道顿堀一带向北接心斋桥筋，沿商店街随兴逛
+    note: 按营业情况挑店，之后乘车去中崎町，不把跨区转场当长距离徒步。
+  - id: d1-nakazakicho
+    place: nakazakicho
+    time: 看体力与兴致 · 顺序仅供参考
+    mode: rail
+    connection: 心斋桥至中崎町区域乘市内交通，站内及街区入口步行另计；具体班次待核
+    duration: 45–60分钟
+    note: 选感兴趣的小店和咖啡馆，不逐店打卡；具体店铺营业时间待选店后核实。
+  - id: d1-umeda
+    place: umeda-shopping
+    time: 看体力与兴致 · 顺序仅供参考
+    mode: walk
+    connection: 中崎町至梅田茶屋町一带，依选店位置短距离步行；暂留15–25分钟，非导航实测
+    duration: 逛街60–90分钟仅作参考，晚餐另留充分时间
+    note: 在梅田吃晚饭，餐厅待选、未预约；购物按兴趣，不为饭后其他景点压缩用餐。
+  - id: d1-umeda-sky
+    place: umeda-sky
+    time: 看体力与兴致 · 顺序仅供参考
+    mode: walk
+    connection: 梅田晚饭后如有兴致，步行至梅田蓝天大厦展望台专用入口；具体距离与耗时待选定餐厅后核实，疲劳时可打车，排队和上楼另留余量
+    duration: 60–90分钟
+    note: 若当天选择前往，按常规22:00最后入场、22:30关闭判断是否还有充足观景时间；不设到达目标，晚到或疲劳就不赶着补齐。
+    fees:
+      - ticketOptions:
+          - umeda-sky-adult
+        accounting: budget
+        budgetItem: day-01-cost-02
   - id: d1-osaka-2
-    place: osaka
-    time: 夜间
-    mode: walk
-    connection: 步行回房
+    place: sugata-osaka
+    time: 抵达后安顿／游览后返回
+    mode: rail
+    connection: 如去了空中庭园，从梅田蓝天大厦乘市内交通或打车回Sugata；若跳过，则从梅田用餐处直接回酒店
     duration: ""
     note: 回酒店休息，为明早跨城留体力。
-distanceKm:
-  - 3
-  - 5
-activityKcal:
-  - 120
-  - 250
+distanceKm: []
+activityKcal: []
+activityNote: 新增通天阁、日本桥商圈、难波八阪神社、黑门市场，衔接道顿堀与原北部行程；全程步行总量与热量待重算，不默认全部步行。
 dining: []
+flexible: true
 ```
+
+### 第一天行李审核 · 2026-09-23（酒店已确定，寄存细则待核）
+
+用户确认第一晚已预订 **Sugata Hotel Osaka**。建议路线：**关西国际机场 → Sugata寄存／入住 → 通天阁 → でんでんタウン／日本橋筋商店街 → 难波八阪神社 → 黑门市场 → 道顿堀・戎桥 → 法善寺横丁 → 心斋桥筋 → 中崎町 → 梅田商圈及晚饭 → 空中庭园展望台（饭后按兴致）→ Sugata**。
+
+优先把酒店作为唯一存取行李点，晚间从梅田或空中庭园展望台乘车回酒店，不必绕回车站取箱子；去各商圈时均轻装。15:00前抵达以向前台寄存为目标；15:00后若已可交房则直接把行李放房间。平台列有寄存服务，但具体提前寄存时段、费用和容量待酒店确认。酒店不在原Cross Hotel的位置，机场接驳和晚间返程不能沿用旧步行分钟数。
+
+南海难波等车站不设寄存节点；只有酒店无法接收行李时再比较顺路车站寄存，不预先增加取件绕行。第一晚住宿选择已确认，无需再次询问酒店名称；订单价格与寄存细则尚未确认。第二天及以后继续逐日审核。
 
 ## 2026-10-02 · 京都 · 岚山
 
@@ -2012,7 +2256,7 @@ luggage: 入住前和退房后的行李均在Cross Keys民宿交接；咖啡厅�
 next: 明天不换酒店，行李留房间；哲学小道与贵船之间乘公共交通。
 rest: 岚山后回房休息约60分钟。结束较晚就缩短祇园夜游，正常吃晚饭。
 notes:
-  - Cross Keys 已预订10/2–10/4两晚。住宿查询口径4位成人、2间房；实际订单房间与寝具、房费未提供。16:00–21:00到对面the
+  - Cross Keys 已预订10/2–10/4两晚。住宿查询口径4位成人、2间房；4位成人、2晚住宿合计3,349.99 CNY（人民币）；实际订单房间与寝具配置待补充。16:00–21:00到对面the
     kind
     cafe办理入住，最迟10/1告知预计到达时间；10/4须10:00前退房。入住前及退房后可寄存，交接点已确认在Cross Keys民宿，可用时段另核。住宿税现金另付，金额待房东告知。电话+81-90-3710-5869。
   - 原京都站前酒店的交通时长与住宿预算已失效；餐饮营业时间不等于民宿接待时间。
@@ -2112,7 +2356,7 @@ optional:
 overview:
   - d2-kyoto
 budget:
-  summary: 新住宿相关交通、税费及订单金额待确认，仅保留其他已知费用。
+  summary: 住宿4人2晚合计3,349.99 CNY；交通与现金住宿税待确认。人民币房费单列，不直接并入JPY合计。
   items:
     - id: day-02-cost-02
       name: 门票 · 爱宕念佛寺
@@ -2132,7 +2376,7 @@ schedule:
   slots: []
 stops:
   - id: d2-osaka
-    place: osaka
+    place: sugata-osaka
     time: 较早出发
     mode: walk
     connection: ""
@@ -2144,7 +2388,7 @@ stops:
     mode: rail
     connection: 按Cross Keys新地址衔接
     duration: ""
-    note: Cross Keys 已预订10/2–10/4两晚。住宿查询口径4位成人、2间房；实际订单房间与寝具、房费未提供。16:00–21:00到对面the
+    note: Cross Keys 已预订10/2–10/4两晚。住宿查询口径4位成人、2间房；4位成人、2晚住宿合计3,349.99 CNY（人民币）；实际订单房间与寝具配置待补充。16:00–21:00到对面the
       kind
       cafe办理入住，最迟10/1告知预计到达时间；10/4须10:00前退房。入住前及退房后可寄存，交接点已确认在Cross Keys民宿，可用时段另核。住宿税现金另付，金额待房东告知。电话+81-90-3710-5869。
   - id: d2-umahori
@@ -2224,7 +2468,7 @@ stops:
     mode: rail
     connection: 按Cross Keys新地址衔接
     duration: ""
-    note: Cross Keys 已预订10/2–10/4两晚。住宿查询口径4位成人、2间房；实际订单房间与寝具、房费未提供。16:00–21:00到对面the
+    note: Cross Keys 已预订10/2–10/4两晚。住宿查询口径4位成人、2间房；4位成人、2晚住宿合计3,349.99 CNY（人民币）；实际订单房间与寝具配置待补充。16:00–21:00到对面the
       kind
       cafe办理入住，最迟10/1告知预计到达时间；10/4须10:00前退房。入住前及退房后可寄存，交接点已确认在Cross Keys民宿，可用时段另核。住宿税现金另付，金额待房东告知。电话+81-90-3710-5869。
   - id: d2-yasaka
@@ -2258,7 +2502,7 @@ stops:
     mode: rail
     connection: 按Cross Keys新地址衔接
     duration: ""
-    note: Cross Keys 已预订10/2–10/4两晚。住宿查询口径4位成人、2间房；实际订单房间与寝具、房费未提供。16:00–21:00到对面the
+    note: Cross Keys 已预订10/2–10/4两晚。住宿查询口径4位成人、2间房；4位成人、2晚住宿合计3,349.99 CNY（人民币）；实际订单房间与寝具配置待补充。16:00–21:00到对面the
       kind
       cafe办理入住，最迟10/1告知预计到达时间；10/4须10:00前退房。入住前及退房后可寄存，交接点已确认在Cross Keys民宿，可用时段另核。住宿税现金另付，金额待房东告知。电话+81-90-3710-5869。
 distanceKm:
@@ -2298,13 +2542,14 @@ dining: []
 id: day-03
 date: 2026-10-03
 city: 京都 · 贵船
-title: 哲学小道与贵船灯笼
-subtitle: 沿水渠慢走，午间充分休息，再乘叡电去山谷。诗仙堂已移除。
-intensity: 适中
+title: 永观堂、哲学之道、银阁寺与贵船
+subtitle: 永观堂 → 哲学之道 → 银阁寺，午餐休息后经出町柳前往贵船。
+intensity: 增加两座寺院参观，按体力控制停留
 hotel: cross-keys
 focus:
-  - nyakuoji
-  - ginkaku
+  - eikando
+  - philosopher
+  - ginkakuji-temple
   - demachi
   - kibuneguchi
   - kifune
@@ -2312,9 +2557,10 @@ luggage: 入住前和退房后的行李均在Cross Keys民宿交接；咖啡厅�
 next: 明早退房先寄存，伏见稻荷短游后回酒店取件，再乘JR去宇治。
 rest: 午饭、咖啡与坐下休息留90–120分钟；贵船以本宫和近处溪边为主。
 notes:
-  - Cross Keys 已预订10/2–10/4两晚。住宿查询口径4位成人、2间房；实际订单房间与寝具、房费未提供。16:00–21:00到对面the
-    kind
-    cafe办理入住，最迟10/1告知预计到达时间；10/4须10:00前退房。入住前及退房后可寄存，交接点已确认在Cross Keys民宿，可用时段另核。住宿税现金另付，金额待房东告知。电话+81-90-3710-5869。
+  - 2026-09-21补全永观堂、哲学之道、银阁寺主线，两座寺院均安排普通入内参观；银阁寺桥仅为途经点。
+  - 若约09:00开始永观堂，寺院各留45–60分钟、哲学之道60–90分钟、两端衔接合留20–30分钟，午餐休息另留90–120分钟；均为规划预留，不是预约时刻。
+  - 前往贵船的实际车次待核；上午拖晚则缩短贵船奥宫等可选停留，不压缩午餐休息或赶路。
+  - Cross Keys 已预订10/2–10/4两晚。住宿查询口径4位成人、2间房；4位成人、2晚住宿合计3,349.99 CNY（人民币）；实际订单房间与寝具配置待补充。16:00–21:00到对面the kind cafe办理入住，最迟10/1告知预计到达时间；10/4须10:00前退房。入住前及退房后可寄存，交接点已确认在Cross Keys民宿，可用时段另核。住宿税现金另付，金额待房东告知。电话+81-90-3710-5869。
   - 原京都站前酒店的交通时长与住宿预算已失效；餐饮营业时间不等于民宿接待时间。
   - 不走鞍马山徒步；奥宫是可缩短的支线。
   - 贵船神社本宫开放至20:00不等于巴士运营到20:00。先核33路末段班次，再决定离开时间。
@@ -2327,22 +2573,39 @@ optional:
     id: day-03-optional-01
 overview: []
 budget:
-  summary: 新住宿相关交通、税费及订单金额待确认，仅保留其他已知费用。
+  summary: 住宿4人2晚合计3,349.99 CNY；交通与现金住宿税待确认。人民币房费单列，不直接并入JPY合计。
   items:
-    - name: 门票／体验
-      min: 0
-      max: 0
-      note: 当前为哲学小道与贵船境内短游，不含御守、御朱印或其他付费项目。
-      source: null
-      confirmed: false
+    - id: day-03-cost-eikando
+      name: 门票 · 永观堂
       kind: daily
-      id: day-03-cost-02
-      currency: JPY
+      category: admission
+      ticketOptions:
+        - eikando-adult
+      quantity: 1
+      step: d3-eikando
+      note: 按一位普通成人计费1000日元，与地点票价记录一致。
+      min: 1000
+      max: 1000
+      source: https://www.eikando.or.jp/haikan.html
+      confirmed: true
+    - id: day-03-cost-ginkakuji
+      name: 门票 · 银阁寺
+      kind: daily
+      category: admission
+      ticketOptions:
+        - ginkakuji-adult
+      quantity: 1
+      step: d3-ginkakuji
+      note: 按一位普通成人计费1000日元，两寺合计2000日元／人；不含特别参观。
+      min: 1000
+      max: 1000
+      source: https://www.shokoku-ji.jp/ginkakuji/access/
+      confirmed: true
   notes:
     - 贵船奥宫为可选支线，建议另加30–45分钟；不加入鞍马山徒步。
     - 目前没有已确认预订的餐厅。餐饮未纳入本日统计合计，临时用餐另计；时间轴中的吃饭与休息安排仍保留。
 schedule:
-  note: 京都住宿及交通已更新，旧分钟表暂停；寄存、实际班次与新地址衔接待核。
+  note: 两寺及哲学之道游览合留约3–4小时，午餐休息另留90–120分钟；下午接贵船。旧分钟表暂停，Cross Keys出发交通、银阁寺至出町柳及贵船往返班次待核。
   slots: []
 stops:
   - id: d3-kyoto-crosskeys
@@ -2351,26 +2614,55 @@ stops:
     mode: walk
     connection: 按Cross Keys新地址衔接
     duration: ""
-    note: Cross Keys 已预订10/2–10/4两晚。住宿查询口径4位成人、2间房；实际订单房间与寝具、房费未提供。16:00–21:00到对面the
-      kind
-      cafe办理入住，最迟10/1告知预计到达时间；10/4须10:00前退房。入住前及退房后可寄存，交接点已确认在Cross Keys民宿，可用时段另核。住宿税现金另付，金额待房东告知。电话+81-90-3710-5869。
+    note: Cross Keys 已预订10/2–10/4两晚。住宿查询口径4位成人、2间房；4位成人、2晚住宿合计3,349.99 CNY（人民币）；实际订单房间与寝具配置待补充。16:00–21:00到对面the kind cafe办理入住，最迟10/1告知预计到达时间；10/4须10:00前退房。入住前及退房后可寄存，交接点已确认在Cross Keys民宿，可用时段另核。住宿税现金另付，金额待房东告知。电话+81-90-3710-5869。
+  - id: d3-eikando
+    place: eikando
+    time: 上午，约09:00开始为规划参考
+    mode: bus
+    connection: Cross Keys出发，市内公共交通至永观堂附近后短步行；具体线路与候车待核
+    duration: 参观45–60分钟
+    note: 普通入内参观，按体力选择院内路线。
+    fees:
+      - ticketOptions:
+          - eikando-adult
+        accounting: budget
+        budgetItem: day-03-cost-eikando
   - id: d3-nyakuoji
     place: nyakuoji
-    time: 上午
-    mode: bus
-    connection: 京都市内公共交通
-    note: 从南端进入哲学小道。
+    time: 永观堂参观后
+    mode: walk
+    connection: 永观堂至若王子桥，步行暂留10–15分钟
+    note: 从哲学之道南端进入，不另外参观若王子神社。
+  - id: d3-philosopher
+    place: philosopher
+    time: 上午至午间
+    mode: walk
+    connection: 沿水渠由南向北慢走
+    duration: 全段60–90分钟，含沿途短停
+    note: 不为最短导航绕去大马路，不重复叠加两端节点的步道时长。
   - id: d3-ginkaku
     place: ginkaku
-    time: 慢走60–90分钟
+    time: 步道北端
     mode: walk
-    connection: 沿哲学之道；不为最短导航绕到大马路
-    note: 沿水渠北行。午饭与咖啡留足休息时间，不加寺院打卡。
+    connection: 哲学之道北端至银阁寺桥
+    note: 此处只是过渡节点，随后继续进入银阁寺。
+  - id: d3-ginkakuji
+    place: ginkakuji-temple
+    time: 午前至午间，随散步节奏调整
+    mode: walk
+    connection: 银阁寺桥沿参道到寺院入口，暂留10–15分钟
+    duration: 参观45–60分钟
+    note: 普通境内参观；结束后在周边用午餐、喝咖啡，坐下休息90–120分钟，再前往出町柳。
+    fees:
+      - ticketOptions:
+          - ginkakuji-adult
+        accounting: budget
+        budgetItem: day-03-cost-ginkakuji
   - id: d3-demachi
     place: demachi
     time: 午后
     mode: bus
-    connection: 市内交通至叡电起点
+    connection: 银阁寺参观及周边午餐后，市内交通至出町柳叡电起点；具体上车站与班次待核
     duration: ""
     note: 乘车到出町柳，不把市内转场当徒步。
   - id: d3-kibuneguchi
@@ -2382,7 +2674,7 @@ stops:
     note: 乘鞍马方向；必要时宝池换乘。
   - id: d3-kifune
     place: kifune
-    time: 约16:00–18:00
+    time: 下午至傍晚，随上午进度与返程班次调整
     mode: bus
     connection: 33路巴士，末班待核
     note: 本宫灯笼与近处溪边；奥宫方向可选，不强求走完。
@@ -2410,15 +2702,10 @@ stops:
     mode: bus
     connection: 按Cross Keys新地址衔接
     duration: ""
-    note: Cross Keys 已预订10/2–10/4两晚。住宿查询口径4位成人、2间房；实际订单房间与寝具、房费未提供。16:00–21:00到对面the
-      kind
-      cafe办理入住，最迟10/1告知预计到达时间；10/4须10:00前退房。入住前及退房后可寄存，交接点已确认在Cross Keys民宿，可用时段另核。住宿税现金另付，金额待房东告知。电话+81-90-3710-5869。
-distanceKm:
-  - 5
-  - 7
-activityKcal:
-  - 200
-  - 350
+    note: Cross Keys 已预订10/2–10/4两晚。住宿查询口径4位成人、2间房；4位成人、2晚住宿合计3,349.99 CNY（人民币）；实际订单房间与寝具配置待补充。16:00–21:00到对面the kind cafe办理入住，最迟10/1告知预计到达时间；10/4须10:00前退房。入住前及退房后可寄存，交接点已确认在Cross Keys民宿，可用时段另核。住宿税现金另付，金额待房东告知。电话+81-90-3710-5869。
+distanceKm: []
+activityKcal: []
+activityNote: 新增两寺境内步行，原5–7公里与热量估算暂停，待实际参观范围及交通明确后重算。
 dining: []
 ```
 
@@ -2443,7 +2730,7 @@ luggage: Cross Keys于10:00前退房并按约定寄存 → 京阪往返伏见稻
 next: 花火散场回JR宇治，步行回酒店。明天带行李去JR奈良。
 rest: 15:00后回房至少休息60分钟。先吃晚饭，再轻装去会场。
 notes:
-  - Cross Keys 已预订10/2–10/4两晚。住宿查询口径4位成人、2间房；实际订单房间与寝具、房费未提供。16:00–21:00到对面the
+  - Cross Keys 已预订10/2–10/4两晚。住宿查询口径4位成人、2间房；4位成人、2晚住宿合计3,349.99 CNY（人民币）；实际订单房间与寝具配置待补充。16:00–21:00到对面the
     kind
     cafe办理入住，最迟10/1告知预计到达时间；10/4须10:00前退房。入住前及退房后可寄存，交接点已确认在Cross Keys民宿，可用时段另核。住宿税现金另付，金额待房东告知。电话+81-90-3710-5869。
   - 原京都站前酒店的交通时长与住宿预算已失效；餐饮营业时间不等于民宿接待时间。
@@ -2461,7 +2748,7 @@ optional: []
 overview:
   - d4-uji
 budget:
-  summary: 新住宿相关交通、税费及订单金额待确认，仅保留其他已知费用。
+  summary: 住宿4人2晚合计3,349.99 CNY；交通与现金住宿税待确认。人民币房费单列，不直接并入JPY合计。
   items:
     - id: day-04-cost-02
       name: 体验 · 对凤庵薄茶
@@ -2499,7 +2786,7 @@ stops:
     mode: walk
     connection: 按Cross Keys新地址衔接
     duration: ""
-    note: Cross Keys 已预订10/2–10/4两晚。住宿查询口径4位成人、2间房；实际订单房间与寝具、房费未提供。16:00–21:00到对面the
+    note: Cross Keys 已预订10/2–10/4两晚。住宿查询口径4位成人、2间房；4位成人、2晚住宿合计3,349.99 CNY（人民币）；实际订单房间与寝具配置待补充。16:00–21:00到对面the
       kind
       cafe办理入住，最迟10/1告知预计到达时间；10/4须10:00前退房。入住前及退房后可寄存，交接点已确认在Cross Keys民宿，可用时段另核。住宿税现金另付，金额待房东告知。电话+81-90-3710-5869。
   - id: d4-inari
@@ -2514,7 +2801,7 @@ stops:
     mode: rail
     connection: 按Cross Keys新地址衔接
     duration: ""
-    note: Cross Keys 已预订10/2–10/4两晚。住宿查询口径4位成人、2间房；实际订单房间与寝具、房费未提供。16:00–21:00到对面the
+    note: Cross Keys 已预订10/2–10/4两晚。住宿查询口径4位成人、2间房；4位成人、2晚住宿合计3,349.99 CNY（人民币）；实际订单房间与寝具配置待补充。16:00–21:00到对面the
       kind
       cafe办理入住，最迟10/1告知预计到达时间；10/4须10:00前退房。入住前及退房后可寄存，交接点已确认在Cross Keys民宿，可用时段另核。住宿税现金另付，金额待房东告知。电话+81-90-3710-5869。
   - id: d4-uji
@@ -2523,7 +2810,7 @@ stops:
     mode: rail
     connection: JR宇治；从稻荷结束到放妥行李留75–100分钟
     duration: ""
-    note: 放下行李，再进入茶文化行程。
+    note: 酒店已预订，15:00起可入住；如午前到达，先确认能否寄存，再进入茶文化行程。
   - id: d4-omotesando
     place: omotesando
     time: 午饭
@@ -2645,23 +2932,22 @@ dining: []
 id: day-05-a
 date: 2026-10-05
 city: 奈良 → 有马
-title: 上午看鹿与草坡，下午前往温泉酒店
-subtitle: 奈良寄存与游览 → 午后取件转场 → 御幸荘 花結び一泊二食。
+title: 奈良看鹿与草坡，前往已订的兆乐
+subtitle: 宇治退房 → 近铁奈良寄存 → 公园与若草山 → 取件赴有马兆乐，东大寺只在时间充裕时加入。
 intensity: 半日游览与跨城移动
-hotel: hanamusubi
+hotel: choraku
 focus:
   - kasuga
   - mizuya
   - hill
   - hanamusubi
-luggage: 宇治退房 → JR宇治直达JR奈良 → 短程打车至近铁奈良站储物柜寄存 → 山麓打车回取 → 电车随身带到有马 → 酒店接驳。
-next: 第六天留在有马吃过午餐后再去神户市区酒店。
+luggage: 宇治10:00前退房，经JR奈良转至近铁奈良寄存；游览后回同一处取件，铁路赴有马并联系兆乐接送。柜位尺寸及取件时间待审核。
+next: 10/6从兆乐退房，小镇午餐后取件前往神户市区酒店；寄存待确认。
 rest: 午后不加景点；到酒店后休息，晚餐及泡汤以从容为先。
 notes:
-  - 2026-09-14确认Plan A方向；酒店10/5房量、五人房型、一泊二食价格及19:00晚餐仍待确认，未预订。
-  - 草坡目标13:00左右离开，13:30作为需重新检查衔接的时间点；不保留若草山夕照或奈良晚饭。
-  - 下列分钟数来自交通预算，不是已核实列车班次；按五人带箱留换乘余量。
-  - 近铁奈良站五件行李柜位、尺寸、取件可用时段待确认；出租车须两辆普通车或确认五人车型、合法上车点及到位时间。
+  - 兆乐已预订10/5–10/6一晚；房型、餐食、价格与入住截止待订单。
+  - 原19:00晚餐并非兆乐已确认安排；保留提早离奈良的余量，待酒店确认后重算。
+  - 近铁奈良寄存与用车容量待确认；不在奈良过夜，也不等若草山夕照。
 optional:
   - id: day-05-a-optional-todaiji
     place: todaiji
@@ -2674,12 +2960,18 @@ overview:
   - d5a-hill
   - d5a-hotel
 budget:
-  summary: 新Plan A的交通、寄存及一泊二食待重新报价，不沿用奈良住宿预算；空项不表示免费。
-  items: []
+  summary: 酒店已订但价格未提供；交通、寄存与税费待核，未预订餐饮不计。
+  items:
+    - name: 若草山成人入山费
+      min: 150
+      max: 150
+      note: 进入一重目草坡时发生。
+      source: https://www.pref.nara.lg.jp/site/park/2585.html
+      confirmed: true
   notes:
-    - 温泉酒店套餐应包含第五日晚餐和第六日早餐；小镇午餐不包含在内。若草山实际登坡须购票，参见wakakusa-adult，待并入新预算，非免费。
+    - 兆乐是否含餐、房费待确认，不使用花結び套餐价格。
 schedule:
-  note: 目标约13:00离开一重目、17点左右到酒店、19:00晚餐待预约；班次与餐食确认后再生成精确时刻表。
+  note: 午后离开奈良，待兆乐晚餐与入住时刻确认后再倒排。
   slots: []
 stops:
   - id: d5a-uji
@@ -2687,7 +2979,7 @@ stops:
     time: 早餐后
     mode: walk
     connection: 宇治退房带行李
-    note: 前一晚花火后的休息也要兼顾，不通过强行早起塞入更多景点。
+    note: 10:00前退房；订单不含早餐，另行安排。前一晚花火后的休息也要兼顾，不通过强行早起塞入更多景点。
   - id: d5a-kintetsu-storage
     place: nara-kintetsu-storage
     time: 上午
@@ -2714,31 +3006,31 @@ stops:
     note: 不去第三重山顶，不安排夕照等待。
   - id: d5a-hill
     place: hill
-    time: 目标13:00左右开始下山
+    time: 午后较早 · 依酒店到店要求倒排
     mode: walk
     connection: 南侧入口至一重目草坡
-    note: 留观景及15–25分钟下山时间；若上午延误，缩短或跳过登坡，不靠赶车追回时间。
+    note: 不等落日；兆乐最晚到店时间确认后重算离山和取件时刻。
   - id: d5a-down
     place: wakakusa
-    time: 约13:20到山麓（预算）
+    time: 午后较早 · 依酒店到店要求倒排
     mode: walk
     connection: 原路下山到约定出租车上车点
-    note: 建议仍按约13:20离开山麓执行；下面的截止时间仅供延误时判断，不是建议拖到最后出发。
+    note: 不等落日；兆乐最晚到店时间确认后重算离山和取件时刻。
     deadline:
-      title: 最晚离开山麓 · 日本时间（JST）
-      taxi: Uber／出租车：13:45 前全员上车出发
-      transit: 公共交通：13:20 前离开山麓前往巴士站
-      calculation: 以19:00晚餐倒推：山麓到近铁奈良15分钟（打车）／40分钟（步行＋候车＋巴士）＋取行李及进站30分钟＋直通快速急行及有马方向铁路换乘170分钟＋有马出站、等接驳及车程30分钟＋入住20分钟＋晚餐前缓冲50分钟。
-      pickup: Uber目的地设为「近鉄奈良駅」，返回早上寄存的同一组储物柜取件。5人通常需两辆普通出租车，或确认可载5人的车型；提前叫车，13:45是全员已上车出发的时间。合法上车点以司机确认为准；13:20仍未落实车辆时立即采用公共交通预案。
-      caveat: 按19:00晚餐倒推的保守规划值，不是已核实的10月5日班次；公共交通13:20／打车13:45出发，均预算14:00到近铁奈良、14:30取件进站完成、17:20到有马、17:50到店、18:10完成入住。直通车须核对目的地为神户三宫，否则可能需尼崎等站换乘。五件行李柜位、柜型与可取件时间及酒店晚餐、接驳仍待确认；延误时联系酒店重算，不保证赶上晚餐。
-      source: https://www.hanamusubi.co.jp/facilities/
+      title: 离山提醒 · 兆乐到店要求待确认
+      transit: 公共交通：最晚离山时间待重新倒排
+      taxi: Uber／出租车：目的地设为近铁奈良站，最晚出发时间待重新倒排
+      calculation: 计入山麓至车站、取行李、铁路换乘、等待酒店接驳及办理入住的时间。
+      pickup: 返回早上同一寄存点。提前确认车辆和行李容量，叫车等待也计入交通时间。
+      caveat: 原13:20／13:45截止基于另一家酒店19:00晚餐，现已失效，不是兆乐订单承诺。
+      source: https://choraku.com/access/
       uberSource: https://www.uber.com/global/ja/r/cities/nara-nara-jp/
   - id: d5a-kintetsu-pickup
     place: nara-kintetsu-storage
-    time: 约13:35到、约14:05取件进站完成（目标预算）
+    time: 午后较早 · 依酒店到店要求倒排
     mode: taxi
     connection: 可用Uber／出租车至近铁奈良（车程暂留15分钟）；公共交通含步行候车暂留40分钟；取件及进站另留30分钟
-    note: 不安排南大门外观或近铁奈良晚饭绕行。
+    note: 不等落日；兆乐最晚到店时间确认后重算离山和取件时刻。
   - id: d5a-kintetsu-depart
     place: kintetsunara
     time: 取件后进站
@@ -2776,6 +3068,11 @@ stops:
     connection: 出站、等待及接驳共留20–30分钟
     note: 一泊二食，目标19:00会席待酒店确认；含餐入住截止另核。接驳20–30分钟为规划余量，非酒店承诺。
 dining: []
+links:
+  - - 兆乐官网
+    - https://choraku.com/
+  - - 兆乐交通与接送
+    - https://choraku.com/access/
 ```
 
 ## 2026-10-05 · 奈良（Plan B留宿版本）
@@ -2880,7 +3177,7 @@ stops:
     mode: walk
     connection: ""
     duration: ""
-    note: 取全部行李退房。
+    note: 10:00前取全部行李退房；订单不含早餐，另行安排。
   - id: d5-nara
     place: nara
     time: 上午
@@ -2968,12 +3265,11 @@ focus:
   - beach
   - venus
   - kobe-hotel
-luggage: 早餐后整理行李，10:00前退房；在花結び退房后暂存、轻装去小镇午餐，饭后回取并前往神户酒店。退房后寄存条件待确认，不能默认午餐时行李随身拖行。
+luggage: 按兆乐订单退房；拟寄存后轻装游小镇、用午餐，再回酒店取件赴神户。寄存、取件及接送需确认，不沿用花結び退房时间。
 next: 第七天从神户市区酒店前往关西机场，班次与出发时间按航班倒排。
 rest: 上午不安排海边；下午城市闲逛可随时坐下喝咖啡或回酒店休息，傍晚海边预留放空时间。
 notes:
-  - 2026-09-14最新Plan A：第六天不从奈良出发，也不在神户安排午餐；在有马小镇吃完午餐后才转场。
-  - 花結び常规10:00退房；早餐07:30／08:00／08:30开餐，实际套餐优先。午餐另付，餐厅待选。
+  - 兆乐早餐、退房时刻待订单确认；神户当晚酒店待选。
   - 目标12:00–13:00左右小镇午餐，饭后取件出发；酒店间转场暂留75–105分钟，具体班次与神户酒店待定。
   - 神户目标14:30左右到酒店，未到入住时间先寄存；实际酒店寄存和入住条件待核。
   - 午后闲逛不设置必须走完的清单；若转场较晚则缩短闲逛，不为同时完成购物与海边夕照而赶路。
@@ -3699,7 +3995,7 @@ photoStatus: 待补充对应地点照片
 
 ```yaml journey:place
 id: philosopher
-name: 哲学小道
+name: 哲学之道
 mapQuery: 哲学の道 京都
 lat: 35.023
 lng: 135.7938
@@ -3886,9 +4182,10 @@ mapUrl: https://www.google.com/maps/search/?api=1&query=89+Honmachi+2-chome+Higa
 coordinateNote: 房东提供的民宿地址，门口精确坐标待核；不是对面咖啡厅。
 hotel:
   name: Cross Keys（Airbnb）
+  booking: https://maps.app.goo.gl/FL4xS4HgDQhL79P18
   area: 京都 · 东山区本町2丁目89 · 10/2–10/4两晚
-  status: 已预订 · 订单金额待补充
-  note: Cross Keys 已预订10/2–10/4两晚。住宿查询口径4位成人、2间房；实际订单房间与寝具、房费未提供。16:00–21:00到对面the
+  status: 已预订 · 4人2晚合计3,349.99 CNY
+  note: Cross Keys 已预订10/2–10/4两晚。住宿查询口径4位成人、2间房；4位成人、2晚住宿合计3,349.99 CNY（人民币）；实际订单房间与寝具配置待补充。16:00–21:00到对面the
     kind
     cafe办理入住，最迟10/1告知预计到达时间；10/4须10:00前退房。入住前及退房后可寄存，交接点已确认在Cross Keys民宿，可用时段另核。住宿税现金另付，金额待房东告知。电话+81-90-3710-5869。
 hours:
@@ -3896,12 +4193,16 @@ hours:
   open: 入住16:00–21:00，先到the kind cafe
   last: 最迟10月1日告知预计入住时间
   close: 10月4日10:00前退房
-  note: Cross Keys 已预订10/2–10/4两晚。住宿查询口径4位成人、2间房；实际订单房间与寝具、房费未提供。16:00–21:00到对面the
+  note: Cross Keys 已预订10/2–10/4两晚。住宿查询口径4位成人、2间房；4位成人、2晚住宿合计3,349.99 CNY（人民币）；实际订单房间与寝具配置待补充。16:00–21:00到对面the
     kind
     cafe办理入住，最迟10/1告知预计到达时间；10/4须10:00前退房。入住前及退房后可寄存，交接点已确认在Cross Keys民宿，可用时段另核。住宿税现金另付，金额待房东告知。电话+81-90-3710-5869。
-    官网／Airbnb订单链接尚未提供，早餐是否包含待确认。
-  sources: []
-  status: 2026-09-19按用户提供的房东信息
+    入住请先导航至Breakfast “the kind”（本町2丁目84-2，坐标34.9937865, 135.7698649），由房东带往对面89号客房；the kind kyoto和Tomi Kintsugi工作室不是另设入住点。民宿门口精确坐标尚未核实，使用地址导航，不套用咖啡馆坐标。早餐是否包含待确认。
+  sources:
+    - - 办理入住 · Breakfast “the kind” 地图
+      - https://maps.app.goo.gl/FL4xS4HgDQhL79P18
+    - - 住宿与行李交接 · Cross Keys地址导航
+      - https://www.google.com/maps/search/?api=1&query=89+Honmachi+2-chome+Higashiyama-ku+Kyoto+605-0981+Japan
+  status: 2026-09-21核对房东最终入住信息
 ```
 
 ## 地点 · the kind cafe
@@ -3922,7 +4223,7 @@ hours:
   sources:
     - - 房东指定地图
       - https://maps.app.goo.gl/FL4xS4HgDQhL79P18
-  status: 2026-09-19按房东信息及指定地图
+  status: 2026-09-21核对房东指定Google地图
 ```
 
 ## 地点 · 清水五条站
@@ -3987,4 +4288,425 @@ hours:
     - - 京阪官方车站资料
       - https://www.keihan.co.jp/traffic/station/153/info.html
   status: 按最新路线图规划，班次待核
+```
+
+
+## 銀水荘 兆楽
+
+```yaml journey:place
+id: choraku
+name: 銀水荘 兆楽
+lat: 34.80303321762264
+lng: 135.24677724228215
+mapQuery: Ginsuisou Choraku 1654-1 Arimacho Kobe Japan
+coordinateNote: 酒店官方交通地图坐标，2026-09-23核对。
+hotel:
+  name: 銀水荘 兆楽（Ginsuisou Choraku）
+  area: 有马温泉 · 有馬町1654-1 · 10/5–10/6一晚
+  status: 已预订 · 用户确认，订单明细待补充
+  url: https://choraku.com/
+  booking: https://choraku.com/access/
+  note: 10/5入住、10/6退房。住宿查询4位成人、2间房；实际订单房型、餐食、价格、税费及取消条款待补充。到达有马后致电+81-78-904-0666联系町内免费接送，资料列07:00–22:00，可能需等待，具体上车点当日确认。退房后寄存及取件时段待酒店确认。
+hours:
+  scope: 已预订住宿 · 2026/10/5–10/6
+  open: 入住时刻以订单方案为准，待补充
+  last: 若含晚餐，最晚到店时刻须向兆乐确认
+  close: 退房时刻待订单确认
+  note: 町内接送与入住受付是不同时间范围；19:00晚餐只是原规划假设，尚不是兆乐已确认的安排。
+  sources:
+    - - 酒店官方交通与接送
+      - https://choraku.com/access/
+  status: 预订日期已确认；订单时刻待核
+```
+
+
+## 嵯峨野观光小火车
+
+```yaml journey:place
+id: sagano-ride
+name: 嵯峨野观光小火车
+lat: 35.0134
+lng: 135.6063
+mapQuery: Torokko Kameoka Station
+duration: 列车体验约25分钟；提前15–20分钟候车是规划建议
+hours:
+  scope: 观光小火车体验
+  open: 依10/2运行日历与所订车次
+  last: 检票截止以所订班次为准
+  close: 以车次为准
+  note: 本节点为游览项目，沿用原方案龟冈上车、嵯峨下车，再乘巴士或打车赴爱宕寺；车次与接续待订票时核对。
+  sources:
+    - - 官方车次与订票
+      - https://www.sagano-kanko.co.jp/ticket/
+  status: 尚未订票
+```
+
+
+## d1_03
+
+```yaml journey:leg
+id: d1_03
+to: d1_03
+mode: rail
+connection: 关西机场乘南海至天下茶屋→堺筋线长堀桥→步行至Sugata；电梯出口、带箱换乘与班次待核
+```
+
+
+## d1_tsutenkaku
+
+```yaml journey:leg
+id: d1_tsutenkaku
+to: d1_tsutenkaku
+mode: rail
+connection: Sugata寄存后乘市内交通至通天阁；候选长堀桥经堺筋线至惠美须町后步行，疲劳时可打车，具体班次与耗时待核
+```
+
+
+## d1_nippombashi
+
+```yaml journey:leg
+id: d1_nippombashi
+to: d1_nippombashi
+mode: walk
+connection: 通天阁一带步行接でんでんタウン／日本橋筋商店街，具体走法依选店位置，耗时待核
+```
+
+
+## d1_nambayasaka
+
+```yaml journey:leg
+id: d1_nambayasaka
+to: d1_nambayasaka
+mode: walk
+connection: 日本桥商圈向西赴难波八阪神社；按体力步行或打车，具体起点与耗时待核
+```
+
+
+## d1_kuromon
+
+```yaml journey:leg
+id: d1_kuromon
+to: d1_kuromon
+mode: walk
+connection: 难波八阪神社向东赴黑门市场；按体力步行或打车，具体路线与耗时待核
+```
+
+
+## d1_06
+
+```yaml journey:leg
+id: d1_06
+to: d1_06
+mode: walk
+connection: 黑门市场之后步行衔接道顿堀・戎桥，具体出入口与耗时待核；顺序仅供参考
+```
+
+
+## d1_05
+
+```yaml journey:leg
+id: d1_05
+to: d1_05
+mode: walk
+connection: 道顿堀附近短步行至法善寺
+```
+
+
+## d1_04
+
+```yaml journey:leg
+id: d1_04
+to: d1_04
+mode: walk
+connection: 向北逛心斋桥筋，随时休息
+```
+
+
+## d1_nakazaki
+
+```yaml journey:leg
+id: d1_nakazaki
+to: d1_nakazaki
+mode: rail
+connection: 心斋桥乘御堂筋线至梅田后步行；也可按位置转谷町线至中崎町，出口现场导航
+```
+
+
+## d1_umeda
+
+```yaml journey:leg
+id: d1_umeda
+to: d1_umeda
+mode: walk
+connection: 中崎町步行往梅田／茶屋町，晚餐店待选
+```
+
+
+## d1_skybuilding
+
+```yaml journey:leg
+id: d1_skybuilding
+to: d1_skybuilding
+mode: walk
+connection: 可选：梅田晚饭后步行至梅田蓝天大厦展望台专用入口；具体距离与耗时待餐厅确定后核实，疲劳时可打车，电梯与排队另计
+```
+
+
+## d1_07
+
+```yaml journey:leg
+id: d1_07
+to: d1_07
+mode: rail
+connection: 若去空中庭园：从梅田蓝天大厦乘市内交通或打车回Sugata；不去则由梅田用餐处直接回店，具体接驳待核
+```
+
+
+## d2_02
+
+```yaml journey:leg
+id: d2_02
+to: d2_02
+mode: rail
+connection: Sugata退房→心斋桥乘御堂筋线梅田→JR大阪至京都→乘车至Cross Keys寄存，接收时段待确认
+```
+
+
+## d2_04
+
+```yaml journey:leg
+id: d2_04
+to: d2_04
+mode: rail
+connection: Cross Keys赴京都站→JR山阴本线马堀→步行至小火车龟冈站，体验至嵯峨；尚未订票，车次与候车时间待核
+```
+
+
+## d2h_board
+
+```yaml journey:leg
+id: d2h_board
+to: d2h_board
+mode: rail
+connection: Cross Keys赴京都站→JR山阴本线龟冈站北口→步行约8分钟到保津川乘船场；不乘观光小火车，依船票提前报到
+```
+
+
+## d2_checkin
+
+```yaml journey:leg
+id: d2_checkin
+to: d2_checkin
+mode: taxi
+connection: 岚山游览后可直接打车至the kind cafe；或经JR嵯峨岚山→京都站转车。16:00–21:00办理入住
+```
+
+
+## d2_16
+
+```yaml journey:leg
+id: d2_16
+to: d2_16
+mode: rail
+connection: 祇园白川步行祇园四条→京阪清水五条→步行回Cross Keys；累了打车
+```
+
+
+## d3_eikando
+
+```yaml journey:leg
+id: d3_eikando
+to: d3_eikando
+mode: taxi
+connection: Cross Keys可打车赴永观堂；公交可经京阪三条转市巴士5路至南禅寺・永观堂道，班次待核
+```
+
+
+## d3_02
+
+```yaml journey:leg
+id: d3_02
+to: d3_02
+mode: walk
+connection: 永观堂向北步行至若王子桥，接哲学之道
+```
+
+
+## d3_03
+
+```yaml journey:leg
+id: d3_03
+to: d3_03
+mode: walk
+connection: 沿水渠向北慢走，途中休息
+```
+
+
+## d3_04
+
+```yaml journey:leg
+id: d3_04
+to: d3_04
+mode: walk
+connection: 至哲学之道北端银阁寺桥，桥只短停
+```
+
+
+## d3_ginkaku
+
+```yaml journey:leg
+id: d3_ginkaku
+to: d3_ginkaku
+mode: walk
+connection: 银阁寺桥经参道步行进寺
+```
+
+
+## d3_07
+
+```yaml journey:leg
+id: d3_07
+to: d3_07
+mode: rail
+connection: 银阁寺游览及午餐后赴出町柳→叡山电车贵船口→33路巴士贵船→步行本宫；回程巴士末班另核
+```
+
+
+## d3_10
+
+```yaml journey:leg
+id: d3_10
+to: d3_10
+mode: rail
+connection: 本宫步行至巴士站→33路贵船口→叡山电车出町柳→京阪清水五条→步行Cross Keys
+```
+
+
+## d4_02
+
+```yaml journey:leg
+id: d4_02
+to: d4_02
+mode: rail
+connection: 退房寄存→清水五条→京阪伏见稻荷→步行大社，选择停靠该站列车
+```
+
+
+## d4_03
+
+```yaml journey:leg
+id: d4_03
+to: d4_03
+mode: rail
+connection: 大社步行京阪伏见稻荷→清水五条→步行Cross Keys取件
+```
+
+
+## d4_04
+
+```yaml journey:leg
+id: d4_04
+to: d4_04
+mode: rail
+connection: 取件后清水五条→京阪东福寺→换JR奈良线宇治→南口步行酒店；15:00前寄存待确认
+```
+
+
+## d4_10
+
+```yaml journey:leg
+id: d4_10
+to: d4_10
+mode: rail
+connection: 酒店步行JR宇治→奈良线长池→步行木津川运动公园，花火前计入排队安检
+```
+
+
+## d4_12
+
+```yaml journey:leg
+id: d4_12
+to: d4_12
+mode: rail
+connection: 散场步行长池→JR奈良线宇治→步行酒店；预留拥挤和候车
+```
+
+
+## d5a_storage
+
+```yaml journey:leg
+id: d5a_storage
+to: d5a_storage
+mode: rail
+connection: 宇治酒店退房→JR宇治至JR奈良→打车至近铁奈良站寄存，柜位尺寸待核
+```
+
+
+## d5a_hotel
+
+```yaml journey:leg
+id: d5a_hotel
+to: d5a_hotel
+mode: rail
+connection: 取件后近铁奈良优先直通快速急行至阪神神户三宫→地铁三宫→谷上→神户电铁有马口→有马温泉→致电兆乐接送；非直通班次需额外换乘，10/5班次及等车时间待核
+```
+
+
+## d6_arimatown
+
+```yaml journey:leg
+id: d6_arimatown
+to: d6_arimatown
+mode: shuttle
+connection: 兆乐退房拟寄存，向酒店确认接送至小镇的安排
+```
+
+
+## d6_hotelpickup
+
+```yaml journey:leg
+id: d6_hotelpickup
+to: d6_hotelpickup
+mode: shuttle
+connection: 小镇午餐后联系兆乐接送或自行返店取件，寄存条件待确认
+```
+
+
+## d6_02
+
+```yaml journey:leg
+id: d6_02
+to: d6_02
+mode: rail
+connection: 兆乐接送有马温泉站→有马口→谷上→地铁三宫→神户酒店；酒店未定，出口与步行待核
+```
+
+
+## d6_06
+
+```yaml journey:leg
+id: d6_06
+to: d6_06
+mode: rail
+connection: 从市区JR三宫或元町至须磨，出站步行海边
+```
+
+
+## d6_16
+
+```yaml journey:leg
+id: d6_16
+to: d6_16
+mode: walk
+connection: 未去夜景则从晚餐地点回酒店；若去Venus Bridge，预先落实出租车下山再回店
+```
+
+
+## d7_06
+
+```yaml journey:leg
+id: d7_06
+to: d7_06
+mode: bus
+connection: 神户酒店赴三宫机场巴士站→关西机场；铁路可备选。按航班、航站楼和班次倒排，计入酒店到站与行李时间
 ```

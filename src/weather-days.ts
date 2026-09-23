@@ -145,8 +145,8 @@ export const WEATHER_DAYS = {
       {
         "id": "uji",
         "name": "宇治",
-        "latitude": 34.8891,
-        "longitude": 135.8002
+        "latitude": 34.8887,
+        "longitude": 135.8008166667
       },
       {
         "id": "inari",
@@ -172,10 +172,10 @@ export const WEATHER_DAYS = {
         "longitude": 135.8201
       },
       {
-        "id": "hanamusubi",
+        "id": "choraku",
         "name": "有马温泉",
-        "latitude": 34.796301,
-        "longitude": 135.25009
+        "latitude": 34.80303321762264,
+        "longitude": 135.24677724228215
       }
     ]
   },
@@ -195,10 +195,10 @@ export const WEATHER_DAYS = {
         "longitude": 135.1136
       },
       {
-        "id": "hanamusubi",
+        "id": "choraku",
         "name": "有马温泉",
-        "latitude": 34.796301,
-        "longitude": 135.25009
+        "latitude": 34.80303321762264,
+        "longitude": 135.24677724228215
       }
     ]
   },
@@ -282,8 +282,8 @@ export const WEATHER_DAYS = {
       {
         "id": "uji",
         "name": "宇治",
-        "latitude": 34.8891,
-        "longitude": 135.8002
+        "latitude": 34.8887,
+        "longitude": 135.8008166667
       },
       {
         "id": "inari",
@@ -307,6 +307,12 @@ export const WEATHER_DAYS = {
         "name": "奈良",
         "latitude": 34.6827,
         "longitude": 135.8201
+      },
+      {
+        "id": "choraku",
+        "name": "有马温泉",
+        "latitude": 34.80303321762264,
+        "longitude": 135.24677724228215
       }
     ]
   },
@@ -314,16 +320,22 @@ export const WEATHER_DAYS = {
     "date": "2026-10-06",
     "locations": [
       {
-        "id": "kaigetsu",
-        "name": "加太地区",
-        "latitude": 34.2742,
-        "longitude": 135.0632
+        "id": "sannomiya",
+        "name": "神户",
+        "latitude": 34.693,
+        "longitude": 135.1947
       },
       {
-        "id": "nara",
-        "name": "奈良",
-        "latitude": 34.6827,
-        "longitude": 135.8201
+        "id": "beach",
+        "name": "须磨海边",
+        "latitude": 34.6412,
+        "longitude": 135.1136
+      },
+      {
+        "id": "choraku",
+        "name": "有马温泉",
+        "latitude": 34.80303321762264,
+        "longitude": 135.24677724228215
       }
     ]
   },
@@ -337,10 +349,10 @@ export const WEATHER_DAYS = {
         "longitude": 135.2441
       },
       {
-        "id": "kaigetsu",
-        "name": "加太地区",
-        "latitude": 34.2742,
-        "longitude": 135.0632
+        "id": "sannomiya",
+        "name": "神户",
+        "latitude": 34.693,
+        "longitude": 135.1947
       }
     ]
   }

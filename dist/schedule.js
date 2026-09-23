@@ -121,7 +121,7 @@ function clockLabel(m,relative=false){if(relative){if(m===0)return '离店';cons
 function durationLabel(m){return m<60?`${m}分钟`:`${Math.floor(m/60)}小时${m%60?`${m%60}分钟`:''}`;}
 function allocationDetails(s,schedule){return `<span class="allocation-type" style="--activity:${ACTIVITY_TYPES[s.type].color}">${ACTIVITY_TYPES[s.type].name}</span><strong>${escapeHtml(s.label)}</strong><span>${clockLabel(s.start,schedule.relative)}–${clockLabel(s.end,schedule.relative)} · ${durationLabel(s.duration)}</span><p>${escapeHtml(s.note||(s.type==='free'?'弹性时间可按体力调整；候场缓冲须保留必要余量。':s.type==='hotel'?'酒店色块只统计当前时间轴内的停留，不代表整晚睡眠时长。':'本段为暂定时间分配，需随实际交通、预约与当天进度调整。'))}</p>`;}
 function renderSchedule(d,p){
- const target=$('day-schedule'),s=scheduleFor(d,p);if(!s){target.innerHTML=d.schedulePending?`<section class="allocation-card"><h3>时间分配待复核</h3><p>${escapeHtml(d.schedulePending)}</p><p>请按下方卡片的先后顺序与宽泛时段查看，未沿用旧路线的分钟表。</p></section>`:'';return;}
+ const target=$('day-schedule'),s=scheduleFor(d,p);if(!s){target.innerHTML=d.schedulePending?`<section class="allocation-card"><h3>${d.flexible?'今天随兴走':'时间分配待复核'}</h3><p>${escapeHtml(d.schedulePending)}</p><p>${d.flexible?'下方地点是可选清单，顺序与时长仅供参考；累了就休息或直接回酒店。':'请按下方卡片的先后顺序与宽泛时段查看，未沿用旧路线的分钟表。'}</p></section>`:'';return;}
  const span=s.end-s.start,position=m=>(m-s.start)/span*100,ticks=[s.start];
  for(let m=Math.ceil(s.start/60)*60;m<s.end;m+=60)if(m-s.start>=45&&s.end-m>=45)ticks.push(m);
  ticks.push(s.end);

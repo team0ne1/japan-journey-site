@@ -53,14 +53,14 @@ describe('shared itinerary suggestions', () => {
     }
     expect((await get('/api/comments', b.cookie)).data.comments[1].canDelete).toBe(false);
   });
-  it('isolates distinct days, repeat visits, and A/B routes while preserving shared-day threads', async () => {
+  it('isolates distinct days and repeated visits while preserving shared-day threads', async () => {
     const { a } = await family();
-    for (const target of ['d1-osaka', 'd1-osaka-2', 'd2-osaka', 'd6-arima-hotel', 'd6-b-nara']) expect((await create(a.cookie, { target })).status).toBe(200);
-    for (const target of ['d1-osaka', 'd1-osaka-2', 'd2-osaka', 'd6-arima-hotel', 'd6-b-nara']) expect((await get('/api/comments?target=' + target, a.cookie)).data.comments).toHaveLength(1);
-    const shared = (await get('/api/comments?target=d1-osaka', a.cookie)).data.comments[0];
+    for (const target of ['route-shared-d1-03', 'route-shared-d1-07', 'route-shared-d2-01', 'route-a-d6-01', 'route-a-d6-hotelpickup']) expect((await create(a.cookie, { target })).status).toBe(200);
+    for (const target of ['route-shared-d1-03', 'route-shared-d1-07', 'route-shared-d2-01', 'route-a-d6-01', 'route-a-d6-hotelpickup']) expect((await get('/api/comments?target=' + target, a.cookie)).data.comments).toHaveLength(1);
+    const shared = (await get('/api/comments?target=route-shared-d1-03', a.cookie)).data.comments[0];
     expect(shared.context.plan).toBe('shared');
     expect((await get('/api/comments/summary', a.cookie)).data.counts).toHaveLength(5);
-    for (const body of [{ target: 'unknown' }, { target: '__proto__' }, { body: '' }, { body: 'x'.repeat(1001) }, { requestId: 'short' }]) expect((await create(a.cookie, body)).status).toBe(400);
+    for (const body of [{ target: 'd1-osaka' }, { target: 'd6-b-nara' }, { target: 'unknown' }, { target: '__proto__' }, { body: '' }, { body: 'x'.repeat(1001) }, { requestId: 'short' }]) expect((await create(a.cookie, body)).status).toBe(400);
     const unsafe = "<img src=x onerror=alert(1)> '); DROP TABLE comments; --";
     expect((await create(a.cookie, { body: unsafe })).data.comment.body).toBe(unsafe);
     expect((await get('/api/comments', a.cookie)).data.comments).toHaveLength(6);
