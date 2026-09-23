@@ -8,7 +8,7 @@
 
 **有马住宿已预订（2026-09-21 用户确认）：銀水荘 兆楽／Ginsuisou Choraku。** 用户已明确更正为 **2026 年 10 月 5 日入住、10 月 6 日退房，1 晚**；沿用全局 4 成人、2 间房、每间 2 人，订单房型／餐食／价格及明细待补充。地址：**〒651-1401 兵庫県神戸市北区有馬町1654-1**；[Google Maps 导航](https://www.google.com/maps/search/?api=1&query=Ginsuisou+Choraku+1654-1+Arimacho+Kobe+Japan)／[酒店官网](https://choraku.com/)。[官网交通页](https://choraku.com/access/)提供有马町内 07:00–22:00 免费接送，抵达后致电 **+81-78-904-0666**，可能需要等待。第五天从奈良离开后直接赴有马入住兆乐；第六天退房后接原神户游览，第六晚神户酒店待选，第七天从神户赴关西机场。具体车次与航班衔接待核实。详见[酒店选择](酒店选择.md)。
 
-**京都住宿已预订：Cross Keys（Airbnb），按本行程为 10 月 2 日入住、10 月 4 日退房，共两晚。** 民宿地址：〒605-0981 京都市東山区本町2丁目89（89 Honmachi 2-chome, Higashiyama-ku, Kyoto）；[民宿地址导航](https://www.google.com/maps/search/?api=1&query=89+Honmachi+2-chome+Higashiyama-ku+Kyoto+605-0981+Japan)。**办理入住先去对面的 [Breakfast “the kind” 咖啡厅](https://maps.app.goo.gl/FL4xS4HgDQhL79P18)**（本町2丁目84-2），不要把两处地址混用。联系电话：+81-90-3710-5869。
+**京都住宿已预订：Cross Keys（Airbnb），按本行程为 10 月 2 日入住、10 月 4 日退房，共两晚。** 民宿地址：〒605-0981 京都市東山区本町2丁目89（89 Honmachi 2-chome, Higashiyama-ku, Kyoto）；[民宿地址导航](https://maps.app.goo.gl/mKWuRX7oUZYGHuEw6)。**办理入住先去对面的 [Breakfast “the kind” 咖啡厅](https://maps.app.goo.gl/FL4xS4HgDQhL79P18)**（本町2丁目84-2），不要把两处地址混用。联系电话：+81-90-3710-5869。
 
 **地图定位说明（2026-09-21核对）：** 房东短链接指向 Breakfast “the kind”，坐标 **34.9937865, 135.7698649**，作为第2天正式入住接待点。Cross Keys住宿及行李交接仍在对面本町2丁目89号，使用上述民宿地址导航；未核实民宿门口精确坐标，不以咖啡馆坐标冒充。入住由房东带往客房；旁边的the kind kyoto商店与Tomi Kintsugi工作室不是额外入住地点。
 

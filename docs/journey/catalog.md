@@ -4178,11 +4178,11 @@ hours:
 id: cross-keys
 name: Cross Keys
 mapQuery: 89 Honmachi 2-chome Higashiyama-ku Kyoto 605-0981 Japan
-mapUrl: https://www.google.com/maps/search/?api=1&query=89+Honmachi+2-chome+Higashiyama-ku+Kyoto+605-0981+Japan
-coordinateNote: 房东提供的民宿地址，门口精确坐标待核；不是对面咖啡厅。
+mapUrl: https://maps.app.goo.gl/mKWuRX7oUZYGHuEw6
+coordinateNote: 2026-09-23用户提供民宿专属地图链接，跳转至本町2丁目89号地址点；入口精确坐标待核，不套用对面咖啡厅坐标。
 hotel:
   name: Cross Keys（Airbnb）
-  booking: https://maps.app.goo.gl/FL4xS4HgDQhL79P18
+  booking: https://maps.app.goo.gl/mKWuRX7oUZYGHuEw6
   area: 京都 · 东山区本町2丁目89 · 10/2–10/4两晚
   status: 已预订 · 4人2晚合计3,349.99 CNY
   note: Cross Keys 已预订10/2–10/4两晚。住宿查询口径4位成人、2间房；4位成人、2晚住宿合计3,349.99 CNY（人民币）；实际订单房间与寝具配置待补充。16:00–21:00到对面the
@@ -4196,12 +4196,12 @@ hours:
   note: Cross Keys 已预订10/2–10/4两晚。住宿查询口径4位成人、2间房；4位成人、2晚住宿合计3,349.99 CNY（人民币）；实际订单房间与寝具配置待补充。16:00–21:00到对面the
     kind
     cafe办理入住，最迟10/1告知预计到达时间；10/4须10:00前退房。入住前及退房后可寄存，交接点已确认在Cross Keys民宿，可用时段另核。住宿税现金另付，金额待房东告知。电话+81-90-3710-5869。
-    入住请先导航至Breakfast “the kind”（本町2丁目84-2，坐标34.9937865, 135.7698649），由房东带往对面89号客房；the kind kyoto和Tomi Kintsugi工作室不是另设入住点。民宿门口精确坐标尚未核实，使用地址导航，不套用咖啡馆坐标。早餐是否包含待确认。
+    入住请先导航至Breakfast “the kind”（本町2丁目84-2，坐标34.9937865, 135.7698649），由房东带往对面89号客房；the kind kyoto和Tomi Kintsugi工作室不是另设入住点。民宿使用用户确认的本町2丁目89号地图链接；入口精确坐标尚未提取，不套用咖啡馆坐标。早餐是否包含待确认。
   sources:
     - - 办理入住 · Breakfast “the kind” 地图
       - https://maps.app.goo.gl/FL4xS4HgDQhL79P18
     - - 住宿与行李交接 · Cross Keys地址导航
-      - https://www.google.com/maps/search/?api=1&query=89+Honmachi+2-chome+Higashiyama-ku+Kyoto+605-0981+Japan
+      - https://maps.app.goo.gl/mKWuRX7oUZYGHuEw6
   status: 2026-09-21核对房东最终入住信息
 ```
 
