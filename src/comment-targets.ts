@@ -83,13 +83,13 @@ export const COMMENT_TARGETS: Record<string, CommentTarget> = {
     "day": 2,
     "plan": "shared",
     "place": "Sugata Hotel Osaka",
-    "time": "11:00前退房；按所选游览方案出发"
+    "time": "提前退房，为10:00前寄送留余量"
   },
-  "d2-crosskeys-storage": {
+  "d2-yamato": {
     "day": 2,
     "plan": "shared",
-    "place": "Cross Keys",
-    "time": "按新住宿衔接 · 时刻待确认"
+    "place": "Yamato 南船场2丁目营业所",
+    "time": "退房后 · 当日配送08:00–10:00办理（JST）"
   },
   "route-shared-d2-04": {
     "day": 2,

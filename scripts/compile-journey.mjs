@@ -22,7 +22,7 @@ export async function compileJourney(){
  const blocks={};for(const m of catalog.matchAll(/```yaml journey:(\w+)\n([\s\S]*?)```/g))(blocks[m[1]]??=[]).push(YAML.parse(m[2]));
  const legs=Object.fromEntries((blocks.leg||[]).map(l=>[l.to,l]));
  const places=Object.fromEntries(blocks.place.map(p=>[p.id,p]));if(Object.keys(places).length!==blocks.place.length)throw Error('Duplicate place IDs');
- const aliases={'永观堂':'eikando','银阁寺':'ginkakuji-temple','落柿舍':'rakushisha','若王子桥':'nyakuoji','银阁寺桥':'ginkaku','贵船神社奥宫':'okumiya','春日大社林荫参道':'kasuga','水谷茶屋':'mizuya','近铁奈良站':'kintetsunara','木津川运动公园':'fireworks','鸭川':'kamo','有马温泉小镇（午餐店待选）':'arima-town'};
+ const aliases={'Yamato 南船场2丁目营业所（寄送行李）':'yamato-minamisemba-2','永观堂':'eikando','银阁寺':'ginkakuji-temple','落柿舍':'rakushisha','若王子桥':'nyakuoji','银阁寺桥':'ginkaku','贵船神社奥宫':'okumiya','春日大社林荫参道':'kasuga','水谷茶屋':'mizuya','近铁奈良站':'kintetsunara','木津川运动公园':'fireworks','鸭川':'kamo','有马温泉小镇（午餐店待选）':'arima-town'};
  for(const n of Object.values(graph.nodes)){n.place=aliases[n.name]||blocks.place.find(p=>p.name===n.name)?.id;if(!n.place)throw Error('Missing catalog entry: '+n.name);}
  const keys={A:{5:'day-05-a',6:'day-06-a',7:'day-07-a'},B:{5:'day-05',6:'day-06-b',7:'day-07-b'},B2:{5:'day-05',6:'day-06-b2',7:'day-07-b2'}};
  const variants={A:{},B:{},B2:{}};const binding={};
@@ -92,8 +92,10 @@ export async function compileJourney(){
      if(id==='d4_03')original.note='仅取行李，在Cross Keys民宿交接，可用时段另核。取件后清水五条→东福寺换JR→宇治。';
     }
     if(legs[id]){mode=legs[id].mode;connection=legs[id].connection;}
+    if(id==='d2_06'&&lazy){mode='taxi';connection=lazyBranch.stops[0].connection;}
+    if(id==='d2_yamato')original={...original,time:'退房后 · 当日配送08:00–10:00办理（JST）'};
     if(id==='d2_06'&&!lazy){mode='rail';connection='观光列车嵯峨下车→步行至野宫巴士站→乘往爱宕寺前的班次；巴士时刻待核，亦可从嵯峨直接打车上山';}
-    if(id==='d2_01'){original={...original,time:'11:00前退房；按所选游览方案出发',note:places[node.place].hotel.note};}
+    if(id==='d2_01'){original={...original,time:ids.includes('d2_yamato')?'提前退房，为10:00前寄送留余量':'11:00前退房；按所选游览方案出发',note:places[node.place].hotel.note};}
     if(places[node.place].hotel&&!original)original={time:'按住宿与交通衔接',note:places[node.place].hotel.note};
     if(id==='d6_01'||id==='d6_hotelpickup')original={time:id==='d6_01'?'按订单退房时间':'午餐后取件',note:'兆乐已订10/5–10/6。早餐与退房时刻、寄存和取件条件待确认；不沿用原酒店时刻。'};
     if(id==='d6_16'&&ids.includes('d6_10')){mode='taxi';connection='Venus Bridge结束后乘预约或已确认的出租车下山，返回神户酒店；酒店位置未定，路线待核';}
@@ -131,6 +133,13 @@ export async function compileJourney(){
     d.budgetPending='新住宿衔接交通及税费待确认；人民币房费单列，不直接并入JPY合计。';
     d.budget.notes=[...(d.budget.notes||[]),'京都Cross Keys已预订，4人2晚房费合计3,349.99 CNY（人民币），现金住宿税金额待房东告知；CNY房费不直接混入JPY费用合计。住宿查询采用4位成人、2间房，实际订单寝具配置待补充；不把历史占位价当成已付费用。'];
     if(lazy)d.subtitle='Cross Keys民宿寄存、午餐后直接打车上山，再经鸟居本、落柿舍、竹林至渡月桥。';
+   }
+   if(day===2&&ids.includes('d2_yamato')){
+    d.schedulePending=base.schedule.note+(hozu?' '+branch.scheduleNote:lazy?' '+lazyBranch.scheduleNote:'');
+    d.notes=[...base.notes,...(hozu?[branch.scheduleNote]:lazy?[lazyBranch.scheduleNote]:[])];
+    d.subtitle=lazy?'大阪Yamato寄送行李后经新大阪乘新干线赴京都，从京都站打车到爱宕念佛寺，再沿街下行。':hozu?'大阪Yamato寄送行李后经新大阪乘新干线赴京都，JR龟冈接保津川游船；岚山徒步后到the kind cafe入住。':base.subtitle;
+    d.budget.notes=[...base.budget.notes,...(hozu?[branch.budgetNote]:lazy?[lazyBranch.budgetNote]:[])];
+    d.budgetPending='新干线及接驳、行李寄送与税费待核；CNY住宿费单列，京都站寄存仅作后备。';
    }
    if(day===4)d.budget.notes.push('宇治酒店已预订：4位成人、2间房、1晚：含10%增值税房费总额37,400 JPY（日元）；Booking.com支付／补贴4,080 JPY，扣减后计算金额33,320 JPY。确认信不据此证明旅客已付款或待付金额，付款状态以订单为准；额外服务不包含。这是4人订单总额，单独列示，不按全队5人均摊或重复计入每人JPY小计。');
    if(base.flexible){d.flexible=true;d.schedulePending=base.schedule.note;d.distance='按实际选择';d.calories='按实际选择';}

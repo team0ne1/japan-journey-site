@@ -1559,5 +1559,22 @@ const PLACE_IMAGES = Object.freeze({
     "thumbnail": "photos/thumbs/togetsu.jpg",
     "thumbnailWidth": 420,
     "thumbnailHeight": 280
+  },
+  "yamato-minamisemba-2": {
+    "src": "photos/yamato-minamisemba-2.jpg",
+    "thumbnail": "photos/thumbs/yamato-minamisemba-2.jpg",
+    "alt": "Yamato大阪行李配送官方服务示意图，非营业所外观",
+    "caption": "官方服务示意图 · 非南船场营业所实景",
+    "author": "ヤマト運輸",
+    "source": "https://www.kuronekoyamato.co.jp/ytc/promotion/baggage_osaka/ja/index.html",
+    "sourceImage": "https://www.kuronekoyamato.co.jp/ytc/promotion/baggage_osaka/ja/img/index_MV_pc.png",
+    "license": "官网图片 · 版权所有",
+    "kind": "official",
+    "note": "营业所位置请以地图与门牌为准。",
+    "checkedAt": "2026-09-28",
+    "width": 960,
+    "height": 240,
+    "thumbnailWidth": 420,
+    "thumbnailHeight": 105
   }
 });

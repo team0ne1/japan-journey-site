@@ -38,7 +38,7 @@ test('old hotel dinner deadline and comment IDs are not assigned to replacements
 test('Hozu and lazy branches remain exclusive after removing transit nodes',()=>{
  const days=model.variants.A[2];assert.equal(days.length,6);assert.ok(days[0].stops.some(s=>s.id==='sagano-ride'));
  for(const d of days.filter(d=>d.choices.includes('保津川游船'))){assert.ok(!d.stops.some(s=>s.id==='sagano-ride'));assert.match(d.stops.find(s=>s.id==='hozu-board').connection,/JR山阴.*龟冈站北口/);assert.equal(d.stops.find(s=>s.id==='hozu-land').mode,'boat');assert.equal(d.stops.find(s=>s.id==='kind-cafe').mode,'taxi');assert.equal(d.budget.items.find(i=>i.name.includes('船票')).min,6000);}
- for(const d of days.filter(d=>d.choices.includes('究极懒人'))){const i=d.stops.findIndex(s=>s.id==='otagi');assert.equal(d.stops[i-1].id,'cross-keys');assert.equal(d.stops[i].mode,'taxi');assert.ok(!d.stops.some(s=>['hozu-board','sagano-ride'].includes(s.id)));}
+ for(const d of days.filter(d=>d.choices.includes('究极懒人'))){const i=d.stops.findIndex(s=>s.id==='otagi');assert.equal(d.stops[i-1].id,'yamato-minamisemba-2');assert.equal(d.stops[i].mode,'taxi');assert.ok(!d.stops.some(s=>['hozu-board','sagano-ride'].includes(s.id)));}
 });
 test('booked Kyoto and Uji information and luggage loop remain intact',()=>{
  for(const d of model.variants.A[2]){const i=d.stops.findIndex(s=>s.id==='kind-cafe');assert.equal(d.stops[i+1].id,'cross-keys');assert.match(d.stops[i].time,/21:00/);}
@@ -60,4 +60,34 @@ test('all active place information renders even when no source list exists',()=>
  const ctx={structuredClone,escapeHtml:s=>String(s),external:(url,label)=>label};vm.createContext(ctx);
  vm.runInContext(read('dist/data.js')+read('dist/hours.js')+read('dist/journey-model.js')+read('dist/tickets.js'),ctx);
  vm.runInContext(`for(const list of Object.values(JOURNEY_MODEL.variants.A))for(const d of list)for(const s of d.stops){renderAccessHours(s.id);renderTicket(s.id);}`,ctx);
+});
+
+test('Day2 shipping replaces morning residence storage across all branches',()=>{
+ for(const d of model.variants.A[2]){
+  assert.equal(d.stops[1].id,'yamato-minamisemba-2');assert.equal(d.stops[1].commentId,'d2-yamato');
+  assert.match(d.stops[1].time,/10:00/);assert.match(d.stops[2].connection,/新大阪.*新干线/);
+  assert.ok(!d.stops.slice(0,d.stops.findIndex(s=>s.id==='kind-cafe')).some(s=>s.id==='cross-keys'));
+  assert.doesNotMatch(d.subtitle+d.schedulePending+d.notes.join(' '),/民宿寄存、午餐后直接打车|确认房东接收时间后重排/);
+ }
+ const d=model.places['yamato-minamisemba-2'].delivery;
+ assert.equal(d.postalCode,'605-0981');assert.equal(d.addressJa,'京都市東山区本町2丁目84-2');
+ assert.equal(d.phone,'09037105864');assert.equal(d.recipient,'冨浪喜久子');
+ assert.match(model.places['cross-keys'].mapQuery,/89 Honmachi/);
+ const fn=read('dist/app.js').split('function renderDelivery(id){')[1].split('function renderTimeline')[0];
+ const html=vm.runInNewContext('function renderDelivery(id){'+fn+';renderDelivery("yamato-minamisemba-2")',{JOURNEY_MODEL:model,escapeHtml:s=>String(s),external:(u,l)=>l});
+ for(const value of [d.addressJa,d.addressEn,d.recipient,d.recipientEn,d.phone])assert.ok(html.includes(value));
+});
+
+test('Day2 late shipping fallback keeps cutoff and delivery time distinct',()=>{
+ const f=model.places['yamato-minamisemba-2'].delivery.fallback;
+ assert.match(f.cutoff,/11:30/);assert.match(f.deliveryTime,/20:00/);
+ assert.equal(f.mapUrl,'https://maps.app.goo.gl/ZFMx9ELH2VjUvqA4A');
+ assert.match(f.fee,/1,100 JPY／件/);assert.match(f.note,/京都站寄存/);
+ for(const d of model.variants.A[2]){
+  assert.match(d.luggage,/新大阪駅東口営業所/);assert.match(d.schedulePending,/11:30/);
+  assert.match(d.stops[1].note,/20:00/);
+ }
+ const fn=read('dist/app.js').split('function renderDelivery(id){')[1].split('function renderTimeline')[0];
+ const html=vm.runInNewContext('function renderDelivery(id){'+fn+';renderDelivery("yamato-minamisemba-2")',{JOURNEY_MODEL:model,escapeHtml:s=>String(s),external:(u,l)=>u+l});
+ for(const value of [f.name,f.cutoff,f.deliveryTime,f.mapUrl,f.sourceUrl])assert.ok(html.includes(value));
 });
