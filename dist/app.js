@@ -131,8 +131,11 @@ function renderDailySummary(d){
 }
 
 function render(){readHash();
- const favoritesView=new URLSearchParams(location.hash.slice(1)).get('view')==='favorites';
- $('content').hidden=favoritesView;$('favorites-panel').hidden=!favoritesView;
+ const view=new URLSearchParams(location.hash.slice(1)).get('view');
+ const favoritesView=view==='favorites',shoppingView=view==='shopping';
+ $('content').hidden=favoritesView||shoppingView;$('favorites-panel').hidden=!favoritesView;$('shopping-panel').hidden=!shoppingView;
+ $('shopping-nav').removeAttribute('aria-current');
+ if(shoppingView){tripWeather.hide();document.querySelectorAll('[data-day],#favorites-nav').forEach(b=>b.removeAttribute('aria-current'));$('shopping-nav').setAttribute('aria-current','page');document.title='购物清单｜关西七日';window.dispatchEvent(new Event('shopping:show'));return;}
  if(favoritesView){
   tripWeather.hide();
   document.querySelectorAll('[data-day]').forEach(b=>b.removeAttribute('aria-current'));
@@ -153,6 +156,7 @@ function render(){readHash();
 }
 $('legend').innerHTML=Object.values(MODES).map(m=>`<span class="legend-item"><span class="legend-line" style="--c:${m.color}"></span>${m.name}</span>`).join('');
 document.querySelectorAll('[data-day]').forEach(b=>b.addEventListener('click',()=>change(Number(b.dataset.day))));
+$('shopping-nav').addEventListener('click',()=>{const p=new URLSearchParams(location.hash.slice(1));p.set('view','shopping');p.set('day',day);p.set('plan',plan);location.hash=p.toString();});
 $('favorites-nav').addEventListener('click',()=>{location.hash=`view=favorites&day=${day}&plan=${plan}`;});
 $('plan-a').addEventListener('click',()=>change(day,'A'));$('plan-b').addEventListener('click',()=>change(day,'B'));$('focus').addEventListener('click',()=>fitMap(true));$('fit').addEventListener('click',()=>fitMap(false));
 $('share').addEventListener('click',async()=>{try{await navigator.clipboard.writeText(location.href);toast('已复制当前日期与方案的链接');}catch{toast('无法自动复制，请复制浏览器地址栏中的链接');}});

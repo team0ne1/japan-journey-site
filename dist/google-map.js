@@ -6,14 +6,15 @@ window.TripGoogleMap = (() => {
     if (sdk) return sdk;
     sdk = new Promise((resolve, reject) => {
       const script = document.createElement('script');
-      const timer = setTimeout(() => reject(new Error('Google 地图连接超时，请稍后重试。')), 20000);
+      const fail = error => { clearTimeout(timer); script.remove(); reject(error); };
+      const timer = setTimeout(() => fail(new Error('Google 地图连接超时，请稍后重试。')), 20000);
       window.tripMapsReady = () => { clearTimeout(timer); resolve(); };
       window.gm_authFailure = () => {
         clearTimeout(timer);
         window.dispatchEvent(new Event('trip:maps-auth-failed'));
-        reject(new Error('Google 地图暂不可用，请使用行程中的分段导航。'));
+        fail(new Error('Google 地图暂不可用，请使用行程中的分段导航。'));
       };
-      script.onerror = () => { clearTimeout(timer); reject(new Error('暂时无法连接 Google 地图，请使用行程中的分段导航。')); };
+      script.onerror = () => fail(new Error('暂时无法连接 Google 地图，请使用行程中的分段导航。'));
       const params = new URLSearchParams({ key: config.apiKey, loading: 'async', callback: 'tripMapsReady', v: 'quarterly', language: 'zh-CN', region: 'JP', auth_referrer_policy: 'origin' });
       script.src = 'https://maps.googleapis.com/maps/api/js?' + params;
       script.async = true;
@@ -21,9 +22,17 @@ window.TripGoogleMap = (() => {
       script.referrerPolicy = 'strict-origin';
       document.head.append(script);
     });
+    sdk = sdk.catch(error => { sdk = undefined; throw error; });
     return sdk;
   }
   return class TripGoogleMap {
+    static async places() {
+      const response = await fetch('/api/maps-config', { credentials: 'same-origin', signal: AbortSignal.timeout(12000) });
+      const config = await response.json();
+      if (!response.ok) throw new Error(config.error || 'Google 地图尚未启用。');
+      await loadSDK(config);
+      return google.maps.importLibrary('places');
+    }
     constructor(element, errorElement) {
       this.element = element;
       this.errorElement = errorElement;

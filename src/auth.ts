@@ -8,6 +8,7 @@ import {
 import { bytes, encode, decode, token, validToken, digest, mac, checkMac, sameSecret, seal, unseal, normalizeAnswer } from './crypto';
 import { Comments, CommentError } from './comments';
 import { Favorites, FavoriteError } from './favorites';
+import { Shopping, ShoppingError } from './shopping';
 
 const DAY = 86_400_000;
 export const SESSION_AGE = 30 * DAY;
@@ -37,12 +38,14 @@ const ok = (data: Record<string, unknown> = {}): Result => ({ status: 200, data 
 export class TripAuth extends DurableObject<AppEnv> {
   private comments: Comments;
   private favorites: Favorites;
+  private shopping: Shopping;
   constructor(ctx: DurableObjectState, env: AppEnv) {
     super(ctx, env);
     this.ctx.storage.sql.exec('CREATE TABLE IF NOT EXISTS records (key TEXT PRIMARY KEY, value TEXT NOT NULL, expires INTEGER NOT NULL DEFAULT 0)');
     this.ctx.storage.sql.exec('CREATE INDEX IF NOT EXISTS record_expiry ON records(expires)');
     this.comments = new Comments(this.ctx.storage);
     this.favorites = new Favorites(this.ctx.storage);
+    this.shopping = new Shopping(this.ctx.storage);
   }
   private get<T>(key: string): T | undefined {
     const row = this.ctx.storage.sql.exec<{ value: string }>('SELECT value FROM records WHERE key=? AND (expires=0 OR expires>?)', key, Date.now()).toArray()[0];
@@ -316,6 +319,8 @@ export class TripAuth extends DurableObject<AppEnv> {
       this.ctx.storage.sql.exec('DELETE FROM comment_rates WHERE author=?', id);
       this.ctx.storage.sql.exec("UPDATE favorites SET author=?,name='已移除成员' WHERE author=?", 'removed:' + token(), id);
       this.ctx.storage.sql.exec('DELETE FROM favorite_rates WHERE author=?', id);
+      this.ctx.storage.sql.exec("UPDATE shopping_items SET author=?,name='已移除成员' WHERE author=?", 'removed:' + token(), id);
+      this.ctx.storage.sql.exec('DELETE FROM shopping_rates WHERE author=?', id);
       this.ctx.storage.sql.exec('DELETE FROM favorite_interests WHERE author=?', id);
       this.del('member:' + id);
       return ok({ removed: true });
@@ -355,12 +360,12 @@ export class TripAuth extends DurableObject<AppEnv> {
       this.secret();
       if (path === '/api/session') return ok({ user: await this.identity(context.sessionHash), setupRequired: !this.get('leader') });
       if (path === '/api/admin/members') return this.members(context);
-      if (path === '/api/comments' || path.startsWith('/api/comments/') || path === '/api/favorites' || path.startsWith('/api/favorites/')) {
+      if (path === '/api/comments' || path.startsWith('/api/comments/') || path === '/api/favorites' || path.startsWith('/api/favorites/') || path === '/api/shopping' || path.startsWith('/api/shopping/')) {
         const session = this.get<Session>('session:' + context.sessionHash);
         if (!session) return fail(401, 'LOGIN_REQUIRED', '登录已失效，请重新登录。');
         const member = session.role === 'member' ? this.get<Member>('member:' + session.userId) : undefined;
         if (session.role === 'member' && !member) return fail(401, 'LOGIN_REQUIRED', '登录已失效，请重新登录。');
-        const collection = path.startsWith('/api/favorites') ? this.favorites : this.comments;
+        const collection = path.startsWith('/api/shopping') ? this.shopping : path.startsWith('/api/favorites') ? this.favorites : this.comments;
         return ok(collection.execute(path, body, { id: session.userId, role: session.role, name: member?.name ?? '领队' }));
       }
       this.limit(context.ipHash);
@@ -384,6 +389,7 @@ export class TripAuth extends DurableObject<AppEnv> {
         default: return { status: 404, data: { error: '找不到此操作。' } };
       }
     } catch (error) {
+      if (error instanceof ShoppingError) return { status: error.status, data: { code: 'SHOPPING_ERROR', error: error.message } };
       if (error instanceof FavoriteError) return { status: error.status, data: { code: 'FAVORITE_ERROR', error: error.message } };
       if (error instanceof CommentError) return { status: error.status, data: { code: 'COMMENT_ERROR', error: error.message } };
       if (error instanceof AuthError) return { status: error.status, data: { code: error.code, error: error.message } };

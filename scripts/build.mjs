@@ -79,12 +79,14 @@ await rm(`${target}/vendor`, { recursive: true, force: true });
 await cp('web/auth.html', `${target}/auth.html`);
 await cp('web/auth.css', `${target}/auth.css`);
 await cp('web/comments.css', `${target}/comments.css`);
+await cp('web/shopping.css', `${target}/shopping.css`);
+await build({ entryPoints: ['web/shopping.js'], outfile: `${target}/shopping.js`, bundle: true, minify: true, target: ['es2022'], format: 'esm' });
 await cp('web/favorites.css', `${target}/favorites.css`);
 await build({ entryPoints: ['web/favorites.js'], outfile: `${target}/favorites.js`, bundle: true, minify: true, target: ['es2022'], format: 'esm' });
 await build({ entryPoints: ['web/comments.js'], outfile: `${target}/comments.js`, bundle: true, minify: true, target: ['es2022'], format: 'esm' });
 await build({ entryPoints: ['web/auth.js'], outfile: `${target}/auth.js`, bundle: true, minify: true, target: ['es2022'], format: 'esm', legalComments: 'eof' });
 const html = await readFile(`${target}/index.html`, 'utf8');
-await writeFile(`${target}/index.html`, html.replace('</head>', '<link rel="stylesheet" href="/auth.css"><link rel="stylesheet" href="/comments.css"><link rel="stylesheet" href="/favorites.css"><script type="module" src="/favorites.js"></script><script type="module" src="/auth.js"></script><script type="module" src="/comments.js"></script></head>'));
+await writeFile(`${target}/index.html`, html.replace('</head>', '<link rel="stylesheet" href="/auth.css"><link rel="stylesheet" href="/comments.css"><link rel="stylesheet" href="/favorites.css"><link rel="stylesheet" href="/shopping.css"><script type="module" src="/shopping.js"></script><script type="module" src="/favorites.js"></script><script type="module" src="/auth.js"></script><script type="module" src="/comments.js"></script></head>'));
 // Sites' platform configuration must never become a downloadable asset.
 await rm(`${target}/.openai`, { recursive: true, force: true });
 console.log('Built Cloudflare assets; original itinerary content retained.');

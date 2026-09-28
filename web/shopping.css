@@ -1,0 +1,18 @@
+#shopping-panel[hidden]{display:none!important}
+.shopping-page .favorites-layout{grid-template-columns:minmax(280px,360px) minmax(0,1fr)}
+.shopping-shared{background:#eaf1ec;border:1px solid #bcd1c2;border-radius:30px;color:#356348;padding:9px 15px;font-size:13px;white-space:nowrap}
+.shopping-stores{border:0;padding:0;margin:22px 0 0;min-width:0}.shopping-stores legend{font-size:14px;font-weight:600;margin-bottom:12px}.shopping-stores label{display:block;margin:0 0 8px}
+.shopping-search{display:flex;gap:8px;align-items:stretch}.shopping-search input{min-width:0}.shopping-search .favorite-button{margin:0}.shopping-stores>small{display:block;margin-top:8px}
+#shopping-form-status,#shopping-list-status,#shopping-search-status,.shopping-status{font-size:13px;line-height:1.7;color:var(--muted)}
+#shopping-search-status:empty,.shopping-status:empty{display:none}#shopping-list{display:grid;gap:18px}
+.shopping-search-result{display:flex;align-items:center;justify-content:space-between;gap:12px;border-top:1px solid var(--line);padding:12px 0;font-size:13px;overflow-wrap:anywhere}.shopping-search-result>div{min-width:0}.shopping-search-result .favorite-button{margin:0;flex-shrink:0}
+.shopping-place{background:#f6f8fa;border:1px solid #dde5e9;border-radius:8px;padding:14px;margin-top:12px;min-width:0;overflow-wrap:anywhere}
+.shopping-place-heading{display:flex;gap:12px;align-items:start;justify-content:space-between}.shopping-place-heading>a{font-size:14px;font-weight:600;line-height:1.65;color:var(--blue)}.shopping-place-heading .favorite-button{font-size:12px;min-height:32px;padding:5px 10px;margin:0}
+.shopping-address{font-size:12px;color:var(--muted);line-height:1.6;margin:5px 0 10px}.shopping-address:empty{display:none}
+.shopping-hours{font-size:12px;line-height:1.75;color:#405767}.shopping-hours-label{font-weight:600}.shopping-hours ul{list-style:none;padding:0;margin:5px 0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px 14px}.favorite-compose .shopping-hours ul{grid-template-columns:1fr}.shopping-hours .favorite-button{display:block;margin:8px 0 0;font-size:12px;min-height:32px}
+.shopping-provider{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:8px;font-size:12px}.shopping-attribution{font-family:Arial,sans-serif;font-style:normal;font-weight:400;font-size:12px;letter-spacing:normal;white-space:nowrap;color:#5e5e5e}
+.shopping-item-heading{display:flex;gap:16px;align-items:start;justify-content:space-between}.shopping-item-heading h3{font-size:19px;line-height:1.5;margin:4px 0 10px;overflow-wrap:anywhere}.shopping-item-heading .favorite-button{flex-shrink:0;font-size:12px}.shopping-item[data-purchased=true]{border-color:#bed3c2}.shopping-item[data-purchased=true] .shopping-item-heading h3{text-decoration:line-through;color:var(--muted)}.shopping-item[data-purchased=true] .shopping-item-heading button{background:#edf5ee;border-color:#bed3c2;color:#356348}
+.shopping-notes{white-space:pre-wrap;overflow-wrap:anywhere;font-size:14px;line-height:1.8;margin:0 0 15px}.shopping-no-place{font-size:13px;color:var(--muted);margin:8px 0}.shopping-footnote{font-size:12px;color:var(--muted);line-height:1.8;margin-top:24px}.shopping-footnote a{display:block;color:var(--blue)}
+.shopping-page button:focus-visible,.shopping-page a:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+@media(max-width:1100px){.shopping-page .favorites-layout{grid-template-columns:1fr}.shopping-hours ul{grid-template-columns:1fr}}
+@media(max-width:680px){.shopping-shared{font-size:12px}.shopping-item-heading{gap:10px}.shopping-item-heading h3{font-size:17px}.shopping-place{padding:12px}.shopping-page .favorite-card{padding:18px}}

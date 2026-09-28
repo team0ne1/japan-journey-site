@@ -5,9 +5,9 @@ import { SESSION_AGE, type Result } from './auth';
 export { TripAuth } from './auth';
 
 const COOKIE = '__Host-trip_session';
-const PUBLIC_FILES = new Set(['/auth.js', '/auth.css', '/favicon.svg']);
+const PUBLIC_FILES = new Set(['/auth.js', '/auth.css', '/favicon.svg', '/maps-terms.html']);
 const AUTH_PAGES = new Set(['/login', '/invite', '/setup']);
-const READ_API = new Set(['/api/session', '/api/admin/members', '/api/comments', '/api/comments/summary', '/api/favorites', '/api/favorites/export']);
+const READ_API = new Set(['/api/session', '/api/admin/members', '/api/comments', '/api/comments/summary', '/api/favorites', '/api/favorites/export', '/api/shopping']);
 function secured(response: Response, mapNonce?: string): Response {
   const result = new Response(response.body, response);
   result.headers.set('Cache-Control', 'private, no-store');
