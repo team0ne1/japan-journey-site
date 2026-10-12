@@ -1576,5 +1576,22 @@ const PLACE_IMAGES = Object.freeze({
     "height": 240,
     "thumbnailWidth": 420,
     "thumbnailHeight": 105
+  },
+  "goshoboh": {
+    "src": "photos/goshoboh.jpg",
+    "thumbnail": "photos/thumbs/goshoboh.jpg",
+    "alt": "陶泉 御所坊建筑与御所坊匾额",
+    "caption": "陶泉 御所坊 · 酒店官网照片",
+    "author": "陶泉 御所坊",
+    "source": "https://goshoboh.com/",
+    "sourceImage": "https://goshoboh.com/wp-content/themes/goshoboh_rs1/assets/img/top-con/top_slide_01.jpg",
+    "license": "来源图片 · 版权所有",
+    "kind": "official",
+    "note": "来源参考照片，缩小展示；季节与现场状况可能不同。",
+    "width": 960,
+    "height": 540,
+    "thumbnailWidth": 420,
+    "thumbnailHeight": 236,
+    "checkedAt": "2026-10-12"
   }
 });

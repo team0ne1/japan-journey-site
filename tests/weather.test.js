@@ -57,7 +57,7 @@ describe('daily weather', () => {
       expect((await weatherResponse(new URL(origin+'/api/weather?'+query))).status).toBe(400);
     }
   });
-  it('allows a valid session and rejects it after revocation', async () => {
+  it('keeps public location validation identical after session revocation', async () => {
     const token = 'W'.repeat(43), hash = await digest(token);
     const stub = env.TRIP_AUTH.getByName(env.TRIP_ID);
     await runInDurableObject(stub, (_, state) => {
@@ -66,15 +66,15 @@ describe('daily weather', () => {
     const request = () => exports.default.fetch(origin+'/api/weather?day=6&plan=B&location=arima', {headers:{Cookie:'__Host-trip_session='+token}});
     expect((await request()).status).toBe(400); // Reached the authenticated location validator.
     await runInDurableObject(stub, (_, state) => state.storage.sql.exec('DELETE FROM records WHERE key=?', 'session:'+hash));
-    expect((await request()).status).toBe(401);
+    expect((await request()).status).toBe(400);
   });
   it('rejects oversized responses and never returns them as forecasts', async () => {
     vi.spyOn(globalThis,'fetch').mockResolvedValue(new Response('x'.repeat(256001)));
     await expect(getForecast(location,'2026-10-02',origin,now)).rejects.toThrow('weather_unavailable');
   });
-  it('keeps weather behind authentication and only accepts GET', async () => {
+  it('validates anonymous weather requests and only accepts GET', async () => {
     const response = await exports.default.fetch(origin+'/api/weather?day=1');
-    expect(response.status).toBe(401);
+    expect(response.status).toBe(200);
     expect(response.headers.get('Cache-Control')).toBe('private, no-store');
     expect((await exports.default.fetch(origin+'/api/weather?day=1',{method:'POST'})).status).toBe(405);
   });

@@ -1,3 +1,4 @@
+import { assertPublicText } from './public-journey.mjs';
 import { compileJourney } from './compile-journey.mjs';
 await compileJourney();
 import { cp, mkdir, readFile, writeFile, rm } from 'node:fs/promises';
@@ -78,15 +79,39 @@ await cp('dist', target, { recursive: true });
 await rm(`${target}/vendor`, { recursive: true, force: true });
 await cp('web/auth.html', `${target}/auth.html`);
 await cp('web/auth.css', `${target}/auth.css`);
-await cp('web/comments.css', `${target}/comments.css`);
 await cp('web/shopping.css', `${target}/shopping.css`);
 await build({ entryPoints: ['web/shopping.js'], outfile: `${target}/shopping.js`, bundle: true, minify: true, target: ['es2022'], format: 'esm' });
 await cp('web/favorites.css', `${target}/favorites.css`);
 await build({ entryPoints: ['web/favorites.js'], outfile: `${target}/favorites.js`, bundle: true, minify: true, target: ['es2022'], format: 'esm' });
-await build({ entryPoints: ['web/comments.js'], outfile: `${target}/comments.js`, bundle: true, minify: true, target: ['es2022'], format: 'esm' });
-await build({ entryPoints: ['web/auth.js'], outfile: `${target}/auth.js`, bundle: true, minify: true, target: ['es2022'], format: 'esm', legalComments: 'eof' });
+await build({ external: ['/favorites.js','/shopping.js'], entryPoints: ['web/auth.js'], outfile: `${target}/auth.js`, bundle: true, minify: true, target: ['es2022'], format: 'esm', legalComments: 'eof' });
 const html = await readFile(`${target}/index.html`, 'utf8');
-await writeFile(`${target}/index.html`, html.replace('</head>', '<link rel="stylesheet" href="/auth.css"><link rel="stylesheet" href="/comments.css"><link rel="stylesheet" href="/favorites.css"><link rel="stylesheet" href="/shopping.css"><script type="module" src="/shopping.js"></script><script type="module" src="/favorites.js"></script><script type="module" src="/auth.js"></script><script type="module" src="/comments.js"></script></head>'));
+await writeFile(`${target}/index.html`, html.replace('</head>', '<link rel="stylesheet" href="/auth.css"><script type="module" src="/auth.js"></script></head>'));
 // Sites' platform configuration must never become a downloadable asset.
 await rm(`${target}/.openai`, { recursive: true, force: true });
-console.log('Built Cloudflare assets; original itinerary content retained.');
+// The public text version is generated from the same redacted model, not private Markdown.
+const publicText=['# 关西七日 · 公开行程','个人预订资料不公开。'];
+for(const variants of Object.values(itinerary.JOURNEY_MODEL.variants.A)){
+ const day=variants[0];publicText.push(`## Day ${day.id} · ${day.city}`,day.subtitle);
+ for(const stop of day.stops)publicText.push(`### ${itinerary.PLACES[stop.id][0]}`,stop.time,stop.note,stop.connection||'');
+}
+await writeFile('dist/itinerary.md',publicText.join('\n\n')+'\n');
+await cp('dist/itinerary.md',`${target}/itinerary.md`);
+// Publish only reviewed files; documentation, backups and future accidental copies stay private.
+const {readdir}=await import('node:fs/promises');
+const approved=new Set(['index.html','favicon.svg','maps-terms.html','auth.html','auth.js','auth.css','favorites.js','favorites.css','shopping.js','shopping.css','app.js','data.js','estimates.js','hours.js','schedule.js','place-images.js','place-photos.js','tickets.js','weather-config.js','weather.js','journey-model.js','route-data.js','google-map.js','routes.json','google-map.css','style.css','itinerary-ui.css','weather.css','itinerary.md','hours-guide.md']);
+const paths=[];
+async function audit(dir,prefix=''){
+ for(const file of await readdir(dir,{withFileTypes:true})){
+  const path=prefix+file.name;
+  if(file.isDirectory()){
+   if(path==='photos'||path==='photos/thumbs')await audit(`${dir}/${file.name}`,path+'/');
+   else await rm(`${dir}/${file.name}`,{recursive:true,force:true});
+  }else if(approved.has(path)||/^photos\/(?:thumbs\/)?[a-z0-9-]+\.jpg$/.test(path)){
+   if(!path.endsWith('.jpg'))assertPublicText(await readFile(`${dir}/${file.name}`,'utf8'));
+   paths.push('/'+path);
+  }else await rm(`${dir}/${file.name}`);
+ }
+}
+await audit(target);
+await writeFile('src/public-assets.ts',`// Generated from audited publication assets.\nexport const PUBLIC_ASSETS = new Set(${JSON.stringify(paths.sort())});\n`);
+console.log('Built and audited public itinerary assets.');

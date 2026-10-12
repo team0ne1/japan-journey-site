@@ -409,11 +409,11 @@ export const COMMENT_TARGETS: Record<string, CommentTarget> = {
     "place": "近铁奈良站・行李寄存",
     "time": "午后较早 · 依酒店到店要求倒排"
   },
-  "route-a-d5a-hotel": {
+  "d5-goshoboh": {
     "day": 5,
     "plan": "A",
-    "place": "銀水荘 兆楽",
-    "time": "按住宿与交通衔接"
+    "place": "陶泉 御所坊",
+    "time": "午后转场抵达 · 15:00起可入住，含餐到店要求另核"
   },
   "route-a-d5-08": {
     "day": 5,
@@ -430,8 +430,8 @@ export const COMMENT_TARGETS: Record<string, CommentTarget> = {
   "route-a-d6-01": {
     "day": 6,
     "plan": "A",
-    "place": "銀水荘 兆楽",
-    "time": "按订单退房时间"
+    "place": "陶泉 御所坊",
+    "time": "依房型10:00或11:00前退房"
   },
   "d6-arima-town": {
     "day": 6,
@@ -448,7 +448,7 @@ export const COMMENT_TARGETS: Record<string, CommentTarget> = {
   "route-a-d6-hotelpickup": {
     "day": 6,
     "plan": "A",
-    "place": "銀水荘 兆楽",
+    "place": "陶泉 御所坊",
     "time": "午餐后取件"
   },
   "route-a-d6-02": {

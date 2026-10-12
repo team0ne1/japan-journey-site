@@ -71,3 +71,28 @@ test('Cross Keys marker and every Kyoto handoff use the residence, not the check
  assert.equal(new URL(link('cross-keys','inari','rail')).searchParams.get('travelmode'),'transit');
  assert.equal(link('hozu-board','hozu-land','boat'),'https://www.hozugawakudari.jp/access');
 });
+
+
+test('Goshoboh replaces both hotel days and town legs use walking navigation',async()=>{
+ const read=p=>readFile(new URL('../'+p,import.meta.url),'utf8');
+ const source=await read('dist/data.js')+await read('dist/journey-model.js');
+ const app=(await read('dist/app.js')).split('\nlet day=')[0];
+ const {model,link,place}=runInNewContext(source+app+';({model:JOURNEY_MODEL,link:routeLink,place:placeLink})',{URLSearchParams});
+ assert.equal(place('goshoboh'),'https://www.google.com/maps?cid=12036972434981022728');
+ for(const d of model.variants.A[5])assert.equal(d.stops.at(-1).id,'goshoboh');
+ for(const d of model.variants.A[6]){
+  assert.equal(d.stops[0].id,'goshoboh');
+  assert.equal(d.stops.find(s=>s.graphId==='d6_hotelpickup').id,'goshoboh');
+  for(const graphId of ['d6_arimatown','d6_hotelpickup']){
+   const i=d.stops.findIndex(s=>s.graphId===graphId),stop=d.stops[i];
+   assert.equal(stop.mode,'walk');
+   const params=new URL(link(d.stops[i-1].id,stop.id,stop.mode)).searchParams;
+   assert.equal(params.get('travelmode'),'walking');
+   assert.match(params.get(graphId==='d6_arimatown'?'origin':'destination'),/御所坊.*858/);
+  }
+  assert.doesNotMatch(JSON.stringify(d),/兆乐|兆楽|choraku/);
+ }
+ const photos=runInNewContext(await read('dist/place-images.js')+';PLACE_IMAGES');
+ assert.equal(photos.goshoboh.source,'https://goshoboh.com/');
+ assert.ok((await readFile(new URL('../dist/'+photos.goshoboh.src,import.meta.url))).length>0);
+});

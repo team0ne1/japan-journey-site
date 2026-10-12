@@ -1,6 +1,7 @@
 import {readFile,writeFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import YAML from 'yaml';
+import { publicJourney } from './public-journey.mjs';
 export function parseGraph(markdown){
  const block=markdown.match(/```mermaid\s*\n([\s\S]*?)```/);if(!block)throw Error('Missing Mermaid route');
  const nodes={},edges=[];let day=0;
@@ -97,7 +98,7 @@ export async function compileJourney(){
     if(id==='d2_06'&&!lazy){mode='rail';connection='观光列车嵯峨下车→步行至野宫巴士站→乘往爱宕寺前的班次；巴士时刻待核，亦可从嵯峨直接打车上山';}
     if(id==='d2_01'){original={...original,time:ids.includes('d2_yamato')?'提前退房，为10:00前寄送留余量':'11:00前退房；按所选游览方案出发',note:places[node.place].hotel.note};}
     if(places[node.place].hotel&&!original)original={time:'按住宿与交通衔接',note:places[node.place].hotel.note};
-    if(id==='d6_01'||id==='d6_hotelpickup')original={time:id==='d6_01'?'按订单退房时间':'午餐后取件',note:'兆乐已订10/5–10/6。早餐与退房时刻、寄存和取件条件待确认；不沿用原酒店时刻。'};
+    if(id==='d6_01'||id==='d6_hotelpickup')original={time:id==='d6_01'?'依房型10:00或11:00前退房':'午餐后取件',note:'御所坊退房时刻依房型确认；寄存及取件条件请事先与酒店核实。'};
     if(id==='d6_16'&&ids.includes('d6_10')){mode='taxi';connection='Venus Bridge结束后乘预约或已确认的出租车下山，返回神户酒店；酒店位置未定，路线待核';}
     return {id:node.place,commentId:cid,graphId:id,time:original?.time||'衔接时段 · 待确认',note:original?.note||places[node.place].duration||'途经点；预留步行、换乘与等候时间。',mode,connection,duration:original?.duration,deadline:original?.deadline};
    });
@@ -145,7 +146,7 @@ export async function compileJourney(){
    if(base.flexible){d.flexible=true;d.schedulePending=base.schedule.note;d.distance='按实际选择';d.calories='按实际选择';}
    if(day===1){d.budgetPending='交通与已订Sugata房费待补；景点按实际选择计费。';}
    if(day===3)d.schedulePending=base.schedule.note;
-   if(day===5){d.budgetPending='兆乐房费、含餐与交通待确认；仅列已知门票。';d.distance='待复核';d.calories='待复核';}
+   if(day===5){d.budgetPending='交通、寄存等费用待核；仅列已知门票，不含个人住宿支出。';d.distance='待复核';d.calories='待复核';}
    if(ids.includes('d5_todaiji'))d.budget.items.push({name:'东大寺大佛殿成人门票',min:800,max:800,note:'仅加入东大寺备选时计入，南大门外观不另收费。',source:'https://www.todaiji.or.jp/information/haikan/',confirmed:true});
    const ticketMap=new Map(Object.values(places).flatMap(p=>p.tickets||[]).map(t=>[t.id,t]));
    d.budget.items=(d.budget.items||[]).map(i=>{if(Number.isFinite(i.min)&&Number.isFinite(i.max))return i;const options=(i.ticketOptions||[]).map(id=>ticketMap.get(id));if(!options.length||options.some(t=>!t||!Number.isFinite(t.amount)))throw Error('Missing cost amount: '+i.name);return {...i,min:Math.min(...options.map(t=>t.amount)),max:Math.max(...options.map(t=>t.amount)),source:options[0].source};});
@@ -154,9 +155,9 @@ export async function compileJourney(){
   }
  }
  for(const days of Object.values(variants))for(const list of Object.values(days))list.sort((a,b)=>Number(b.baseline)-Number(a.baseline));
- const model={version:1,routeHash:createHash('sha256').update(route).digest('hex'),catalogHash:createHash('sha256').update(catalog).digest('hex'),nodes:graph.nodes,edges:graph.edges,places,variants};
+ const model=publicJourney({version:1,routeHash:createHash('sha256').update(route).digest('hex'),catalogHash:createHash('sha256').update(catalog).digest('hex'),nodes:graph.nodes,edges:graph.edges,places,variants});
  const usedIds=new Set(Object.values(graph.nodes).map(n=>n.place));const coords=Object.fromEntries([...usedIds].map(id=>{const p=places[id];return [id,[p.name,p.lat??null,p.lng??null,p.mapQuery||p.name]];}));
- const hotels=Object.fromEntries([...usedIds].filter(id=>places[id].hotel).map(id=>[id,places[id].hotel]));
+ const hotels=Object.fromEntries([...usedIds].filter(id=>places[id].hotel).map(id=>[id,model.places[id].hotel]));
  const code=`// Generated from docs/journey/route.md and catalog.md. Do not edit.\nconst JOURNEY_MODEL=${JSON.stringify(model)};\nObject.assign(PLACES,${JSON.stringify(coords)});\nObject.assign(HOTELS,${JSON.stringify(hotels)});\nDAYS.splice(0,DAYS.length,...Object.values(JOURNEY_MODEL.variants.A).map(v=>v[0]));\nfor(const id of Object.keys(PLAN_B))delete PLAN_B[id];\nfor(const [id,v] of Object.entries(JOURNEY_MODEL.variants.B))if(+id>=5)PLAN_B[id]=v[0];\nMODES.boat={name:'游船',color:'#4f8194',dash:'8 4',icon:'船'};\nMODES.taxi={name:'出租车',color:'#9b723c',dash:'8 5',icon:'车'};\nif(typeof ACCESS_HOURS!=='undefined')for(const p of Object.values(JOURNEY_MODEL.places)){if(p.hours)ACCESS_HOURS[p.id]=p.hours;}\nif(typeof VISIT_TIMES!=='undefined')for(const p of Object.values(JOURNEY_MODEL.places)){if(p.duration)VISIT_TIMES[p.id]=p.duration;}\n`;
  await writeFile('dist/journey-model.js',code);return model;
 }

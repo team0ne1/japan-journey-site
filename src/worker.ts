@@ -1,3 +1,4 @@
+import { PUBLIC_ASSETS } from './public-assets';
 import { previewTitle } from './source-preview';
 import { weatherResponse } from './weather';
 import { digest, mac, validToken } from './crypto';
@@ -5,7 +6,6 @@ import { SESSION_AGE, type Result } from './auth';
 export { TripAuth } from './auth';
 
 const COOKIE = '__Host-trip_session';
-const PUBLIC_FILES = new Set(['/auth.js', '/auth.css', '/favicon.svg', '/maps-terms.html']);
 const AUTH_PAGES = new Set(['/login', '/invite', '/setup']);
 const READ_API = new Set(['/api/session', '/api/admin/members', '/api/comments', '/api/comments/summary', '/api/favorites', '/api/favorites/export', '/api/shopping']);
 function secured(response: Response, mapNonce?: string): Response {
@@ -17,7 +17,7 @@ function secured(response: Response, mapNonce?: string): Response {
   result.headers.set('X-Robots-Tag', 'noindex, nofollow, noarchive');
   result.headers.set('Content-Security-Policy', "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://cyberjapandata.gsi.go.jp; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'self'; object-src 'none'");
   if (mapNonce) {
-    // Only the authenticated itinerary needs Google assets. Login/invitation
+    // The public itinerary needs Google assets. Login/invitation
     // pages retain their original policy and never load the third-party SDK.
     result.headers.set('Referrer-Policy', 'strict-origin');
     result.headers.set('Content-Security-Policy', `default-src 'self'; script-src 'self' 'nonce-${mapNonce}' 'strict-dynamic' https://maps.googleapis.com https://maps.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: blob: https://*.googleapis.com https://*.gstatic.com https://*.google.com https://*.googleusercontent.com; connect-src 'self' https://*.googleapis.com https://*.gstatic.com https://*.google.com; font-src 'self' https://fonts.gstatic.com; frame-src https://*.google.com; worker-src blob:; frame-ancestors 'none'; base-uri 'none'; form-action 'self'; object-src 'none'`);
@@ -69,7 +69,6 @@ export default {
       const sessionHash = validToken(raw) ? await digest(raw) : '';
       if (url.pathname === '/api/maps-config') {
         if (request.method !== 'GET') return json({ error: '不支持此请求方式。' }, 405);
-        if (!await stub.identity(sessionHash)) return json({ error: '请先登录后查看地图。' }, 401);
         // A browser-restricted Maps key is intentionally sent to the browser;
         // never use the server-only Routes API key here.
         if (!env.GOOGLE_MAPS_BROWSER_KEY?.trim() || !env.GOOGLE_MAPS_MAP_ID?.trim())
@@ -78,7 +77,6 @@ export default {
       }
       if (url.pathname === '/api/weather') {
         if (request.method !== 'GET') return json({ error: '不支持此请求方式。' }, 405);
-        if (!await stub.identity(sessionHash)) return json({ error: '请先登录后查看天气。' }, 401);
         return secured(await weatherResponse(url));
       }
       if (url.pathname.startsWith('/api/')) {
@@ -119,16 +117,10 @@ export default {
         }
         assetPath = '/auth.html';
       }
-      else if (!PUBLIC_FILES.has(assetPath)) {
-        const user = await stub.identity(sessionHash);
-        if (!user) {
-          if (assetPath === '/' || assetPath === '/index.html') return secured(Response.redirect(url.origin + '/login', 302));
-          return json({ error: '请先通过邀请或 Passkey 登录。' }, 401);
-        }
-        if (assetPath === '/') assetPath = '/index.html';
-      }
-      // Static asset access always passes through this worker, including Markdown,
-      // JS data files, HEAD, encoded paths, and conditional requests.
+      else if (assetPath === '/') assetPath = '/index.html';
+      if (['/favorites.js','/favorites.css','/shopping.js','/shopping.css'].includes(assetPath) && !await stub.identity(sessionHash)) return json({ error: '成员资料需要登录。' }, 401);
+      // Unknown paths fail closed, including private Markdown, backups and encoded aliases.
+      if (!PUBLIC_ASSETS.has(assetPath)) return json({ error: '页面不存在。' }, 404);
       const assetURL = new URL(assetPath, url.origin);
       const response = await env.ASSETS.fetch(new Request(assetURL, { method: request.method }));
       if (assetPath === '/index.html' && response.ok) {

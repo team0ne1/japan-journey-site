@@ -1,3 +1,9 @@
+## 2026-10-12 公开行程版本
+
+首页、路线数据、地图和天气允许匿名访问。公开数据在构建时脱敏，原始预订文档留在私有仓库，不打包发布。前端评论已移除，历史评论数据库保留并继续鉴权。收藏夹、购物清单和领队管理仍仅供原成员使用。
+
+发布前执行 `npm run check`；`npm run smoke` 验证公开访问和成员数据权限。下方旧版迁移说明为历史记录，当前权限以 [SECURITY.md](SECURITY.md) 为准。
+
 # 关西七日
 
 Google Maps 地图显示已整合。运行 `npm run preview:maps` 打开本机预览；在 `.dev.vars` 填入 `GOOGLE_MAPS_BROWSER_KEY` 后刷新页面。详见 [Google Maps 配置](docs/GOOGLE-MAPS.md)。当前显示行程地点与带方向箭头的游览顺序连线，实际交通路线另行补充。

@@ -3010,21 +3010,21 @@ dining: []
 id: day-05-a
 date: 2026-10-05
 city: 奈良 → 有马
-title: 奈良看鹿与草坡，前往已订的兆乐
-subtitle: 宇治退房 → 近铁奈良寄存 → 公园与若草山 → 取件赴有马兆乐，东大寺只在时间充裕时加入。
+title: 奈良看鹿与草坡，前往陶泉 御所坊
+subtitle: 宇治退房 → 近铁奈良寄存 → 公园与若草山 → 取件赴有马御所坊，东大寺只在时间充裕时加入。
 intensity: 半日游览与跨城移动
-hotel: choraku
+hotel: goshoboh
 focus:
   - kasuga
   - mizuya
   - hill
-  - hanamusubi
-luggage: 宇治10:00前退房，经JR奈良转至近铁奈良寄存；游览后回同一处取件，铁路赴有马并联系兆乐接送。柜位尺寸及取件时间待审核。
-next: 10/6从兆乐退房，小镇午餐后取件前往神户市区酒店；寄存待确认。
+  - goshoboh
+luggage: 宇治10:00前退房，经JR奈良转至近铁奈良寄存；游览后回同一处取件，铁路赴有马；从有马温泉站步行约4分钟到御所坊，携箱可到站后联系酒店接送。柜位尺寸及取件时间待审核。
+next: 10/6从御所坊退房，小镇午餐后取件前往神户市区酒店；寄存待确认。
 rest: 午后不加景点；到酒店后休息，晚餐及泡汤以从容为先。
 notes:
-  - 兆乐已预订10/5–10/6一晚；房型、餐食、价格与入住截止待订单。
-  - 原19:00晚餐并非兆乐已确认安排；保留提早离奈良的余量，待酒店确认后重算。
+  - 御所坊位于有马温泉小镇中心；含餐与最晚到店要求须按所选方案确认。
+  - 原19:00晚餐并非御所坊已确认安排；保留提早离奈良的余量，待酒店确认后重算。
   - 近铁奈良寄存与用车容量待确认；不在奈良过夜，也不等若草山夕照。
 optional:
   - id: day-05-a-optional-todaiji
@@ -3036,9 +3036,9 @@ optional:
 overview:
   - d5a-kintetsu-storage
   - d5a-hill
-  - d5a-hotel
+  - d5-goshoboh
 budget:
-  summary: 酒店已订但价格未提供；交通、寄存与税费待核，未预订餐饮不计。
+  summary: 交通、寄存与税费待核，未预订餐饮不计；公开版不含个人住宿支出。
   items:
     - name: 若草山成人入山费
       min: 150
@@ -3047,9 +3047,9 @@ budget:
       source: https://www.pref.nara.lg.jp/site/park/2585.html
       confirmed: true
   notes:
-    - 兆乐是否含餐、房费待确认，不使用花結び套餐价格。
+    - 御所坊含餐条件须按所选方案确认，不沿用其他酒店套餐。
 schedule:
-  note: 午后离开奈良，待兆乐晚餐与入住时刻确认后再倒排。
+  note: 午后离开奈良，待御所坊晚餐与入住时刻确认后再倒排。
   slots: []
 stops:
   - id: d5a-uji
@@ -3087,28 +3087,28 @@ stops:
     time: 午后较早 · 依酒店到店要求倒排
     mode: walk
     connection: 南侧入口至一重目草坡
-    note: 不等落日；兆乐最晚到店时间确认后重算离山和取件时刻。
+    note: 不等落日；御所坊最晚到店时间确认后重算离山和取件时刻。
   - id: d5a-down
     place: wakakusa
     time: 午后较早 · 依酒店到店要求倒排
     mode: walk
     connection: 原路下山到约定出租车上车点
-    note: 不等落日；兆乐最晚到店时间确认后重算离山和取件时刻。
+    note: 不等落日；御所坊最晚到店时间确认后重算离山和取件时刻。
     deadline:
-      title: 离山提醒 · 兆乐到店要求待确认
+      title: 离山提醒 · 御所坊到店要求待确认
       transit: 公共交通：最晚离山时间待重新倒排
       taxi: Uber／出租车：目的地设为近铁奈良站，最晚出发时间待重新倒排
-      calculation: 计入山麓至车站、取行李、铁路换乘、等待酒店接驳及办理入住的时间。
+      calculation: 计入山麓至车站、取行李、铁路换乘、步行到店或等待酒店接驳及办理入住的时间。
       pickup: 返回早上同一寄存点。提前确认车辆和行李容量，叫车等待也计入交通时间。
-      caveat: 原13:20／13:45截止基于另一家酒店19:00晚餐，现已失效，不是兆乐订单承诺。
-      source: https://choraku.com/access/
+      caveat: 原13:20／13:45截止基于另一家酒店19:00晚餐，现已失效，不可套用到御所坊。
+      source: https://goshoboh.com/access/
       uberSource: https://www.uber.com/global/ja/r/cities/nara-nara-jp/
   - id: d5a-kintetsu-pickup
     place: nara-kintetsu-storage
     time: 午后较早 · 依酒店到店要求倒排
     mode: taxi
     connection: 可用Uber／出租车至近铁奈良（车程暂留15分钟）；公共交通含步行候车暂留40分钟；取件及进站另留30分钟
-    note: 不等落日；兆乐最晚到店时间确认后重算离山和取件时刻。
+    note: 不等落日；御所坊最晚到店时间确认后重算离山和取件时刻。
   - id: d5a-kintetsu-depart
     place: kintetsunara
     time: 取件后进站
@@ -3138,19 +3138,19 @@ stops:
     time: 约16:55（目标预算）
     mode: rail
     connection: 有马口至有马温泉；近铁奈良至此整体暂留150–170分钟（含候车及三宫换乘），未核实班次
-    note: 到站联系花結び接驳。
-  - id: d5a-hotel
-    place: hanamusubi
-    time: 约17:25到店、17:45完成入住（目标预算）
-    mode: shuttle
-    connection: 出站、等待及接驳共留20–30分钟
-    note: 一泊二食，目标19:00会席待酒店确认；含餐入住截止另核。接驳20–30分钟为规划余量，非酒店承诺。
+    note: 到站后步行约4分钟至御所坊，或联系酒店接送；携箱步行需另留余量。
+  - id: d5-goshoboh
+    place: goshoboh
+    time: 午后转场抵达 · 15:00起可入住，含餐到店要求另核
+    mode: rail
+    connection: 有马温泉站步行约4分钟至御所坊；带行李也可到站联系接送，等候时间另留
+    note: 晚餐时间按所选方案确认；退房后行李寄存条件待核。
 dining: []
 links:
-  - - 兆乐官网
-    - https://choraku.com/
-  - - 兆乐交通与接送
-    - https://choraku.com/access/
+  - - 御所坊官网
+    - https://goshoboh.com/
+  - - 御所坊交通与接送
+    - https://goshoboh.com/access/
 ```
 
 ## 2026-10-05 · 奈良（Plan B留宿版本）
@@ -3343,11 +3343,11 @@ focus:
   - beach
   - venus
   - kobe-hotel
-luggage: 按兆乐订单退房；拟寄存后轻装游小镇、用午餐，再回酒店取件赴神户。寄存、取件及接送需确认，不沿用花結び退房时间。
+luggage: 御所坊依房型10:00或11:00前退房；先确认寄存条件，再轻装步行游小镇、用午餐，回酒店取件赴神户。
 next: 第七天从神户市区酒店前往关西机场，班次与出发时间按航班倒排。
 rest: 上午不安排海边；下午城市闲逛可随时坐下喝咖啡或回酒店休息，傍晚海边预留放空时间。
 notes:
-  - 兆乐早餐、退房时刻待订单确认；神户当晚酒店待选。
+  - 御所坊早餐以所选方案为准，退房时刻依房型确认；神户当晚酒店待选。
   - 目标12:00–13:00左右小镇午餐，饭后取件出发；酒店间转场暂留75–105分钟，具体班次与神户酒店待定。
   - 神户目标14:30左右到酒店，未到入住时间先寄存；实际酒店寄存和入住条件待核。
   - 午后闲逛不设置必须走完的清单；若转场较晚则缩短闲逛，不为同时完成购物与海边夕照而赶路。
@@ -3391,7 +3391,7 @@ stops:
     time: 12:00–13:00左右（规划）
     mode: walk
     connection: 小镇内选店用午餐
-    note: 餐厅待选；一泊二食不含这顿午餐。
+    note: 午餐店待选，费用按最终选择另计。
   - id: d6-arima-pickup
     place: hanamusubi
     time: 午餐后
@@ -4374,32 +4374,38 @@ hours:
 ```
 
 
-## 銀水荘 兆楽
+## 陶泉 御所坊
 
 ```yaml journey:place
-id: choraku
-name: 銀水荘 兆楽
-lat: 34.80303321762264
-lng: 135.24677724228215
-mapQuery: Ginsuisou Choraku 1654-1 Arimacho Kobe Japan
-coordinateNote: 酒店官方交通地图坐标，2026-09-23核对。
+id: goshoboh
+name: 陶泉 御所坊
+lat: 34.796867
+lng: 135.247139
+mapQuery: 陶泉 御所坊 神戸市北区有馬町858
+mapUrl: https://www.google.com/maps?cid=12036972434981022728
+coordinateNote: 酒店官网Google地图链接位置，2026-10-12核对；地点链接使用官网提供的CID，分段导航以酒店名称与858号地址为目的地。
 hotel:
-  name: 銀水荘 兆楽（Ginsuisou Choraku）
-  area: 有马温泉 · 有馬町1654-1 · 10/5–10/6一晚
-  status: 已预订 · 用户确认，订单明细待补充
-  url: https://choraku.com/
-  booking: https://choraku.com/access/
-  note: 10/5入住、10/6退房。住宿查询4位成人、2间房；实际订单房型、餐食、价格、税费及取消条款待补充。到达有马后致电+81-78-904-0666联系町内免费接送，资料列07:00–22:00，可能需等待，具体上车点当日确认。退房后寄存及取件时段待酒店确认。
+  name: 陶泉 御所坊（Tocen Goshoboh）
+  area: 有马温泉 · 神戸市北区有馬町858
+  status: 住宿地点参考
+  url: https://goshoboh.com/
+  booking: https://reserve.489ban.net/client/goshoboh/0/plan
+  shuttle: https://goshoboh.com/access/
+  note: 位于有马温泉中心街；官方方案列有马温泉站步行约4分钟。到站也可致电078-904-0551联系接送，服务时段与等候时间需确认。退房后寄存及取件条件需向酒店核实。
 hours:
-  scope: 已预订住宿 · 2026/10/5–10/6
-  open: 入住时刻以订单方案为准，待补充
-  last: 若含晚餐，最晚到店时刻须向兆乐确认
-  close: 退房时刻待订单确认
-  note: 町内接送与入住受付是不同时间范围；19:00晚餐只是原规划假设，尚不是兆乐已确认的安排。
+  scope: 酒店入住与退房
+  open: 15:00起入住（以所选方案为准）
+  last: 含餐方案须另核晚餐及最晚到店时间；官网素泊方案正文列22:00，表格列23:00，晚到请先向酒店确认
+  close: 地久客房10:00前退房；中庸、天乐11:00前退房，其他房型以所选方案为准
+  note: 官网电话栏09:00–18:00不等于入住时间；不能以素泊方案的晚到时间推断含餐方案。站前接送需联系酒店，退房后寄存条件待确认。
   sources:
-    - - 酒店官方交通与接送
-      - https://choraku.com/access/
-  status: 预订日期已确认；订单时刻待核
+    - - 御所坊官方交通与接送
+      - https://goshoboh.com/access/
+    - - 御所坊官方住宿方案与时刻
+      - https://reserve.489ban.net/client/goshoboh/0/detail/768725
+    - - 御所坊官方预订入口
+      - https://reserve.489ban.net/client/goshoboh/0/plan
+  status: 2026-10-12核对公开信息；具体入住条件以所选方案为准
 ```
 
 
@@ -4740,7 +4746,7 @@ connection: 宇治酒店退房→JR宇治至JR奈良→打车至近铁奈良站�
 id: d5a_hotel
 to: d5a_hotel
 mode: rail
-connection: 取件后近铁奈良优先直通快速急行至阪神神户三宫→地铁三宫→谷上→神户电铁有马口→有马温泉→致电兆乐接送；非直通班次需额外换乘，10/5班次及等车时间待核
+connection: 取件后近铁奈良优先直通快速急行至阪神神户三宫→地铁三宫→谷上→神户电铁有马口→有马温泉→步行约4分钟至御所坊，携箱可到站致电酒店接送；非直通班次需额外换乘，10/5班次及等车时间待核
 ```
 
 
@@ -4749,8 +4755,8 @@ connection: 取件后近铁奈良优先直通快速急行至阪神神户三宫�
 ```yaml journey:leg
 id: d6_arimatown
 to: d6_arimatown
-mode: shuttle
-connection: 兆乐退房拟寄存，向酒店确认接送至小镇的安排
+mode: walk
+connection: 御所坊退房后确认可寄存，再从酒店步行游有马温泉小镇；酒店位于中心街
 ```
 
 
@@ -4759,8 +4765,8 @@ connection: 兆乐退房拟寄存，向酒店确认接送至小镇的安排
 ```yaml journey:leg
 id: d6_hotelpickup
 to: d6_hotelpickup
-mode: shuttle
-connection: 小镇午餐后联系兆乐接送或自行返店取件，寄存条件待确认
+mode: walk
+connection: 小镇午餐后步行返回御所坊取件；退房后寄存条件及取件时段提前确认
 ```
 
 
@@ -4770,7 +4776,7 @@ connection: 小镇午餐后联系兆乐接送或自行返店取件，寄存条�
 id: d6_02
 to: d6_02
 mode: rail
-connection: 兆乐接送有马温泉站→有马口→谷上→地铁三宫→神户酒店；酒店未定，出口与步行待核
+connection: 御所坊取件后步行约4分钟至有马温泉站（携箱另留余量，需接送则先向酒店确认）→有马口→谷上→地铁三宫→神户酒店；酒店未定，出口与步行待核
 ```
 
 

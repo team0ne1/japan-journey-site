@@ -136,18 +136,23 @@ function createPanel() {
 }
 async function itineraryPage() {
   identity = (await api('/api/session')).user;
-  if (!identity) return location.replace('/login');
+  if (!identity) return;
+  for (const href of ['/favorites.css','/shopping.css']) { const link=document.createElement('link'); link.rel='stylesheet'; link.href=href; document.head.append(link); }
+  window.tripMemberAccess = true;
+  $('favorites-nav').hidden = false; $('shopping-nav').hidden = false;
+  await Promise.all([import('/favorites.js'), import('/shopping.js')]);
+  window.dispatchEvent(new HashChangeEvent('hashchange'));
   const controls = document.createElement('div'); controls.className = 'account-controls';
   controls.innerHTML = `<span class="account-label">${esc(identity.name)}</span>${identity.role === 'leader' ? '<button id="manage-invites" class="auth-button">成员邀请</button>' : ''}<button id="account-logout" class="auth-button">退出</button>`;
   document.querySelector('.top-actions').append(controls);
-  $('account-logout').onclick = event => busy(event.currentTarget, async () => { await api('/api/logout', {}); location.replace('/login'); });
+  $('account-logout').onclick = event => busy(event.currentTarget, async () => { await api('/api/logout', {}); location.replace('/'); });
   if (identity.role === 'leader') { createPanel(); $('manage-invites').onclick = event => busy(event.currentTarget, async () => { $('member-panel').showModal(); await refreshMembers(); }, 'panel-message'); }
   // Revalidate on returning to a tab and periodically. Already downloaded content
   // cannot be retracted, but further page/API requests are always server-checked.
-  async function checkSession() { try { const {user} = await api('/api/session'); if (!user) location.replace('/login'); } catch { /* Offline reading can continue; next server request still enforces auth. */ } }
+  async function checkSession() { try { const {user} = await api('/api/session'); if (!user) location.reload(); } catch { /* Offline reading can continue; next server request still enforces auth. */ } }
   window.addEventListener('pageshow', checkSession);
   document.addEventListener('visibilitychange', () => { if (!document.hidden) checkSession(); });
   setInterval(() => { if (!document.hidden) checkSession(); }, 60_000);
 }
 if ($('auth-content')) authPage().catch(error => { $('auth-content').textContent = ''; message(error.message, true); });
-else itineraryPage().catch(() => { location.replace('/login'); });
+else itineraryPage().catch(() => { /* Public itinerary remains available when identity lookup fails. */ });

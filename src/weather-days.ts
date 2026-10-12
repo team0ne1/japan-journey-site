@@ -172,10 +172,10 @@ export const WEATHER_DAYS = {
         "longitude": 135.8201
       },
       {
-        "id": "choraku",
+        "id": "goshoboh",
         "name": "有马温泉",
-        "latitude": 34.80303321762264,
-        "longitude": 135.24677724228215
+        "latitude": 34.796867,
+        "longitude": 135.247139
       }
     ]
   },
@@ -195,10 +195,10 @@ export const WEATHER_DAYS = {
         "longitude": 135.1136
       },
       {
-        "id": "choraku",
+        "id": "goshoboh",
         "name": "有马温泉",
-        "latitude": 34.80303321762264,
-        "longitude": 135.24677724228215
+        "latitude": 34.796867,
+        "longitude": 135.247139
       }
     ]
   },
@@ -309,10 +309,10 @@ export const WEATHER_DAYS = {
         "longitude": 135.8201
       },
       {
-        "id": "choraku",
+        "id": "goshoboh",
         "name": "有马温泉",
-        "latitude": 34.80303321762264,
-        "longitude": 135.24677724228215
+        "latitude": 34.796867,
+        "longitude": 135.247139
       }
     ]
   },
@@ -332,10 +332,10 @@ export const WEATHER_DAYS = {
         "longitude": 135.1136
       },
       {
-        "id": "choraku",
+        "id": "goshoboh",
         "name": "有马温泉",
-        "latitude": 34.80303321762264,
-        "longitude": 135.24677724228215
+        "latitude": 34.796867,
+        "longitude": 135.247139
       }
     ]
   },

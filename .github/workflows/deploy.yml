@@ -55,5 +55,5 @@ jobs:
             exit 1
           fi
           npx --no-install wrangler deploy --keep-vars --message "GitHub ${GITHUB_SHA}"
-      - name: Check live login and private content protection
+      - name: Check public itinerary and private member data
         run: npm run smoke

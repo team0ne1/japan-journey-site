@@ -1,6 +1,6 @@
 function renderDepartureDeadline(deadline){
  if(!deadline)return '';
- return `<aside class="departure-deadline" aria-label="离开时间提醒"><strong>${escapeHtml(deadline.title)}</strong><p class="departure-deadline-times">${escapeHtml(deadline.transit)}<br>${escapeHtml(deadline.taxi)}</p><p>${escapeHtml(deadline.calculation)}</p><p>${escapeHtml(deadline.pickup)}</p><p>${escapeHtml(deadline.caveat)}</p><div class="stop-links">${external(deadline.source,'酒店晚餐时段')}${external(deadline.uberSource,'Uber 奈良')}</div></aside>`;
+ return `<aside class="departure-deadline" aria-label="离开时间提醒"><strong>${escapeHtml(deadline.title)}</strong><p class="departure-deadline-times">${escapeHtml(deadline.transit)}<br>${escapeHtml(deadline.taxi)}</p><p>${escapeHtml(deadline.calculation)}</p><p>${escapeHtml(deadline.pickup)}</p><p>${escapeHtml(deadline.caveat)}</p><div class="stop-links">${external(deadline.source,'酒店官方信息')}${external(deadline.uberSource,'Uber 奈良')}</div></aside>`;
 }
 'use strict';
 const $=id=>document.getElementById(id);
@@ -93,24 +93,22 @@ function drawMap(){
  if(unlocated.length)document.querySelector('.map-caption').textContent+=' '+unlocated.map(id=>PLACES[id][0]).join('、')+'的精确点位待确认，暂未绘制。';
  fitMap(focusMode);
 }
-function hotelShuttleUrl(){return activeJourneyPlan()==='B2'?'https://www.qkamura.or.jp/kada/access/':plan==='B'?'https://kada-kaigetsu.com/access/':'https://choraku.com/access/';}
+function hotelShuttleUrl(){return activeJourneyPlan()==='B2'?'https://www.qkamura.or.jp/kada/access/':plan==='B'?'https://kada-kaigetsu.com/access/':'https://goshoboh.com/access/';}
 function renderHeading(d){
  $('day-heading').innerHTML=`<div class="day-heading"><p class="day-kicker">${day===0?'THE WHOLE JOURNEY · 7 DAYS':`DAY ${String(day).padStart(2,'0')} / 07 · ${escapeHtml(d.date)} ${escapeHtml(d.weekday)}`}</p><h2>${escapeHtml(d.title)}</h2><p class="day-description">${escapeHtml(d.subtitle)}</p>${day===0?'':`<div class="day-chips"><span>${escapeHtml(d.intensity)}</span><span>${d.stops.length}个行程节点</span><span>日本时间</span></div>`}</div>`;
 }
 
-function renderDelivery(id){
- const d=JOURNEY_MODEL.places[id]?.delivery;if(!d)return '';
- const f=d.fallback;
+function renderShippingFallback(id){
+ const f=JOURNEY_MODEL.places[id]?.shippingFallback;
  const backup=f?`<section class="access-hours delivery-fallback" aria-label="错过寄送截止的后备方案"><div class="hours-heading"><strong>错过10:00？改到新大阪东口寄送</strong></div><p><strong>${escapeHtml(f.name)}</strong><br>${escapeHtml(f.nameEn)}</p><dl>${[['办理截止',f.cutoff],['建议到店',f.arrival],['送达时间',f.deliveryTime],['配送范围',f.serviceArea],['费用参考',f.fee]].map(([label,value])=>`<div><dt>${escapeHtml(label)}</dt><dd>${escapeHtml(value)}</dd></div>`).join('')}</dl><p>${escapeHtml(f.route)}</p><p>${escapeHtml(f.note)}</p><div class="stop-links">${external(f.mapUrl,'新大阪东口营业所 · Google 地图')}${external(f.sourceUrl,'官方营业所表 · 第3页')}</div><small>${escapeHtml(f.checked)}</small></section>`:'';
- const rows=[['郵便番号 / 邮编',d.postalCode],['住所 / 日文地址',d.addressJa],['Address / 英文地址',d.addressEn],['お届け先氏名 / 收件人',d.recipient+' '+d.recipientEn],['電話番号 / 收件电话',d.phone]];
- return `<section class="access-hours delivery-info" aria-label="配送先信息"><div class="hours-heading"><strong>配送先 · 行李收件信息</strong></div><dl>${rows.map(([label,value])=>`<div><dt>${escapeHtml(label)}</dt><dd>${escapeHtml(value)}</dd></div>`).join('')}</dl><p>${escapeHtml(d.note)}</p><div class="stop-links">${external(d.mapUrl,'收件地址 · Google 地图')}</div></section>${backup}`;
+ return backup;
 }
 
 function renderTimeline(d){
  $('timeline').innerHTML=`<div class="section-label"><h3>当天行程</h3><span>${d.flexible?'弹性清单 · 不要求全部完成':'按游览顺序 · 点击地点定位'}</span></div><details class="route-guide"><summary>游览时长与入场时间说明</summary><p>游览时长包含景点内部慢走；交通、排队与用餐另留。可进入时段、最晚入场和结束时间分别列出，未公布的保留待确认。</p>${external('hours-guide.md','开放时间核对表 · 2026.09.11')}</details><ol class="timeline">${d.stops.map((stop,index)=>{
  const next=d.stops[index+1],mode=next?MODES[next.mode]:null,duration=durationFor(d,stop,index);
  const scenic=Boolean(VISIT_TIMES[stop.id])&&!HOTELS[stop.id];
- return `<li class="stop${scenic?' scenic-stop':' transit-stop'}" data-stop="${index}" id="${escapeHtml(stop.commentId)}"><article class="stop-card"><div class="stop-card-top"><button type="button" class="stop-pin" data-locate="${index}" aria-label="在地图上查看第${index+1}站 ${escapeHtml(PLACES[stop.id][0])}">${index+1}</button><div><p class="stop-time">${escapeHtml(stop.time)}</p><h4><button type="button" class="stop-title" data-locate="${index}">${escapeHtml(PLACES[stop.id][0])}</button></h4></div><span class="stop-category">${HOTELS[stop.id]?'住宿':scenic?'游览':'途经'}</span></div><div class="stop-content with-photo"><div class="stop-description"><p class="stop-note">${escapeHtml(stop.note)}</p>${duration?`<p class="visit-duration">${escapeHtml(duration)}</p>`:''}${renderTicket(stop.id)}</div>${JourneyPhotos.render(stop.id,PLACES[stop.id][0])}</div>${renderDepartureDeadline(stop.deadline)}${renderDelivery(stop.id)}${renderAccessHours(stop.id)}<div class="stop-links">${external(placeLink(stop.id),'Google 地图')}${external(xiaohongshuLink(stop.id),'小红书搜索')}${HOTELS[stop.id]?.url?external(HOTELS[stop.id].url,'酒店官网'):''}</div>${stop.commentId?`<div class="step-comments" data-comment-target="${escapeHtml(stop.commentId)}"></div>`:''}</article>${next?`<div class="connection"><span class="mode-tag" style="--c:${mode.color}">${mode.name}</span><span>${escapeHtml(next.connection||'按实际情况衔接')}</span>${external(next.mode==='shuttle'?hotelShuttleUrl():routeLink(stop.id,next.id,next.mode),next.mode==='shuttle'?'接驳':'导航')}</div>`:'<p class="day-end">当天行程结束 · 好好休息</p>'}</li>`;
+ return `<li class="stop${scenic?' scenic-stop':' transit-stop'}" data-stop="${index}" id="${escapeHtml(stop.commentId)}"><article class="stop-card"><div class="stop-card-top"><button type="button" class="stop-pin" data-locate="${index}" aria-label="在地图上查看第${index+1}站 ${escapeHtml(PLACES[stop.id][0])}">${index+1}</button><div><p class="stop-time">${escapeHtml(stop.time)}</p><h4><button type="button" class="stop-title" data-locate="${index}">${escapeHtml(PLACES[stop.id][0])}</button></h4></div><span class="stop-category">${HOTELS[stop.id]?'住宿':scenic?'游览':'途经'}</span></div><div class="stop-content with-photo"><div class="stop-description"><p class="stop-note">${escapeHtml(stop.note)}</p>${duration?`<p class="visit-duration">${escapeHtml(duration)}</p>`:''}${renderTicket(stop.id)}</div>${JourneyPhotos.render(stop.id,PLACES[stop.id][0])}</div>${renderDepartureDeadline(stop.deadline)}${renderShippingFallback(stop.id)}${renderAccessHours(stop.id)}<div class="stop-links">${external(placeLink(stop.id),'Google 地图')}${external(xiaohongshuLink(stop.id),'小红书搜索')}${HOTELS[stop.id]?.url?external(HOTELS[stop.id].url,'酒店官网'):''}</div></article>${next?`<div class="connection"><span class="mode-tag" style="--c:${mode.color}">${mode.name}</span><span>${escapeHtml(next.connection||'按实际情况衔接')}</span>${external(next.mode==='shuttle'?hotelShuttleUrl():routeLink(stop.id,next.id,next.mode),next.mode==='shuttle'?'接驳':'导航')}</div>`:'<p class="day-end">当天行程结束 · 好好休息</p>'}</li>`;
  }).join('')}</ol>`;
  document.querySelectorAll('[data-locate]').forEach(b=>b.addEventListener('click',()=>{setReadingView('map');selectStop(Number(b.dataset.locate));if(innerWidth<=1100)$('content').scrollIntoView({behavior:'smooth',block:'start'});}));
 }
@@ -120,18 +118,19 @@ function renderSupport(d){const hotel=d.hotel?HOTELS[d.hotel]:null;const optiona
 }
 function overview(){
  const selected=Array.from({length:7},(_,i)=>getDay(i+1));const stops=[stop('kix','10/1','抵达机场')];
- for(const d of selected){if(d.id===5)stops.push(stop('nara-kintetsu-storage','10/5',plan==='A'?'奈良游览后取件，前往已订的兆乐':'奈良游览，当晚住奈良','rail',d.luggage));if(d.hotel&&stops.at(-1).id!==d.hotel)stops.push(stop(d.hotel,d.date+' · 住宿',d.title,'rail',d.luggage));}
+ for(const d of selected){if(d.id===5)stops.push(stop('nara-kintetsu-storage','10/5',plan==='A'?'奈良游览后取件，前往御所坊':'奈良游览，当晚住奈良','rail',d.luggage));if(d.hotel&&stops.at(-1).id!==d.hotel)stops.push(stop(d.hotel,d.date+' · 住宿',d.title,'rail',d.luggage));}
  stops.push(stop('kix','10/7','按航班倒排返程','bus',selected[6].luggage));
  return {id:0,title:'先看方向，再看每一天',subtitle:plan==='A'?'大阪 → 京都 → 宇治 → 奈良 → 有马 → 神户 → 关西机场':'大阪 → 京都 → 宇治 → 奈良 → 加太 → 关西机场',focus:stops.map(s=>s.id),stops};
 }
 const yenRange=(range,multiplier=1)=>range.map(n=>Math.round(n*multiplier).toLocaleString('zh-CN')).join('–');
 function renderDailySummary(d){
  const b=budgetFor(d,plan),total=sumBudget(b),daytime=sumBudget(b,false);
- return `<section class="daily-summary" aria-label="当天费用与体力总结"><div class="daily-kpis"><div><span>统计费用／成人</span><strong>${b.pending?'待复核':yenRange(total)} <small>JPY</small></strong></div><div><span>全天步行参考</span><strong>${escapeHtml(d.distance)} <small>km</small></strong></div><div><span>活动额外消耗</span><strong>${escapeHtml(d.calories)} <small>kcal</small></strong></div></div><p class="budget-scope">含当晚住宿分摊，不含未预订餐饮。热量按70kg成人估算。</p><details class="budget-details"><summary>查看费用构成与估算说明 <span>${b.pending?'总费用待报价':'5人合计 '+yenRange(total,PARTY_SIZE)+' JPY'}</span></summary><p class="summary-narrative">${escapeHtml(b.summary)}</p>${b.items.map(item=>`<div class="budget-row"><strong>${escapeHtml(item.name)}</strong><span class="budget-amount">${yenRange([item.min,item.max])} JPY／人</span><p>${escapeHtml(item.note)} ${item.source?external(item.source,'来源'):''}</p></div>`).join('')}<p class="budget-scope">${b.pending?'以下仅为已知项目，不代表完整日费用。':'不含住宿：'+yenRange(daytime)+' JPY／人。'}住宿为规划预留，非指定日期房价；机票、购物和自选升级另计。已含套餐餐食不重复加价；未知费用不表示免费。</p><ul>${(b.notes||[]).map(n=>`<li>${escapeHtml(n)}</li>`).join('')}<li>步行和热量包含景区内部与上下坡，不含基础代谢；不是精确测量。</li></ul>${b.sources?`<div class="link-row">${b.sources.map(x=>external(x[1],x[0])).join('')}</div>`:''}</details></section>`;
+ return `<section class="daily-summary" aria-label="当天费用与体力总结"><div class="daily-kpis"><div><span>统计费用／成人</span><strong>${b.pending?'待复核':yenRange(total)} <small>JPY</small></strong></div><div><span>全天步行参考</span><strong>${escapeHtml(d.distance)} <small>km</small></strong></div><div><span>活动额外消耗</span><strong>${escapeHtml(d.calories)} <small>kcal</small></strong></div></div><p class="budget-scope">不含个人住宿支出及未预订餐饮。热量按70kg成人估算。</p><details class="budget-details"><summary>查看费用构成与估算说明 <span>${b.pending?'总费用待报价':'5人合计 '+yenRange(total,PARTY_SIZE)+' JPY'}</span></summary><p class="summary-narrative">${escapeHtml(b.summary)}</p>${b.items.map(item=>`<div class="budget-row"><strong>${escapeHtml(item.name)}</strong><span class="budget-amount">${yenRange([item.min,item.max])} JPY／人</span><p>${escapeHtml(item.note)} ${item.source?external(item.source,'来源'):''}</p></div>`).join('')}<p class="budget-scope">${b.pending?'以下仅为已知项目，不代表完整日费用。':'不含住宿：'+yenRange(daytime)+' JPY／人。'}公开版不列个人住宿费用；机票、购物和自选升级另计。已含套餐餐食不重复加价；未知费用不表示免费。</p><ul>${(b.notes||[]).map(n=>`<li>${escapeHtml(n)}</li>`).join('')}<li>步行和热量包含景区内部与上下坡，不含基础代谢；不是精确测量。</li></ul>${b.sources?`<div class="link-row">${b.sources.map(x=>external(x[1],x[0])).join('')}</div>`:''}</details></section>`;
 }
 
 function render(){readHash();
- const view=new URLSearchParams(location.hash.slice(1)).get('view');
+ let view=new URLSearchParams(location.hash.slice(1)).get('view');
+ if((view==='favorites'||view==='shopping')&&!window.tripMemberAccess)view='';
  const favoritesView=view==='favorites',shoppingView=view==='shopping';
  $('content').hidden=favoritesView||shoppingView;$('favorites-panel').hidden=!favoritesView;$('shopping-panel').hidden=!shoppingView;
  $('shopping-nav').removeAttribute('aria-current');

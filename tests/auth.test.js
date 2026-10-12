@@ -28,9 +28,9 @@ async function member(cookie) {
 }
 async function records(prefix) { return runInDurableObject(stub(),(_,state)=>state.storage.sql.exec('SELECT key,value,expires FROM records WHERE key LIKE ?',prefix+'%').toArray()); }
 beforeEach(async()=>{await reset();});
-describe('private itinerary and invitations',()=>{
-  it('keeps map settings private and reports missing setup without exposing other secrets',async()=>{
-    expect((await get('/api/maps-config')).status).toBe(401);
+describe('public itinerary and protected membership',()=>{
+  it('serves browser-only map settings publicly without exposing other secrets',async()=>{
+    expect((await worker.fetch(new Request(origin+'/api/maps-config'),{...env,GOOGLE_MAPS_BROWSER_KEY:'browser-test-key',GOOGLE_MAPS_MAP_ID:'test-map-id'})).status).toBe(200);
     const {cookie}=await setup();
     expect((await worker.fetch(new Request(origin+'/api/maps-config',{headers:{Cookie:cookie}}),{...env,GOOGLE_MAPS_BROWSER_KEY:'',GOOGLE_MAPS_MAP_ID:''})).status).toBe(503);
     const response=await worker.fetch(new Request(origin+'/api/maps-config',{headers:{Cookie:cookie}}),{
@@ -40,9 +40,9 @@ describe('private itinerary and invitations',()=>{
     expect(response.headers.get('Cache-Control')).toBe('private, no-store');
     expect((await post('/api/maps-config',{},cookie)).status).toBe(405);
   });
-  it('allows the Google SDK only on authenticated itinerary pages with fresh script nonces',async()=>{
+  it('allows the Google SDK on public itinerary pages with fresh script nonces',async()=>{
     const {cookie}=await setup();
-    const page=await get('/',cookie), html=await page.text(), policy=page.headers.get('Content-Security-Policy');
+    const page=await get('/'), html=await page.text(), policy=page.headers.get('Content-Security-Policy');
     const nonce=policy.match(/'nonce-([^']+)'/)[1];
     expect(policy).toContain("'strict-dynamic'");
     expect(policy).not.toContain("'unsafe-eval'");
@@ -55,7 +55,7 @@ describe('private itinerary and invitations',()=>{
     const login=await get('/login');
     expect(login.headers.get('Content-Security-Policy')).not.toContain('maps.googleapis.com');
     expect(login.headers.get('Referrer-Policy')).toBe('no-referrer');
-    for(const path of ['/routes.json','/google-map.js','/route-data.js'])expect((await get(path)).status).toBe(401);
+    for(const path of ['/routes.json','/google-map.js','/route-data.js'])expect((await get(path)).status).toBe(200);
   });
   it('returns signed-in members and leaders from old invite/login links to their own itinerary without reusing an invite',async()=>{
     const {cookie:leader}=await setup();const m=await member(leader);
@@ -76,12 +76,12 @@ describe('private itinerary and invitations',()=>{
     expect((await post('/api/invite/verify',{token:m.token,answer:'03-08'})).status).toBe(410);
     expect((await records('session:'))).toHaveLength(2);
   });
-  it('does not auto-enter with missing, expired, revoked or logged-out browser sessions',async()=>{
+  it('keeps membership private but itinerary public after session expiry or revocation',async()=>{
     const {cookie:leader}=await setup();const m=await member(leader);
     const signed=await post('/api/invite/verify',{token:m.token,answer:'03-08'});
     async function denied(cookie) {
-      expect((await get('/',cookie)).status).toBe(302);
-      expect((await get('/',cookie)).headers.get('Location')).toBe(origin+'/login');
+      expect((await get('/',cookie)).status).toBe(200);
+      expect((await get('/api/favorites',cookie)).status).toBe(401);
       expect((await get('/invite',cookie)).status).toBe(200);
       expect((await get('/login',cookie)).status).toBe(200);
       expect((await (await get('/api/session',cookie)).json()).user).toBeNull();
@@ -96,12 +96,15 @@ describe('private itinerary and invitations',()=>{
     await runInDurableObject(stub(),(_,state)=>state.storage.sql.exec("UPDATE records SET expires=1 WHERE key LIKE 'session:%'"));
     await denied(leader);
   });
-  it('blocks every itinerary payload before authentication; public login stays available',async()=>{
-    for(const path of ['/data.js','/app.js','/itinerary.md','/hours-guide.md','/vendor/leaflet.js','/%64ata.js','/auth.html','/index.html/'])expect((await get(path)).status,path).toBe(401);
-    expect((await get('/')).status).toBe(302);
+  it('serves audited itinerary assets publicly while unknown and private paths fail closed',async()=>{
+    for(const path of ['/','/data.js','/app.js','/itinerary.md','/hours-guide.md','/index.html'])expect((await get(path)).status,path).toBe(200);
+    for(const path of ['/docs/journey/catalog.md','/.dev.vars','/comments.js','/comments.css','/vendor/leaflet.js','/%64ata.js','/index.html/','/booking.pdf'])expect((await get(path)).status,path).toBe(404);
     expect((await get('/login')).status).toBe(200);
     expect((await get('/auth.js')).status).toBe(200);
-    expect((await exports.default.fetch(origin+'/data.js',{method:'HEAD'})).status).toBe(401);
+    expect((await exports.default.fetch(origin+'/data.js',{method:'HEAD'})).status).toBe(200);
+    for(const path of ['/api/comments','/api/comments/summary','/api/favorites','/api/favorites/export','/api/shopping'])expect((await get(path)).status,path).toBe(401);
+    expect((await get('/api/admin/members')).status).toBe(403);
+    const html=await (await get('/')).text();expect(html).not.toContain('comments.js');expect(html).not.toContain('step-comments');
   });
   it('requires correct bootstrap secret, actual verified Passkey, and a single leader claim',async()=>{
     expect((await post('/api/setup/options',{setupSecret:'wrong'})).status).toBe(403);
@@ -154,7 +157,7 @@ describe('private itinerary and invitations',()=>{
     await post('/api/admin/invite/rotate',{memberId:m.id},cookie);
     const link=await post('/api/admin/invite/claim',{memberId:m.id},cookie);
     expect((await post('/api/admin/member/revoke',{memberId:m.id},cookie)).status).toBe(200);
-    expect((await get('/data.js',session.cookie)).status).toBe(401);
+    expect((await get('/api/favorites',session.cookie)).status).toBe(401);
     expect((await post('/api/invite/info',{token:new URLSearchParams(new URL(link.data.url).hash.slice(1)).get('token')})).status).toBe(410);
   });
   it('expires sessions on the server and enforces fresh Passkey verification for management',async()=>{
@@ -163,10 +166,10 @@ describe('private itinerary and invitations',()=>{
     expect((await post('/api/admin/member/create',{name:'a',question:'q',answer:'a'},cookie)).data.code).toBe('STEP_UP');
     const options=await post('/api/passkey/options',{},cookie);const verified=await post('/api/passkey/verify',{challengeId:options.data.challengeId,response:await key.authenticate(options.data.options)},cookie);
     expect(verified.status,JSON.stringify(verified.data)).toBe(200);expect(verified.cookie).not.toBe(cookie);
-    expect((await get('/data.js',cookie)).status).toBe(401);
+    expect((await get('/api/favorites',cookie)).status).toBe(401);
     expect((await post('/api/admin/member/create',{name:'a',question:'q',answer:'a'},verified.cookie)).status).toBe(200);
     await runInDurableObject(stub(),(_,state)=>state.storage.sql.exec("UPDATE records SET expires=1 WHERE key LIKE 'session:%'"));
-    expect((await get('/data.js',verified.cookie)).status).toBe(401);
+    expect((await get('/api/favorites',verified.cookie)).status).toBe(401);
   });
   it('rejects wrong origin, RP ID, missing UV, and replayed Passkey challenge',async()=>{
     const {key}=await setup();
@@ -197,13 +200,13 @@ describe('private itinerary and invitations',()=>{
     const login=await post('/api/passkey/options',{},cookie);const authenticated=await post('/api/passkey/verify',{challengeId:login.data.challengeId,response:await backup.authenticate(login.data.options)},cookie);
     expect(authenticated.status).toBe(200);
     expect((await post('/api/admin/passkey/delete',{id:key.id},authenticated.cookie)).status).toBe(200);
-    expect((await get('/data.js',authenticated.cookie)).status).toBe(401);
+    expect((await get('/api/favorites',authenticated.cookie)).status).toBe(401);
     expect((await records('passkey:')).map(row=>JSON.parse(row.value).id)).toEqual([backup.id]);
   });
   it('logout invalidates the session and expires the browser cookie',async()=>{
     const {cookie}=await setup();const result=await post('/api/logout',{},cookie);
     expect(result.status).toBe(200);expect(result.headers.get('Set-Cookie')).toContain('Max-Age=0');
-    expect((await get('/data.js',cookie)).status).toBe(401);
+    expect((await get('/api/favorites',cookie)).status).toBe(401);
   });
   it('expired invitations and challenges cannot authenticate',async()=>{
     const {cookie,key}=await setup();const m=await member(cookie);const c=await post('/api/passkey/options');
@@ -251,7 +254,7 @@ describe('private itinerary and invitations',()=>{
       const registered=await invoke('/api/setup/verify',{challengeId:options.data.challengeId,response:await replacement.register(options.data.options)});
       expect(registered.status).toBe(200);
     });
-    expect((await get('/data.js',cookie)).status).toBe(401);
+    expect((await get('/api/favorites',cookie)).status).toBe(401);
     expect((await get('/data.js',memberLogin.cookie)).status).toBe(200);
     expect((await records('passkey:'))).toHaveLength(1);
   });
@@ -276,7 +279,7 @@ describe('permanent member removal',()=>{
     expect((await post('/api/admin/member/remove',{memberId:m.id},cookie)).status).toBe(200); // retry is safe
     for(const session of [first.cookie,second.cookie]) {
       expect((await (await get('/api/session',session)).json()).user).toBeNull();
-      expect((await get('/data.js',session)).status).toBe(401);
+      expect((await get('/api/favorites',session)).status).toBe(401);
       expect((await get('/api/comments',session)).status).toBe(401);
     }
     for(const token of [m.token,secondToken])expect((await post('/api/invite/verify',{token,answer:'03-08'})).status).toBe(410);
@@ -316,7 +319,7 @@ describe('permanent member removal',()=>{
     expect(results[3].status).toBe(200);
     await evictDurableObject(stub());
     expect((await records('')).some(row=>row.value.includes(m.id))).toBe(false);
-    for(const result of results)if(result.cookie)expect((await get('/data.js',result.cookie)).status).toBe(401);
+    for(const result of results)if(result.cookie)expect((await get('/api/favorites',result.cookie)).status).toBe(401);
     expect((await post('/api/admin/invite/claim',{memberId:m.id},cookie)).status).toBe(404);
     expect((await post('/api/admin/invite/rotate',{memberId:m.id},cookie)).status).toBe(404);
   });
